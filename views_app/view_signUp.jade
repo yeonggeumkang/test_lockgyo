@@ -1,0 +1,36 @@
+html
+    head 회원가입
+    body
+        h1 
+        
+        form(name="회원가입", method="post")
+            div.input email 입력 
+                br
+                input(type="text", name="email", placeholder="email")
+                br
+                
+            div.input 비밀번호
+                br
+                input(type="password", name="password",placeholder="password")
+                br
+                
+            div.input 비밀번호 확인
+                br
+                input(type="password", name="password2",placeholder="password2")
+                
+            div.input 이름
+                br
+                input(type="text", name="name", placeholder="name")
+                
+            div.input 학번
+                br
+                input(type='text', name='student_id', placeholder='10자리 학번을 입력하세요.')
+
+            div.input 연락처
+                br
+                input(type='text', name="phone_number", placeholder="01012345678 형태로 입력하세요.")
+                
+            div.actions
+                br
+                br
+                input(type="submit", value="회원가입", name="회원가입", placeholder="회원가입")

@@ -1,0 +1,18 @@
+html
+    head
+    body 
+        h1 sign in page
+        
+        form(name="sign in", method="post")
+
+            div.input
+                input(type="text", name="email", placeholder="email")
+            div.input
+                input(type="password", name="password", placeholder="password")
+            div.actions
+                input(type="submit", value="Login")
+                
+            div.actions
+                input(type='button', value='아이디 찾기', onclick="location.href='/helpuser/id'")
+            div.actions
+                input(type='button', value='비밀번호 찾기', onclick="location.href='/helpuser/pw'")
