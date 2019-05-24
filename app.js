@@ -133,10 +133,75 @@ app.post('/signUp', function(req,res){
     });
 });
 
-app.get('/main',function(req,res){ //메인페이지
-    res.send("main page");
-    //코드작성//
+app.get('/main', function(req,res) { //메인페이지
+    res.render('view_main');
 });
+
+app.post('/main', function(req,res){
+    var lockNum = req.body.lockerNumber;
+    var ownerName = req.body.ownerName;
+    var set = [req.body.lockerNumber, req.body.ownerName];
+    var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
+    var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
+
+    connection.query(sql1, lockNum, function(error, results, fields){
+      if(error){
+        res.send('first query error');
+      } else {
+        var objectResult = JSON.stringify(results[0]);
+        if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
+          res.send('사용중인 사물함');
+        } else {
+          connection.query(sql2, [req.body.ownerName, req.body.lockerNumber], function(error, results, fields){
+            if(error){
+              res.send('second query error');
+            } else {
+              res.send('신청 완료');
+            }
+          });
+        }
+
+      }
+    });
+});
+
+app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
+    var sql_all = 'SELECT * FROM NOTICE;'
+    conn.query(sql_all, function(err, rows, fields){
+        var id = req.query.id;
+        if(id){
+            var sql_detail = 'SELECT * FROM NOTICE WHERE ID=?;';
+            conn.query(sql_detail,[id],function(err, row, fields){
+                if(err){
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+                }else {
+                    res.render('view_post',{post:row[0]});
+                }
+            });
+        }else{
+            res.render('view_notice',{topics:rows});
+        };
+    });
+});
+app.get('/notice/add',function(req,res){
+   res.render('view_addPost');
+});//글쓰기 화면
+app.post('/notice/add',function(req,res){//DB에 글 작성
+    var title = req.body.title;
+    var description = req.body.description;
+    var author = req.body.author;
+    var sql = 'INSERT INTO notice (title, description, author) VALUES(?, ?, ?);';
+    conn.query(sql, [title, description, author], function(err, rows, fields){
+       if(err){
+           console.log(err);
+           res.status(500).send('Internal Server Error');
+       } else{
+           res.redirect('/notice')
+       }
+    });
+});
+
 app.get(['/notice','/notice/:id'],function(req,res){ //공지사항
     res.send("notice list page");
     //코드작성//
