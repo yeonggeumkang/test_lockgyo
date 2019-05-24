@@ -202,9 +202,44 @@ app.post('/notice/add',function(req,res){//DB에 글 작성
     });
 });
 
-app.get(['/notice','/notice/:id'],function(req,res){ //공지사항
-    res.send("notice list page");
-    //코드작성//
+app.get(['/notice/edit','/notice/edit?id=:id'],function(req,res){
+    var id = req.query.id;
+    var sql = 'SELECT * FROM NOTICE WHERE ID=?;';
+        conn.query(sql,[id],function(err, row, fields){
+            if(err){
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            }else {
+                res.render('view_editPost',{post:row[0]});
+            }
+        });
+});
+app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
+    var id = req.query.id;
+    var title = req.body.title;
+    var description = req.body.description;
+    var author = req.body.author;
+    var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE id=?';
+    conn.query(sql,[title, description, author, id], function(err,rows,fields){
+       if(err){
+           console.log(err);
+           res.status(500).send('Internal Server Error');
+       }else{
+           res.redirect('/notice/?id='+id);
+       }
+    });
+});
+app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
+    var id = req.query.id;
+    var sql = 'DELETE FROM notice WHERE id=?;';
+    conn.query(sql,[id],function(err, row, fields){
+       if(err){
+           console.log(err);
+           res.status(500).send('Internal Server Error');
+       }else{
+           res.redirect('/notice');
+       }
+    });
 });
 app.get('/mypage',function(req,res){ //마이페이지
     res.send("mypage");
