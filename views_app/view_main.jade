@@ -1,0 +1,15 @@
+html
+    head
+        title
+            h1  사물함 신청
+
+    body
+        form(class='신청', action='/main', method='post')
+
+            div.input 이름
+              input(type='text', name='ownerName', value='이름')
+
+            div.input 사물함 번호
+              input(type='text', name='lockerNumber', value='사물함 번호')
+            div.input
+              input(type='submit', value='신청')
