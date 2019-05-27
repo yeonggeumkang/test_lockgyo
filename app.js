@@ -139,10 +139,9 @@ app.get('/main', function(req,res) { //메인페이지
 
 app.post('/main', function(req,res){
     var lockNum = req.body.lockerNumber;
-    var ownerName = req.body.ownerName;
-    var set = [req.body.lockerNumber, req.body.ownerName];
     var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
-    var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
+    var sql2 = 'update locker set owner_id=?, usable=0 where lid=?;'
+    console.log(req.session.studentID);
 
     connection.query(sql1, lockNum, function(error, results, fields){
       if(error){
@@ -151,15 +150,15 @@ app.post('/main', function(req,res){
         var objectResult = JSON.stringify(results[0]);
         if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
           res.send('사용중인 사물함');
-        } else {
-          connection.query(sql2, [req.body.ownerName, req.body.lockerNumber], function(error, results, fields){
-            if(error){
-              res.send('second query error');
-            } else {
-              res.send('신청 완료');
-            }
-          });
-        }
+        } else {}
+     connection.query(sql2, [req.session.studentID, req.body.lockerNumber], function(error, results, fields){
+        if(error){
+            res.send('second query error');
+          } else {
+            res.send('신청 완료');
+          }
+        });
+
 
       }
     });
