@@ -117,9 +117,10 @@ app.post('/signUp', function(req,res){
 
                         if(req.body.password === req.body.password2){ //비밀번호 일치 확인
                             var user = [req.body.email, req.body.password, req.body.name, req.body.student_id, req.body.phone_number]
-                            connection.query('INSERT INTO users(email, password, name, student_id, phone_number) values(?,?,?,?,?)', user,                                           function(error, result){
+                            connection.query('INSERT INTO users(email, password, name, student_id, phone_number) values(?,?,?,?,?)', user,
+                            function(error, result, fields){
                                 if(error){
-                                    res.send('error');
+                                    res.send('second error');
                                 } else {
                                     res.redirect('/main'); // '/main/:id'로 해야할까
                                 }})
