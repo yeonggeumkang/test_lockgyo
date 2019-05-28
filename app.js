@@ -45,6 +45,8 @@ app.post('/signIn', function(req,res){
         } else {
             if(results.length > 0){ //데이터 존재
                 if(results[0].password == password) { //비밀번호 일치, 로그인 성공
+                    req.session.email = req.body.email;
+                    req.session.studentID = results[0].student_id;
                     req.session.user = results;
                     res.redirect('/');
                 } else { //비밀번호 불일치
