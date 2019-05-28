@@ -4,7 +4,15 @@ html
             h1  사물함 신청
 
     body
-        form(class='신청', action='/main', method='post')
+      a(href='/main') HOME
+      &nbsp;&nbsp;
+
+      a(href='/notice') 공지사항
+      &nbsp;&nbsp;
+
+      a(href='/mypage') 마이페이지
+
+      form(class='신청', action='/main', method='post')
             h3 사물함 신청
 
             div.input 사물함 번호

@@ -243,7 +243,7 @@ app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     });
 });
 app.get('/mypage',function(req,res){ //마이페이지
-    res.send("mypage");
+    res.render('view_mypage');
     //코드작성//
 });
 
