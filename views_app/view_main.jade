@@ -4,6 +4,7 @@ html
             h1  사물함 신청
 
     body
+      //상단 탭
       a(href='/main') HOME
       &nbsp;&nbsp;
 
@@ -12,6 +13,16 @@ html
 
       a(href='/mypage') 마이페이지
 
+      //사용중인 사물함 정보
+      if locker
+        h3 나의 사물함 정보
+        = locker.lid
+        번 사물함을 사용중입니다.
+      else
+        h3 나의 사물함 정보
+        사용중인 사물함이 없습니다.
+
+      //사물함 신청
       form(class='신청', action='/main', method='post')
             h3 사물함 신청
 
@@ -19,3 +30,15 @@ html
               input(type='number', name='lockerNumber', value='사물함 번호')
             div.input
               input(type='submit', value='신청')
+      //사물함 반납
+      form(class='신청', action='/main/return', method='post')
+            h3 사물함 반납
+
+            div.input
+              input(type='submit', value='반납')
+      //사물함 연장
+
+      //공지사항
+      if notice
+          h3= notice.title
+          = notice.description

@@ -137,7 +137,23 @@ app.post('/signUp', function(req,res){
 });
 
 app.get('/main', function(req,res) { //메인페이지
-    res.render('view_main');
+    var studentID = req.session.studentID;
+    var sql = 'SELECT lid FROM locker WHERE owner_id = ?';
+    var sql2 = 'select * from notice where nid=1';
+    connection.query(sql, studentID, function(error, result1, fields){
+      if(error) {
+        res.send('query error');
+      } else {
+        connection.query(sql2, function(error, result2, fields){
+          if(error){
+            res.send('second query error');
+          } else {
+            res.render('view_main', {locker:result1[0], notice:result2[0]});
+          }
+        });
+        //res.render('view_main', {locker:results[0]});
+      }
+    });
 });
 
 app.post('/main', function(req,res){
@@ -161,10 +177,21 @@ app.post('/main', function(req,res){
             res.send('신청 완료');
           }
         });
-
-
       }
     });
+});
+
+app.post('/main/return', function(req,res){
+  var user = req.session.studentID;
+  var sql = 'update locker set usable=1, owner_id=NULL where owner_id=?;';
+  connection.query(sql, user, function(error, results, fields){
+    if(error){
+      res.send('query error');
+    } else {
+      //반납되었다는 알람, 팝업추가
+      res.redirect('/main');
+    }
+  });
 });
 
 app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
@@ -243,8 +270,25 @@ app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     });
 });
 app.get('/mypage',function(req,res){ //마이페이지
-    res.render('view_mypage');
-    //코드작성//
+    var user = req.session.studentID;
+    var sql = 'SELECT * FROM USERS WHERE student_id=?;';
+
+    connection.query(sql, user, function(error, results, fields){
+      if(error){
+        res.send('query error');
+      } else {
+        res.render('view_mypage',{information:results[0]});
+      }
+    });
+    //res.render('view_mypage');
+});
+
+app.get('/mypage/edit', function(req,res){
+  res.send('개인정보 수정화면');
+});
+
+app.get('/mypage/quit', function(req,res){
+  res.send('탈퇴화면');
 });
 
 app.get('/admin',function(req,res){ //관리자페이지
