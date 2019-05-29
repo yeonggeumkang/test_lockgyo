@@ -47,6 +47,8 @@ app.post('/signIn', function(req,res){
                 if(results[0].password == password) { //비밀번호 일치, 로그인 성공
                     req.session.email = req.body.email;
                     req.session.studentID = results[0].student_id;
+                    req.session.name = results[0].name;
+                    req.session.phone_number = results[0].phone_number;
                     req.session.user = results;
                     res.redirect('/');
                 } else { //비밀번호 불일치
@@ -124,7 +126,7 @@ app.post('/signUp', function(req,res){
                                 if(error){
                                     res.send('second error');
                                 } else {
-                                    res.redirect('/main'); // '/main/:id'로 해야할까
+                                    res.redirect('/signIn'); // '/main/:id'로 해야할까
                                 }})
                         } else { //password 확인 불일치
                             res.send('비밀번호가 일치하지 않습니다.');
@@ -137,9 +139,14 @@ app.post('/signUp', function(req,res){
 });
 
 app.get('/main', function(req,res) { //메인페이지
+    if(!req.session.user){
+      res.redirect('/signIn');
+    } else {}
     var studentID = req.session.studentID;
     var sql = 'SELECT lid FROM locker WHERE owner_id = ?';
     var sql2 = 'select * from notice where nid=1';
+    var sql3 = 'select * from locker;';
+
     connection.query(sql, studentID, function(error, result1, fields){
       if(error) {
         res.send('query error');
@@ -148,15 +155,24 @@ app.get('/main', function(req,res) { //메인페이지
           if(error){
             res.send('second query error');
           } else {
-            res.render('view_main', {locker:result1[0], notice:result2[0]});
+            connection.query(sql3, function(error,result3, fileds){
+              if(error){
+                res.send('third query error');
+              } else {
+                res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3});
+              }
+            })
           }
         });
-        //res.render('view_main', {locker:results[0]});
+
       }
     });
 });
 
 app.post('/main', function(req,res){
+    if(!req.session.user){
+      res.redirect('/signIn');
+    } else {}
     var lockNum = req.body.lockerNumber;
     var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
     var sql2 = 'update locker set owner_id=?, usable=0 where lid=?;'
@@ -182,6 +198,9 @@ app.post('/main', function(req,res){
 });
 
 app.post('/main/return', function(req,res){
+  if(!req.session.user){
+    res.redirect('/signIn');
+  } else {}
   var user = req.session.studentID;
   var sql = 'update locker set usable=1, owner_id=NULL where owner_id=?;';
   connection.query(sql, user, function(error, results, fields){
@@ -269,22 +288,14 @@ app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
        }
     });
 });
+
 app.get('/mypage',function(req,res){ //마이페이지
+    if(!req.session.user){
+      res.redirect('/signIn');
+    } else {}
     var user = req.session.studentID;
-    var sql = 'SELECT * FROM USERS WHERE student_id=?;';
-
-    connection.query(sql, user, function(error, results, fields){
-      if(error){
-        res.send('query error');
-      } else {
-        res.render('view_mypage',{information:results[0]});
-      }
-    });
-    //res.render('view_mypage');
-});
-
-app.get('/mypage/edit', function(req,res){
-  res.send('개인정보 수정화면');
+    res.render('view_mypage',{name:req.session.name, email:req.session.email,
+                              phone_number:req.session.phone_number, studentID:user});
 });
 
 app.get('/mypage/quit', function(req,res){

@@ -42,3 +42,16 @@ html
       if notice
           h3= notice.title
           = notice.description
+      br
+
+      //모든 사물함 정보
+      h3 모든 사물함 보기
+      if allLocker
+        each lock in allLocker
+          if lock.usable
+            span(style='color:blue')=lock.Lid
+            span(style='color:blue')&nbsp; 사용가능
+          else
+            span(style='color:red')=lock.Lid
+            span(style='color:red')&nbsp; 사용중
+          br
