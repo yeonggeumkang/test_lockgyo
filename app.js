@@ -9,7 +9,7 @@ app.use(session({
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host     : 'localhost',
+  host     : '127.0.0.1',
   user     : 'root',
   password : '961107',
   database : 'test_db'
