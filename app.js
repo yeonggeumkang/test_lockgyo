@@ -1,10 +1,19 @@
 var express =require('express');
 var app = express();
 var session = require('express-session');
+require('date-utils');
+var MySQLStore = require('express-mysql-session');
 app.use(session({
     secret : '1107',
     resave : false,
-    saveUninitialized : false
+    saveUninitialized : false,
+    store : new MySQLStore({
+  host : 'localhost',
+  port : 3306,
+  user : 'root',
+  password : '961107',
+  database : 'test_db'
+  })
 }));
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
@@ -103,7 +112,14 @@ app.post('/help/pw', function(req,res){
         }
     });
 });
-
+app.get('/logout', function(req,res){
+  delete req.session.email;
+  delete req.session.studentID;
+  delete req.session.name;
+  delete req.session.phone_number;
+  delete req.session.user;
+  res.redirect('/');
+})
 //회원가입 페이지
 app.get('/signUp',function(req,res){
     res.render('view_signUp');
@@ -177,6 +193,9 @@ app.post('/main', function(req,res){
     var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
     var sql2 = 'update locker set owner_id=?, usable=0 where lid=?;'
     console.log(req.session.studentID);
+
+    var nowDate = new Date();
+    //date 유효성 코드 추가
 
     connection.query(sql1, lockNum, function(error, results, fields){
       if(error){
