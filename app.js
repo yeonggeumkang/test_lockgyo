@@ -356,6 +356,41 @@ app.get('/mypage/quit', function(req,res){
 app.get('/admin',function(req,res){ //관리자페이지
     res.render("view_admin");
     //코드작성//
+    var privilege = req.session.privilege;
+    var sql= 'SELECT * FROM USERS WHERE privilege=3;';
+    if(!req.session.user){
+      res.redirect('/signIn');
+    }else {
+        if(privilege!=1){
+            res.redirect('/main');
+        }else {
+            connection.query(sql, function(err, rows, fields){
+                if(err){
+                    console.log(err);
+                }
+                else {
+                     res.render('view_Admin',{users:rows});
+                }
+            });
+        };
+    };
+});
+//관리자페이지 내 회원권한 변경
+app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,res){
+    var id = req.query.id;
+    var privilege = req.session.privilege;
+    var sql = 'UPDATE USERS SET privilege=2 where student_id=?;';
+    if(privilege!=1){
+        res.send('허가되지 않은 접근입니다');
+    }else{
+        connection.query(sql, [id], function(err, rows, fields){
+           if(err){
+               console.log(err);
+           } else{
+               res.redirect('/admin');
+           } 
+        });
+    };
 });
 app.listen(3000,function(){ //포트접속
     console.log('Connected, 3000 port!');
