@@ -1,0 +1,27 @@
+html
+  head
+    title 개인정보 수정
+    body
+      h1 개인정보 수정
+      form(name="개인정보수정", method="post")
+          div.input email
+              br
+              input(type="text", name="email", value=email)
+              br
+
+          div.input 이름
+              br
+              input(type="text", name="name", placeholder=name)
+
+          div.input 학번
+              br
+              input(type='text', name="student_id", placeholder=studentID)
+
+          div.input 연락처
+              br
+              input(type='text', name="phone_number", placeholder=phone_number)
+
+          div.actions
+              br
+              br
+              input(type="submit", value="수정", name="수정", placeholder="수정")

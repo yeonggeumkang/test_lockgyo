@@ -14,11 +14,15 @@ html
       a(href='/mypage') 마이페이지
       &nbsp; &nbsp;
       
-      a(href='/admin') 관리자페이지
-      &nbsp; &nbsp;
+      if privilege === 1
+        a(href='/admin') 관리자페이지
+        &nbsp; &nbsp;
 
       a(href='/logout') 로그아웃
+      
 
+      
+      
       //사용중인 사물함 정보
       if locker
         h3 나의 사물함 정보
@@ -57,6 +61,9 @@ html
           if lock.usable
             span(style='color:blue')=lock.Lid
             span(style='color:blue')&nbsp; 사용가능
+            br
+            a(href='/main/?id='+lock.Lid) 신청하기
+            
           else
             span(style='color:red')=lock.Lid
             span(style='color:red')&nbsp; 사용중

@@ -92,7 +92,7 @@ app.post('/help/id', function(req,res){
             res.send('error');
         } else {
             if(results.length>0){
-                res.send(results); //수정해야함
+                res.send(results[0].email); //수정해야함
             } else {
                 res.send('가입 안됨');
             }
@@ -192,7 +192,7 @@ app.get('/main', function(req,res) { //메인페이지
               if(error){
                 res.send('third query error');
               } else {
-                res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3});
+                res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3, privilege:req.session.privilege});
               }
             })
           }
@@ -334,6 +334,18 @@ app.get('/mypage',function(req,res){ //마이페이지
                               phone_number:req.session.phone_number, studentID:user});
 });
 
+app.get('/mypage/edit', function(req, res){
+  if(!req.session.user){
+    res.redirect('/signIn');
+  } else {}
+  var user = req.session.studentID;
+  res.render('view_myedit',{name:req.session.name, email:req.session.email,
+                            phone_number:req.session.phone_number, studentID:user});
+});
+
+app.post('/mypage/edit', function(req, res){
+  res.send('hello');
+})
 app.get('/mypage/quit', function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
