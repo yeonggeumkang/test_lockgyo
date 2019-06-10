@@ -1,10 +1,21 @@
 var express =require('express');
 var app = express();
 var session = require('express-session');
+require('date-utils');
+var MySQLStore = require('express-mysql-session');
+var bkfd2Password = require('pbkdf2-password');
+var hasher = bkfd2Password();
 app.use(session({
     secret : '1107',
     resave : false,
-    saveUninitialized : false
+    saveUninitialized : false,
+    store : new MySQLStore({
+  host : 'localhost',
+  port : 3306,
+  user : 'root',
+  password : '961107',
+  database : 'test_db'
+  })
 }));
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
@@ -19,7 +30,6 @@ app.use(bodyParser.urlencoded({exteded:false}));
 app.locals.pretty = true;
 app.set('views','./views_app'); //view파일 디렉토리 설정
 app.set('view engine','jade'); //Jade엔진
-
 
 app.get('/',function(req,res){ // 사용자 정보 있으면 메인페이지, 없으면 로그인페이지로 리다이렉션 설정.
   if(req.session.user){
@@ -44,16 +54,23 @@ app.post('/signIn', function(req,res){
             res.send('error');
         } else {
             if(results.length > 0){ //데이터 존재
-                if(results[0].password == password) { //비밀번호 일치, 로그인 성공
+                hasher({password:req.body.password, salt:results[0].salt}, function(err, pass, salt, hash){
+                  if(results[0].password === hash) { //비밀번호 일치?
                     req.session.email = req.body.email;
                     req.session.studentID = results[0].student_id;
                     req.session.name = results[0].name;
                     req.session.phone_number = results[0].phone_number;
                     req.session.user = results;
                     res.redirect('/');
+                  } else {
+                    res.send('wrong password');
+                  }
+                });
+                /*if(results[0].password == password) { //비밀번호 일치, 로그인 성공
+
                 } else { //비밀번호 불일치
                     res.send('wrong password');
-                }
+                }*/
             } else { //데이터 없음
                 res.send('email do not exist');
             }
@@ -103,39 +120,54 @@ app.post('/help/pw', function(req,res){
         }
     });
 });
-
+app.get('/logout', function(req,res){
+  delete req.session.email;
+  delete req.session.studentID;
+  delete req.session.name;
+  delete req.session.phone_number;
+  delete req.session.user;
+  res.redirect('/');
+})
 //회원가입 페이지
 app.get('/signUp',function(req,res){
     res.render('view_signUp');
 });
 
+
 app.post('/signUp', function(req,res){
     var tid = req.body.student_id;
-    connection.query('SELECT * FROM users WHERE student_id = ?', tid,
-                    function(error,results,fields){
-        if(error){ //쿼리 오류
-                res.send('error');
+    var temail = req.body.email;
 
-                } else {
-                    if(results.length===0){ //데이터 없음, 회원가입
-
-                        if(req.body.password === req.body.password2){ //비밀번호 일치 확인
-                            var user = [req.body.email, req.body.password, req.body.name, req.body.student_id, req.body.phone_number]
-                            connection.query('INSERT INTO users(email, password, name, student_id, phone_number) values(?,?,?,?,?)', user,
-                            function(error, result, fields){
-                                if(error){
-                                    res.send('second error');
-                                } else {
-                                    res.redirect('/signIn'); // '/main/:id'로 해야할까
-                                }})
-                        } else { //password 확인 불일치
-                            res.send('비밀번호가 일치하지 않습니다.');
+    if(req.body.password === req.body.password2) { //비밀번호 불일치
+      connection.query('SELECT * FROM users WHERE email = ?', temail, function(error, results, fields){
+          if(error) { res.send('error'); }
+          else {
+            if(results.length===0){ //데이터 없음 -->회원가입
+              connection.query('SELECT * FROM users WHERE student_id=?', tid, function(error, results, fields){
+                if(error) {res.send('error2');}
+                else {
+                  if(results.length===0) {
+                    var opts = {password:req.body.password};
+                    hasher(opts, function(err, pass, salt, hash){
+                      var hashUser = [req.body.email, hash, req.body.name, req.body.student_id, req.body.phone_number, salt];
+                      console.log(hashUser);
+                      connection.query('INSERT INTO users(email, password, name, student_id, phone_number, salt) values(?,?,?,?,?,?)', hashUser,
+                      function(error, result, fields){
+                        if(error){
+                          res.send('등록에서 오류');
+                        } else {
+                          res.redirect('/main');
                         }
-                    } else { //학번 데이터 있음, 이미 가입
-                        res.send('이미 가입된 학생');
-                    }
-        }
-    });
+
+                    });
+                  });
+                  } else { res.send('이미 존재하는 학번입니다.'); }
+                }});
+            } else { res.send('이미 존재하는 id(email)입니다.'); }
+          }});
+    } else {
+      res.send('비밀번호가 일치하지 않음');
+    }
 });
 
 app.get('/main', function(req,res) { //메인페이지
@@ -177,6 +209,9 @@ app.post('/main', function(req,res){
     var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
     var sql2 = 'update locker set owner_id=?, usable=0 where lid=?;'
     console.log(req.session.studentID);
+
+    var nowDate = new Date();
+    //date 유효성 코드 추가
 
     connection.query(sql1, lockNum, function(error, results, fields){
       if(error){
@@ -299,7 +334,23 @@ app.get('/mypage',function(req,res){ //마이페이지
 });
 
 app.get('/mypage/quit', function(req,res){
-  res.send('탈퇴화면');
+  if(!req.session.user){
+    res.redirect('/signIn');
+  } else {}
+  var id = req.session.studentID;
+  connection.query('delete from users where student_id=?', id, function(error, results, fields){
+    if(error){
+      console.log('탈퇴 실패');
+      res.status(500);
+    } else {
+      delete req.session.email;
+      delete req.session.studentID;
+      delete req.session.name;
+      delete req.session.phone_number;
+      delete req.session.user;
+      res.send('탈퇴 완료');
+    }
+  });
 });
 
 app.get('/admin',function(req,res){ //관리자페이지
