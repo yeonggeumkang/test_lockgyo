@@ -11,8 +11,8 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : '961107',
-  database : 'test_db'
+  password : '',
+  database : 'o2'
 });
 connection.connect(); //mysql DB 연결
 app.use(bodyParser.urlencoded({exteded:false}));
@@ -49,6 +49,7 @@ app.post('/signIn', function(req,res){
                     req.session.studentID = results[0].student_id;
                     req.session.name = results[0].name;
                     req.session.phone_number = results[0].phone_number;
+                    req.session.privilege = results[0].privilege;
                     req.session.user = results;
                     res.redirect('/');
                 } else { //비밀번호 불일치
@@ -215,11 +216,11 @@ app.post('/main/return', function(req,res){
 
 app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
     var sql_all = 'SELECT * FROM NOTICE;'
-    conn.query(sql_all, function(err, rows, fields){
+    connection.query(sql_all, function(err, rows, fields){
         var id = req.query.id;
         if(id){
             var sql_detail = 'SELECT * FROM NOTICE WHERE ID=?;';
-            conn.query(sql_detail,[id],function(err, row, fields){
+            connection.query(sql_detail,[id],function(err, row, fields){
                 if(err){
                     console.log(err);
                     res.status(500).send('Internal Server Error');
@@ -240,7 +241,7 @@ app.post('/notice/add',function(req,res){//DB에 글 작성
     var description = req.body.description;
     var author = req.body.author;
     var sql = 'INSERT INTO notice (title, description, author) VALUES(?, ?, ?);';
-    conn.query(sql, [title, description, author], function(err, rows, fields){
+    connection.query(sql, [title, description, author], function(err, rows, fields){
        if(err){
            console.log(err);
            res.status(500).send('Internal Server Error');
@@ -252,7 +253,7 @@ app.post('/notice/add',function(req,res){//DB에 글 작성
 app.get(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     var id = req.query.id;
     var sql = 'SELECT * FROM NOTICE WHERE ID=?;';
-        conn.query(sql,[id],function(err, row, fields){
+        connection.query(sql,[id],function(err, row, fields){
             if(err){
                 console.log(err);
                 res.status(500).send('Internal Server Error');
@@ -267,7 +268,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     var description = req.body.description;
     var author = req.body.author;
     var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE id=?';
-    conn.query(sql,[title, description, author, id], function(err,rows,fields){
+    connection.query(sql,[title, description, author, id], function(err,rows,fields){
        if(err){
            console.log(err);
            res.status(500).send('Internal Server Error');
@@ -279,7 +280,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
 app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     var id = req.query.id;
     var sql = 'DELETE FROM notice WHERE id=?;';
-    conn.query(sql,[id],function(err, row, fields){
+    connection.query(sql,[id],function(err, row, fields){
        if(err){
            console.log(err);
            res.status(500).send('Internal Server Error');
@@ -302,10 +303,46 @@ app.get('/mypage/quit', function(req,res){
   res.send('탈퇴화면');
 });
 
+//관리자페이지
 app.get('/admin',function(req,res){ //관리자페이지
-    res.render("view_admin");
-    //코드작성//
+    var privilege = req.session.privilege;
+    var sql= 'SELECT * FROM USERS WHERE privilege=3;';
+    if(!req.session.user){
+      res.redirect('/signIn');
+    }else {
+        if(privilege!=1){
+            res.redirect('/main');
+        }else {
+            connection.query(sql, function(err, rows, fields){
+                if(err){
+                    console.log(err);
+                }
+                else {
+                     res.render('view_Admin',{users:rows});
+                }
+            });
+        };
+    };
 });
+//관리자페이지 내 회원권한 변경
+app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,res){
+    var id = req.query.id;
+    var privilege = req.session.privilege;
+    var sql = 'UPDATE USERS SET privilege=2 where student_id=?;';
+    if(privilege!=1){
+        res.send('허가되지 않은 접근입니다');
+    }else{
+        connection.query(sql, [id], function(err, rows, fields){
+           if(err){
+               console.log(err);
+           } else{
+               res.redirect('/admin');
+           } 
+        });
+    };
+});
+
+//포트개방
 app.listen(3000,function(){ //포트접속
     console.log('Connected, 3000 port!');
 });
