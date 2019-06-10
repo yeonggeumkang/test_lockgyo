@@ -4,36 +4,3 @@ html
         meta(charset='utf-8')
     body
         h1 admin page
-        p 섹션1. 회원관리
-        | 현재 승인대기중인 가입자 수는 #{users.length}명 입니다
-        table
-            tr 
-                td 학번
-                td 이름
-                td 상태
-                
-            each user in users
-                tr
-                    td= user.student_id
-                    td= user.name
-                    td= user.privilege
-                    td 
-                        a(href='/admin/changePrivilege?id='+user.student_id) 가입승인
-            
-        p 섹션2. 일정관리
-        form(action='/admin/setSchedule' method='post')
-            p
-                일정유형<br>
-                select(name='dateType')
-                    option(value='extend') 연장신청
-                    option(value='new') 신규신청
-                    option(value='additional') 추가신청
-            p   
-                시작일자 <br>
-                input(type='date' id='str_date' name='str_date')
-            p   
-                마감일자 <br>
-                input(type='date' id='end_date' name='end_date')
-            p
-                input(type='submit' value='적용하기')
-        script(type='text/javascript') document.getElementById('str_date').value = new Date().toISOString().substring(0, 10);
