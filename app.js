@@ -14,7 +14,7 @@ app.use(session({
   port : 3306,
   user : 'root',
   password : '961107',
-  database : 'test_db'
+  database : 'test'
   })
 }));
 var bodyParser = require('body-parser');
@@ -23,7 +23,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '961107',
-  database : 'test_db'
+  database : 'test'
 });
 connection.connect(); //mysql DB 연결
 app.use(bodyParser.urlencoded({exteded:false}));
@@ -57,9 +57,9 @@ app.post('/signIn', function(req,res){
                 hasher({password:req.body.password, salt:results[0].salt}, function(err, pass, salt, hash){
                   if(results[0].password === hash) { //비밀번호 일치?
                     req.session.email = req.body.email;
-                    req.session.studentID = results[0].student_id;
+                    req.session.Uid = results[0].Uid;
                     req.session.name = results[0].name;
-                    req.session.phone_number = results[0].phone_number;
+                    req.session.phone = results[0].phone;
                     req.session.privilege = results[0].privilege;
                     req.session.user = results;
                     res.redirect('/');
@@ -86,7 +86,7 @@ app.get('/help/id', function(req,res){
 
 app.post('/help/id', function(req,res){
     var hid = req.body.student_id;
-    connection.query('SELECT email FROM users WHERE student_id = ?', hid,
+    connection.query('SELECT email FROM users WHERE Uid = ?', hid,
                     function(error,results,fields){
         if(error) {
             res.send('error');
@@ -108,7 +108,7 @@ app.get('/help/pw', function(req,res){
 app.post('/help/pw', function(req,res){
     var helpVar = [req.body.student_id, req.body.email];
 
-    connection.query('SELECT password FROM users WHERE (student_id=? and email=?)', helpVar,
+    connection.query('SELECT password FROM users WHERE (Uid=? and email=?)', helpVar,
                     function(error,results,fields){
         if(error) {
             res.send('error');
@@ -123,9 +123,9 @@ app.post('/help/pw', function(req,res){
 });
 app.get('/logout', function(req,res){
   delete req.session.email;
-  delete req.session.studentID;
+  delete req.session.Uid;
   delete req.session.name;
-  delete req.session.phone_number;
+  delete req.session.phone;
   delete req.session.user;
   res.redirect('/');
 })
@@ -144,7 +144,7 @@ app.post('/signUp', function(req,res){
           if(error) { res.send('error'); }
           else {
             if(results.length===0){ //데이터 없음 -->회원가입
-              connection.query('SELECT * FROM users WHERE student_id=?', tid, function(error, results, fields){
+              connection.query('SELECT * FROM users WHERE Uid=?', tid, function(error, results, fields){
                 if(error) {res.send('error2');}
                 else {
                   if(results.length===0) {
@@ -152,7 +152,7 @@ app.post('/signUp', function(req,res){
                     hasher(opts, function(err, pass, salt, hash){
                       var hashUser = [req.body.email, hash, req.body.name, req.body.student_id, req.body.phone_number, salt];
                       console.log(hashUser);
-                      connection.query('INSERT INTO users(email, password, name, student_id, phone_number, salt) values(?,?,?,?,?,?)', hashUser,
+                      connection.query('INSERT INTO users(email, password, name, Uid, phone, salt) values(?,?,?,?,?,?)', hashUser,
                       function(error, result, fields){
                         if(error){
                           res.send('등록에서 오류');
@@ -175,9 +175,9 @@ app.get('/main', function(req,res) { //메인페이지
     if(!req.session.user){
       res.redirect('/signIn');
     } else {}
-    var studentID = req.session.studentID;
-    var sql = 'SELECT lid FROM locker WHERE owner_id = ?';
-    var sql2 = 'select * from notice where nid=1';
+    var studentID = req.session.Uid;
+    var sql = 'SELECT Lid FROM locker WHERE owner = ?';
+    var sql2 = 'select * from notice where Nid=1';
     var sql3 = 'select * from locker;';
 
     connection.query(sql, studentID, function(error, result1, fields){
@@ -208,8 +208,8 @@ app.post('/main', function(req,res){
     } else {}
     var lockNum = req.body.lockerNumber;
     var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
-    var sql2 = 'update locker set owner_id=?, usable=0 where lid=?;'
-    console.log(req.session.studentID);
+    var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
+    console.log(req.session.Uid);
 
     var nowDate = new Date();
     //date 유효성 코드 추가
@@ -222,7 +222,7 @@ app.post('/main', function(req,res){
         if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
           res.send('사용중인 사물함');
         } else {}
-     connection.query(sql2, [req.session.studentID, req.body.lockerNumber], function(error, results, fields){
+     connection.query(sql2, [req.session.Uid, req.body.lockerNumber], function(error, results, fields){
         if(error){
             res.send('second query error');
           } else {
@@ -237,8 +237,8 @@ app.post('/main/return', function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
   } else {}
-  var user = req.session.studentID;
-  var sql = 'update locker set usable=1, owner_id=NULL where owner_id=?;';
+  var user = req.session.Uid;
+  var sql = 'update locker set usable=1, owner=NULL where owner=?;';
   connection.query(sql, user, function(error, results, fields){
     if(error){
       res.send('query error');
@@ -329,18 +329,18 @@ app.get('/mypage',function(req,res){ //마이페이지
     if(!req.session.user){
       res.redirect('/signIn');
     } else {}
-    var user = req.session.studentID;
+    var user = req.session.Uid;
     res.render('view_mypage',{name:req.session.name, email:req.session.email,
-                              phone_number:req.session.phone_number, studentID:user});
+                              phone_number:req.session.phone, studentID:user});
 });
 
 app.get('/mypage/edit', function(req, res){
   if(!req.session.user){
     res.redirect('/signIn');
   } else {}
-  var user = req.session.studentID;
+  var user = req.session.Uid;
   res.render('view_myedit',{name:req.session.name, email:req.session.email,
-                            phone_number:req.session.phone_number, studentID:user});
+                            phone_number:req.session.phone, studentID:user});
 });
 
 app.post('/mypage/edit', function(req, res){
@@ -350,16 +350,16 @@ app.get('/mypage/quit', function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
   } else {}
-  var id = req.session.studentID;
-  connection.query('delete from users where student_id=?', id, function(error, results, fields){
+  var id = req.session.Uid;
+  connection.query('delete from users where Uid=?', id, function(error, results, fields){
     if(error){
       console.log('탈퇴 실패');
       res.status(500);
     } else {
       delete req.session.email;
-      delete req.session.studentID;
+      delete req.session.Uid;
       delete req.session.name;
-      delete req.session.phone_number;
+      delete req.session.phone;
       delete req.session.user;
       res.send('탈퇴 완료');
     }
