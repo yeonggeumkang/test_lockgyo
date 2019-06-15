@@ -3,22 +3,22 @@ html
       link(rel='stylesheet', href='style.css')
     body
 
-        h1 LOGIN
+        
         div.container
-          div.login_box
-            form(name="sign in", method="post")
+          h1 LOGIN
+                form(name="sign in", method="post")
 
-              div.inner_login_box
-                  input(type='text', name='email', placeholder="email")
-                  br
-                  input(type="password", name="password", placeholder="password")
-              div.button
-                  input(type="submit", value="로그인", size='50')
-              br
+                  div.inner_login_box
+                      input.A(type='text', name='email', placeholder="email")
+                      br
+                      input.A(type="password", name="password", placeholder="password")
+                      div.button
+                          input(type="submit", value="로그인", size='50')
+                      br
 
-              div.button
-                  input(type='button', value='회원가입', onclick="location.href='/signUp'")
+                      div.button
+                          input(type='button', value='회원가입', onclick="location.href='/signUp'")
 
-              div.button
-                  input(type='button', value='아이디 찾기', onclick="location.href='/help/id'")
-                  input(type='button', value='비밀번호 찾기', onclick="location.href='/help/pw'")
+                      div.button
+                          input(type='button', value='아이디 찾기', onclick="location.href='/help/id'")
+                          input(type='button', value='비밀번호 찾기', onclick="location.href='/help/pw'")

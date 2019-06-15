@@ -11,7 +11,6 @@ html
         //상단 탭
         //div(style='align-self: center; background-color:white; color:#646464; height:30px')
         ul.navbar
-            
               a(href='/main') HOME
               &nbsp;&nbsp;
             
@@ -27,59 +26,47 @@ html
 
               a(href='/logout') 로그아웃
             
-
-        
-       
-        //사용중인 사물함 정보
-        div.info
-          if locker
+        div.left_info
+          //사용중인 사물함 정보
+          div.info
             h3 나의 사물함 정보
-            = locker.Lid
-            번 사물함을 사용중입니다.
-          else
-            h3 나의 사물함 정보
-            사용중인 사물함이 없습니다.
+            if locker
+            
+              = locker.Lid
+              번 사물함을 사용중입니다.
+            else
+            
+              사용중인 사물함이 없습니다.
         
-        //사물함 신청
-        div.info
-          form(class='신청', action='/main', method='post')
-                h3 사물함 신청
+          //사물함 반납
+          div.info
+            form(class='신청', action='/main/return', method='post')
+                  h3 사물함 반납
 
-                div.inner_login_box
-                  사물함 번호
-
-                  input(type='number', name='lockerNumber', value='사물함 번호')
-                  
                   div.button
-                    input(type='submit', value='신청')
+                    input(type='submit', value='반납')
+          //사물함 연장
+        
+        div.right_info
+          //공지사항
+          div.right_content
+            h3 신청 일정
+            if notice
+                h3= notice.title
+                = notice.description
+            br
 
-        //사물함 반납
-        div.info
-          form(class='신청', action='/main/return', method='post')
-                h3 사물함 반납
-
-                div.button
-                  input(type='submit', value='반납')
-        //사물함 연장
-
-        //공지사항
-        div.notice
-          if notice
-              h3= notice.title
-              = notice.description
-          br
-
-        //모든 사물함 정보
-        div.all_locker
-          h3 모든 사물함 보기
-          if allLocker
-            each lock in allLocker
-              if lock.usable
-                span(style='color:blue')=lock.Lid
-                span(style='color:blue') &nbsp; 사용가능 &nbsp;
-                a(href='/main/enroll?id='+lock.Lid) 신청하기
-                
-              else
-                span(style='color:red')=lock.Lid
-                span(style='color:red')&nbsp; 사용중
-              br
+          //모든 사물함 정보
+          div.right_content
+            h3 모든 사물함 보기
+            if allLocker
+              each lock in allLocker
+                if lock.usable
+                  span(style='color:blue')=lock.Lid
+                  span(style='color:blue') &nbsp; 사용가능 &nbsp;
+                  a(href='/main/enroll?id='+lock.Lid) 신청하기
+                  
+                else
+                  span(style='color:red')=lock.Lid
+                  span(style='color:red')&nbsp; 사용중
+                br

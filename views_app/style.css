@@ -2,10 +2,64 @@
   width : 80%;
   height : 89vh;
   margin : auto;
-  background-color : #000000;
-  overflow: auto;
+  background-color : #FFFFFF;
   text-align: center;
+
 }
-.login_box{
-  color: red;
+
+.inner_login_box {
+  color : blue;
+  border-style: 2px black;
+  border-radius: 5px;
+  background-color: #F5F5F5;
+  margin: auto;
+  text-align: center;
+  margin-left: inherit;
+  padding: 30px;
+  width: 30%;
+  display: inline-block;
+  font-size: 18px;
+}
+.A{
+  height: 30px;
+  font-size: 18px;
+  size: 40px;
+}
+.navbar {
+  background-color: gray;
+  color : white;
+  font-size: 20px;
+  height: 40px;
+  width: 100%;
+  margin:0; padding:10px;
+  background-color: red;
+}
+.left_info{
+  float: left;
+  padding-left: 4%;
+  background-color: #FFFFFF;
+  margin-top:20px;
+  width:20%;
+
+}
+
+.right_info{
+  float:right;
+  margin-top: 20px;
+  width:70%;
+  height : 60%
+  text-align: left;
+  padding-left: 5%;
+  border-left: 1.5px gray;
+  border-style: dashed;
+  border-top : 0px;
+  border-right : 0px;
+  border-bottom: 0px;
+}
+.right_content{
+  border : 1px black;
+  border-style :solid;
+  margin-top : 20px;
+  margin-bottom: 20px;
+
 }
