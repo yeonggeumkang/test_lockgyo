@@ -15,9 +15,9 @@ html
         p
             a(href='/notice') 돌아가기
         p
-            a(href='/notice/edit?id='+post.id) 수정
+            a(href='/notice/edit?id='+post.Nid) 수정
         p
-            a(href='/notice/delete?id='+post.id id='btn_delete') 삭제
+            a(href='/notice/delete?id='+post.Nid id='btn_delete') 삭제
         script
             | var element = document.getElementById('btn_delete');
             | element.onclick = function() {var result = confirm("정말 삭제하시겠습니까?");};

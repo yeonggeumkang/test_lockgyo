@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '961107',
+  password : '',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : '961107',
+  password : '',
   database : 'test'
 });
 connection.connect(); //mysql DB 연결
@@ -254,7 +254,7 @@ app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
     connection.query(sql_all, function(err, rows, fields){
         var id = req.query.id;
         if(id){
-            var sql_detail = 'SELECT * FROM NOTICE WHERE ID=?;';
+            var sql_detail = 'SELECT * FROM NOTICE WHERE Nid=?;';
             connection.query(sql_detail,[id],function(err, row, fields){
                 if(err){
                     console.log(err);
@@ -287,7 +287,7 @@ app.post('/notice/add',function(req,res){//DB에 글 작성
 });
 app.get(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     var id = req.query.id;
-    var sql = 'SELECT * FROM NOTICE WHERE ID=?;';
+    var sql = 'SELECT * FROM NOTICE WHERE Nid=?;';
         connection.query(sql,[id],function(err, row, fields){
             if(err){
                 console.log(err);
@@ -302,7 +302,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     var title = req.body.title;
     var description = req.body.description;
     var author = req.body.author;
-    var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE id=?';
+    var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE Nid=?';
     connection.query(sql,[title, description, author, id], function(err,rows,fields){
        if(err){
            console.log(err);
@@ -314,7 +314,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
 });
 app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     var id = req.query.id;
-    var sql = 'DELETE FROM notice WHERE id=?;';
+    var sql = 'DELETE FROM notice WHERE Nid=?;';
     connection.query(sql,[id],function(err, row, fields){
        if(err){
            console.log(err);
@@ -444,6 +444,20 @@ app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,
            }
         });
     };
+});
+app.post('/admin/setSchedule',function(req,res){
+    var type = req.body.dateType;
+    var str_date = req.body.str_date;
+    var end_date = req.body.end_date;
+    var sql = 'UPDATE SCHEDULE SET strDate = ?, endDate = ? WHERE type = ?;';
+    connection.query(sql, [str_date, end_date, type], function(err, rows, fields){
+       if(err){
+           console.log(err);
+           res.status(500).send('Internal Server Error');
+       } else{
+           res.redirect('/admin')
+       }
+    });
 });
 app.listen(3000,function(){ //포트접속
     console.log('Connected, 3000 port!');
