@@ -1,0 +1,11 @@
+.container {
+  width : 80%;
+  height : 89vh;
+  margin : auto;
+  background-color : #000000;
+  overflow: auto;
+  text-align: center;
+}
+.login_box{
+  color: red;
+}

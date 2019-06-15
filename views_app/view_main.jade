@@ -1,70 +1,85 @@
 html
     head
+      
         title
             h1  사물함 신청
-
-    body
-      //상단 탭
-      a(href='/main') HOME
-      &nbsp;&nbsp;
-
-      a(href='/notice') 공지사항
-      &nbsp;&nbsp;
-
-      a(href='/mypage') 마이페이지
-      &nbsp; &nbsp;
-      
-      if privilege === 1
-        a(href='/admin') 관리자페이지
-        &nbsp; &nbsp;
-
-      a(href='/logout') 로그아웃
-      
+        link(rel='stylesheet', href='style.css')
+    body                      
 
       
-      
-      //사용중인 사물함 정보
-      if locker
-        h3 나의 사물함 정보
-        = locker.lid
-        번 사물함을 사용중입니다.
-      else
-        h3 나의 사물함 정보
-        사용중인 사물함이 없습니다.
-
-      //사물함 신청
-      form(class='신청', action='/main', method='post')
-            h3 사물함 신청
-
-            div.input 사물함 번호
-              input(type='number', name='lockerNumber', value='사물함 번호')
-            div.input
-              input(type='submit', value='신청')
-      //사물함 반납
-      form(class='신청', action='/main/return', method='post')
-            h3 사물함 반납
-
-            div.input
-              input(type='submit', value='반납')
-      //사물함 연장
-
-      //공지사항
-      if notice
-          h3= notice.title
-          = notice.description
-      br
-
-      //모든 사물함 정보
-      h3 모든 사물함 보기
-      if allLocker
-        each lock in allLocker
-          if lock.usable
-            span(style='color:blue')=lock.Lid
-            span(style='color:blue')&nbsp; 사용가능
-            br
-            a(href='/main/?id='+lock.Lid) 신청하기
+      div.container
+        //상단 탭
+        //div(style='align-self: center; background-color:white; color:#646464; height:30px')
+        ul.navbar
             
+              a(href='/main') HOME
+              &nbsp;&nbsp;
+            
+              a(href='/notice') 공지사항
+              &nbsp;&nbsp;
+            
+              a(href='/mypage') 마이페이지
+              &nbsp; &nbsp;
+           
+              if privilege === 1
+                a(href='/admin') 관리자페이지
+                &nbsp; &nbsp;
+
+              a(href='/logout') 로그아웃
+            
+
+        
+       
+        //사용중인 사물함 정보
+        div.info
+          if locker
+            h3 나의 사물함 정보
+            = locker.Lid
+            번 사물함을 사용중입니다.
           else
-            span(style='color:red')=lock.Lid
-            span(style='color:red')&nbsp; 사용중
+            h3 나의 사물함 정보
+            사용중인 사물함이 없습니다.
+        
+        //사물함 신청
+        div.info
+          form(class='신청', action='/main', method='post')
+                h3 사물함 신청
+
+                div.inner_login_box
+                  사물함 번호
+
+                  input(type='number', name='lockerNumber', value='사물함 번호')
+                  
+                  div.button
+                    input(type='submit', value='신청')
+
+        //사물함 반납
+        div.info
+          form(class='신청', action='/main/return', method='post')
+                h3 사물함 반납
+
+                div.button
+                  input(type='submit', value='반납')
+        //사물함 연장
+
+        //공지사항
+        div.notice
+          if notice
+              h3= notice.title
+              = notice.description
           br
+
+        //모든 사물함 정보
+        div.all_locker
+          h3 모든 사물함 보기
+          if allLocker
+            each lock in allLocker
+              if lock.usable
+                span(style='color:blue')=lock.Lid
+                span(style='color:blue') &nbsp; 사용가능 &nbsp;
+                a(href='/main/enroll?id='+lock.Lid) 신청하기
+                
+              else
+                span(style='color:red')=lock.Lid
+                span(style='color:red')&nbsp; 사용중
+              br
