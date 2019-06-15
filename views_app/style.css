@@ -33,6 +33,7 @@
   width: 100%;
   margin:0; padding:10px;
   background-color: red;
+  text-align: right;
 }
 .left_info{
   float: left;
@@ -61,5 +62,13 @@
   border-style :solid;
   margin-top : 20px;
   margin-bottom: 20px;
-
+}
+.content_box{
+  display: inline-block;
+  width : 80%;
+  height: 80%;
+  border : 1px black;
+  border-style :solid;
+  text-align: center;
+  margin: auto;
 }

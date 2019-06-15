@@ -5,8 +5,6 @@ require('date-utils');
 var MySQLStore = require('express-mysql-session');
 var bkfd2Password = require('pbkdf2-password');
 var hasher = bkfd2Password();
-var mime = require('mime-types');
-mime.contentType('text/html');
 app.use(session({
     secret : '1107',
     resave : false,
