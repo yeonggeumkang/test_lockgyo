@@ -1,39 +1,41 @@
 html
   head
     title MY PAGE
-
+    link(rel='stylesheet', href='style.css')
   body
-    a(href='/main') HOME
-    &nbsp;&nbsp;
+    div.container
+      ul.navbar
+        a(href='/main') HOME
+        &nbsp;&nbsp;
 
-    a(href='/notice') 공지사항
-    &nbsp;&nbsp;
+        a(href='/notice') 공지사항
+        &nbsp;&nbsp;
 
-    a(href='/mypage') 마이페이지
-    &nbsp; &nbsp;
+        a(href='/mypage') 마이페이지
+        &nbsp; &nbsp;
 
-    a(href='/logout') 로그아웃
+        a(href='/logout') 로그아웃
 
 
-
-    h3 내 정보
-    이름 :&nbsp;
-    =name
-    br
-    이메일(ID) :&nbsp;
-    =email
-    br
-    학번 :&nbsp;
-    =studentID
-    br
-    휴대폰 번호 :&nbsp;
-    =phone_number
-    br
-    br
-    p
-      a(href='/mypage/edit') 개인정보 수정
-    p
-        a(href='/mypage/quit' id='btn_delete') 회원탈퇴
-    script
-        | var element = document.getElementById('btn_delete');
-        | element.onclick = function() {var result = confirm("정말 탈퇴하시겠습니까?");};
+      div.content_box
+        h3 내 정보
+        이름 :&nbsp;
+        =name
+        br
+        이메일(ID) :&nbsp;
+        =email
+        br
+        학번 :&nbsp;
+        =studentID
+        br
+        휴대폰 번호 :&nbsp;
+        =phone_number
+        br
+        br
+        p
+          a(href='/mypage/edit') 개인정보 수정
+        p
+            a(href='/mypage/quit' id='btn_delete') 회원탈퇴
+        script
+            | var element = document.getElementById('btn_delete');
+            | element.onclick = function() {var result = confirm("정말 탈퇴하시겠습니까?");};
