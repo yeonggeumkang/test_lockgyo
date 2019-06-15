@@ -1,24 +1,24 @@
 html
     head
+      link(rel='stylesheet', href='style.css')
     body
-        h1 sign in page
 
-        form(name="sign in", method="post")
+        h1 LOGIN
+        div.container
+          div.login_box
+            form(name="sign in", method="post")
 
-            div.input
-                input(type="text", name="email", placeholder="email")
-            div.input
-                input(type="password", name="password", placeholder="password")
-            div.actions
-                input(type="submit", value="Login")
-            br
+              div.inner_login_box
+                  input(type='text', name='email', placeholder="email")
+                  br
+                  input(type="password", name="password", placeholder="password")
+              div.button
+                  input(type="submit", value="로그인", size='50')
+              br
 
-            div.actions
-                input(type='button', value='회원가입', onclick="location.href='/signUp'")
-            br
+              div.button
+                  input(type='button', value='회원가입', onclick="location.href='/signUp'")
 
-            div.actions
-                input(type='button', value='아이디 찾기', onclick="location.href='/help/id'")
-
-
-                input(type='button', value='비밀번호 찾기', onclick="location.href='/help/pw'")
+              div.button
+                  input(type='button', value='아이디 찾기', onclick="location.href='/help/id'")
+                  input(type='button', value='비밀번호 찾기', onclick="location.href='/help/pw'")
