@@ -9,5 +9,13 @@
     },
     "scripts": {
         "test": "mocha --recursive tests"
+    },
+    "dependencies": {
+        "date-utils": "^1.2.21",
+        "express": "^4.17.1",
+        "express-mysql-session": "^2.1.0",
+        "express-session": "^1.16.2",
+        "jade": "^1.11.0",
+        "pbkdf2-password": "^1.2.1"
     }
 }
