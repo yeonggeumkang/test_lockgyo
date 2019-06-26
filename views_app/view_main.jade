@@ -11,6 +11,7 @@ html
         //상단 탭
         //div(style='align-self: center; background-color:white; color:#646464; height:30px')
         ul.navbar
+
               a(href='/main') HOME
               &nbsp;&nbsp;
             
@@ -60,9 +61,9 @@ html
                     td= schedule[0].endDate
                 tr
                     td 신규신청기간
-                    td= schedule[1].strDate
+                    //td= schedule[1].strDate
                     td ~
-                    td= schedule[1].endDate
+                    //td= schedule[1].endDate
             br
 
           //모든 사물함 정보
@@ -71,22 +72,30 @@ html
             if locker
                 p 새로운 사물함을 사용하고 싶은 경우 사용중인 사물함을 먼저 반납하시기 바랍니다
             if allLocker
-              each lock in allLocker
-                if locker
-                  if lock.usable
-                    span(style='color:blue')=lock.Lid
-                    span(style='color:blue') &nbsp; 사용가능 &nbsp;
-                  else
-                    span(style='color:red')=lock.Lid
-                    span(style='color:red')&nbsp; 사용중
-                else
+              table
+                each lock in allLocker
+                  if(lock.Lid%10==1)
+                    tr
+                  if locker
                     if lock.usable
-                      span(style='color:blue')=lock.Lid
-                      span(style='color:blue') &nbsp; 사용가능 &nbsp;
-                      a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청하기
+                      td(style='color:blue')= lock.Lid
+                        br
+                        span(style='color:blue') 사용가능
                     else
-                      span(style='color:red')=lock.Lid
-                      span(style='color:red')&nbsp; 사용중
+                      td(style='color:red')= lock.Lid
+                        br
+                        span(style='color:red') 사용중
+                  else
+                      if lock.usable
+                        td(style='color:blue')= lock.Lid
+                          br
+                          span(style='color:blue') 사용가능
+                          br
+                          a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청하기
+                      else
+                        td(style='color:red')= lock.Lid
+                          br
+                          span(style='color:red') 사용중
                 br
                 
                 
