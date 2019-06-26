@@ -67,12 +67,26 @@ html
               div.right_content
                 h3 모든 사물함 보기
                 if locker
+<<<<<<< HEAD
                     p 새로운 사물함을 사용하고 싶은 경우 사용중인 사물함을 먼저 반납하시기 바랍니다
                 if allLocker
                   each lock in allLocker
                     if locker
                         span(style='color:blue')=lock.Lid
                         span(style='color:blue') &nbsp; 사용가능 &nbsp;
+=======
+                  if lock.usable
+                    span(style='color:blue')=lock.Lid
+                    span(style='color:blue') &nbsp; 사용가능 &nbsp;
+                  else
+                    span(style='color:red')=lock.Lid
+                    span(style='color:red')&nbsp; 사용중
+                else
+                    if lock.usable
+                      span(style='color:blue')=lock.Lid
+                      span(style='color:blue') &nbsp; 사용가능 &nbsp;
+                      a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청하기
+>>>>>>> yeonggeum2
                     else
                         if lock.usable
                           span(style='color:blue')=lock.Lid
