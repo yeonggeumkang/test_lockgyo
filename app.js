@@ -20,10 +20,11 @@ app.use(session({
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'test'
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'test',
+    dateStrings: 'date'
 });
 connection.connect(); //mysql DB 연결
 app.use(bodyParser.urlencoded({exteded:false}));
@@ -176,9 +177,10 @@ app.get('/main', function(req,res) { //메인페이지
       res.redirect('/signIn');
     } else {}
     var studentID = req.session.Uid;
-    var sql = 'SELECT Lid FROM locker WHERE owner = ?';
-    var sql2 = 'select * from notice where Nid=1';
-    var sql3 = 'select * from locker;';
+    var sql = 'SELECT Lid FROM LOCKER WHERE owner = ?';
+    var sql2 = 'SELECT * FROM NOTICE WHERE Nid=1';
+    var sql3 = 'SELECT * FROM LOCKER;';
+    var sql4 = 'SELECT * FROM SCHEDULE'
 
     connection.query(sql, studentID, function(error, result1, fields){
       if(error) {
@@ -188,19 +190,27 @@ app.get('/main', function(req,res) { //메인페이지
           if(error){
             res.send('second query error');
           } else {
-            connection.query(sql3, function(error,result3, fileds){
+            connection.query(sql3, function(error,result3, fields){
               if(error){
                 res.send('third query error');
               } else {
-                res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3, privilege:req.session.privilege});
-              }
-            })
-          }
-        });
+                  connection.query(sql4, function(error,result4, fields){
+                      if(error){
+                          res.send('fourth query error');
+                          console.log(error);
+                      }else{
+                      res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3, privilege:req.session.privilege, schedule:result4});
+                      }
+                  })
+                }
+              });
+            }
+          });
+        }
 
-      }
-    });
-});
+      });
+    }
+);
 
 app.post('/main', function(req,res){
     if(!req.session.user){

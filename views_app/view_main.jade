@@ -44,29 +44,50 @@ html
                   h3 사물함 반납
 
                   div.button
-                    input(type='submit', value='반납')
+                    input(id='btn_return' type='submit', value='반납')
           //사물함 연장
         
         div.right_info
           //공지사항
           div.right_content
             h3 신청 일정
-            if notice
-                h3= notice.title
-                = notice.description
+            p(id=time)= schedule[0].strDate
+            table(class=tbl_schedule)
+                tr
+                    td 연장신청기간
+                    td= schedule[0].strDate
+                    td ~
+                    td= schedule[0].endDate
+                tr
+                    td 신규신청기간
+                    td= schedule[1].strDate
+                    td ~
+                    td= schedule[1].endDate
             br
 
           //모든 사물함 정보
           div.right_content
             h3 모든 사물함 보기
+            if locker
+                p 새로운 사물함을 사용하고 싶은 경우 사용중인 사물함을 먼저 반납하시기 바랍니다
             if allLocker
               each lock in allLocker
-                if lock.usable
-                  span(style='color:blue')=lock.Lid
-                  span(style='color:blue') &nbsp; 사용가능 &nbsp;
-                  a(href='/main/enroll?id='+lock.Lid) 신청하기
-                  
+                if locker
+                    span(style='color:blue')=lock.Lid
+                    span(style='color:blue') &nbsp; 사용가능 &nbsp;
                 else
-                  span(style='color:red')=lock.Lid
-                  span(style='color:red')&nbsp; 사용중
+                    if lock.usable
+                      span(style='color:blue')=lock.Lid
+                      span(style='color:blue') &nbsp; 사용가능 &nbsp;
+                      a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청하기
+                    else
+                      span(style='color:red')=lock.Lid
+                      span(style='color:red')&nbsp; 사용중
                 br
+                
+                
+        script
+            | var btnEnroll = document.getElementById('btn_enroll');
+            | btnEnroll.onclick = function(){var result = alert("신청완료");};
+            | var btnReturn = documnet.getElementById('btn_return);
+            | btnReturn.onclick = function() {var a = confirm("반납완료");}
