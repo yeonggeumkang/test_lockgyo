@@ -1,24 +1,38 @@
 html
     head
       link(rel='stylesheet', href='style.css')
+      link(rel='stylesheet', href='style.css')
     body
-
-        
         div.container
-          h1 LOGIN
-                form(name="sign in", method="post")
+            ul.navbar
+                  a(href='/main') HOME
+                  &nbsp;&nbsp;
 
-                  div.inner_login_box
-                      input.A(type='text', name='email', placeholder="email")
-                      br
-                      input.A(type="password", name="password", placeholder="password")
-                      div.button
-                          input(type="submit", value="로그인", size='50')
-                      br
+                  a(href='/notice') 공지사항
+                  &nbsp;&nbsp;
 
-                      div.button
-                          input(type='button', value='회원가입', onclick="location.href='/signUp'")
+                  a(href='/mypage') 마이페이지
+                  &nbsp; &nbsp;
 
-                      div.button
-                          input(type='button', value='아이디 찾기', onclick="location.href='/help/id'")
-                          input(type='button', value='비밀번호 찾기', onclick="location.href='/help/pw'")
+                  if privilege === 1
+                    a(href='/admin') 관리자페이지
+                    &nbsp; &nbsp;
+
+                  a(href='/logout') 로그아웃
+              h1 LOGIN
+                    form(name="sign in", method="post")
+
+                      div.inner_login_box
+                          input.A(type='text', name='email', placeholder="email")
+                          br
+                          input.A(type="password", name="password", placeholder="password")
+                          div.button
+                              input(type="submit", value="로그인", size='50')
+                          br
+
+                          div.button
+                              input(type='button', value='회원가입', onclick="location.href='/signUp'")
+
+                          div.button
+                              input(type='button', value='아이디 찾기', onclick="location.href='/help/id'")
+                              input(type='button', value='비밀번호 찾기', onclick="location.href='/help/pw'")

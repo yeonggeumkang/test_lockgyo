@@ -1,11 +1,28 @@
 html
     head
+        link(rel='stylesheet', href='style.css')
     body
-        form(name="helpuser", method="post")
-        
-            div.input 학번입력
-                br
-                input(type="text", name="student_id")
-                
-            div.actions
-                input(type="submit", value="email id 찾기")
+        div.container
+            ul.navbar
+                  a(href='/main') HOME
+                  &nbsp;&nbsp;
+
+                  a(href='/notice') 공지사항
+                  &nbsp;&nbsp;
+
+                  a(href='/mypage') 마이페이지
+                  &nbsp; &nbsp;
+
+                  if privilege === 1
+                    a(href='/admin') 관리자페이지
+                    &nbsp; &nbsp;
+
+                  a(href='/logout') 로그아웃
+            form(name="helpuser", method="post")
+
+                div.input 학번입력
+                    br
+                    input(type="text", name="student_id")
+
+                div.actions
+                    input(type="submit", value="email id 찾기")

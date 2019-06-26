@@ -2,17 +2,34 @@ doctype html
 html
     head
         meta(charset='utf-8')
+        link(rel='stylesheet', href='style.css')
     body
-        h1
-            | 수정하기
-        form(action='/notice/edit?id='+post.Nid method='post')
-            p
-                input(type='text' name='title' value=post.title placeholder='제목')
-            p
-                textarea(name='description' placeholder='내용')
-                    =post.description
-            p
-                input(type='text' name='author' value=post.author placeholder='작성자')    
-            p
-                input(type='submit')
+        div.container
+            ul.navbar
+                  a(href='/main') HOME
+                  &nbsp;&nbsp;
+
+                  a(href='/notice') 공지사항
+                  &nbsp;&nbsp;
+
+                  a(href='/mypage') 마이페이지
+                  &nbsp; &nbsp;
+
+                  if privilege === 1
+                    a(href='/admin') 관리자페이지
+                    &nbsp; &nbsp;
+
+                  a(href='/logout') 로그아웃
+            h1
+                | 수정하기
+            form(action='/notice/edit?id='+post.Nid method='post')
+                p
+                    input(type='text' name='title' value=post.title placeholder='제목')
+                p
+                    textarea(name='description' placeholder='내용')
+                        =post.description
+                p
+                    input(type='text' name='author' value=post.author placeholder='작성자')    
+                p
+                    input(type='submit')
                 
