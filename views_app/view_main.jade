@@ -73,8 +73,12 @@ html
             if allLocker
               each lock in allLocker
                 if locker
+                  if lock.usable
                     span(style='color:blue')=lock.Lid
                     span(style='color:blue') &nbsp; 사용가능 &nbsp;
+                  else
+                    span(style='color:red')=lock.Lid
+                    span(style='color:red')&nbsp; 사용중
                 else
                     if lock.usable
                       span(style='color:blue')=lock.Lid
