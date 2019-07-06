@@ -142,7 +142,7 @@ app.post('/signUp', function(req,res){
 
     if(req.body.password === req.body.password2) { //비밀번호 불일치
       connection.query('SELECT * FROM users WHERE email = ?', temail, function(error, results, fields){
-          if(error) { res.send('error');}
+          if(error) { res.send('error'); }
           else {
             if(results.length===0){ //데이터 없음 -->회원가입
               connection.query('SELECT * FROM users WHERE Uid=?', tid, function(error, results, fields){
@@ -217,65 +217,30 @@ app.post('/main', function(req,res){
       res.redirect('/signIn');
     } else {}
     var lockNum = req.body.lockerNumber;
-    /*
-    var sql1 = 'SELECT usable, owner FROM LOCKER WHERE LID=?'
-    var sql2 = 'UPDATE locker SET owner=?, usable=0 WHERE lid=?;'
+    var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
+    var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
+    console.log(req.session.Uid);
+
+    var nowDate = new Date();
+    //date 유효성 코드 추가
+
     connection.query(sql1, lockNum, function(error, results, fields){
       if(error){
         res.send('first query error');
       } else {
-        console.log(results);
-        /*var objectResult = JSON.stringify(results[0]);
+        var objectResult = JSON.stringify(results[0]);
         if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
           res.send('사용중인 사물함');
         } else {}
      connection.query(sql2, [req.session.Uid, req.body.lockerNumber], function(error, results, fields){
         if(error){
-            res.send('이미 사물함을 사용중입니다.');
+            res.send('second query error');
           } else {
             res.send('신청 완료');
           }
         });
       }
-    });*/
-});
-
-app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
-  console.log('enroll get access');
-  var id = req.query.id;
-  console.log(id);
-  var sql1 = 'SELECT usable, owner FROM LOCKER WHERE LID=?'
-  var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
-  console.log(req.session.Uid);
-
-  var nowDate = new Date();
-  //date 유효성 코드 추가
-  connection.query(sql1, id, function(error, results, fields){
-    if(error){
-      res.send('first query error');
-    } else {
-      if(results[0].usable === '0'){
-        res.send('타인이 사용중인 사물함');
-      } else {}
-
-   connection.query(sql2, [req.session.Uid, id], function(error, results, fields){
-      if(error){
-          console.log('이 사용자는 사물함을 사용중');
-          res.send('이미 사물함을 사용중입니다');
-        } else {
-          res.redirect('/main');
-        }
-      });
-    }
-  });
-});
-
-app.post('/main/enroll?id=:id', function(req,res){
-  console.log('enroll post access');
-  var id = req.query.id;
-  console.log(id);
-  var lockNum = req.body.lockerNumber;
-
+    });
 });
 
 app.post('/main/return', function(req,res){
@@ -370,7 +335,43 @@ app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     });
 });
 
+app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
+  console.log('enroll get access');
+  var id = req.query.id;
+  console.log(id);
+  var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
+  var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
+  console.log(req.session.Uid);
 
+  var nowDate = new Date();
+  //date 유효성 코드 추가
+
+  connection.query(sql1, id, function(error, results, fields){
+    if(error){
+      res.send('first query error');
+    } else {
+      var objectResult = JSON.stringify(results[0]);
+      if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
+        res.send('사용중인 사물함');
+      } else {}
+   connection.query(sql2, [req.session.Uid, id], function(error, results, fields){
+      if(error){
+          res.send('second query error');
+        } else {
+          res.redirect('/main');
+        }
+      });
+    }
+  });
+});
+
+app.post('/main/enroll?id=:id', function(req,res){
+  console.log('enroll post access');
+  var id = req.query.id;
+  console.log(id);
+  var lockNum = req.body.lockerNumber;
+
+});
 
 app.get('/mypage',function(req,res){ //마이페이지
     if(!req.session.user){
