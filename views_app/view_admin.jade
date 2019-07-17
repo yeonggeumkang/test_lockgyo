@@ -1,6 +1,7 @@
 doctype html
 html
     head
+        title 관리자페이지 | LOCKGYO
         meta(charset='utf-8')
         link(rel='stylesheet', href='style.css')
     body
@@ -34,11 +35,11 @@ html
 
                 each user in users
                     tr
-                        td= user.student_id
+                        td= user.Uid
                         td= user.name
                         td= user.privilege
                         td 
-                            a(href='/admin/changePrivilege?id='+user.student_id) 가입승인
+                            a(href='/admin/changePrivilege?id='+user.Uid) 가입승인
 
             p 섹션2. 일정관리
             p 현재일정

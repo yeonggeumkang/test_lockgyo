@@ -1,6 +1,6 @@
 html
     head
-    title 개인정보 수정
+    title 정보수정 | LOCKGYO
     link(rel='stylesheet', href='style.css')
     body
          div.navbar_container
@@ -45,3 +45,5 @@ html
                       br
                       br
                       input(type="submit", value="수정", name="수정", placeholder="수정")
+              a(id='edit_password' href='/mypage/editpw?id='+studentId) 비밀번호변경
+              input(type='button', value='비밀번호변경', onclick="location.href='/mypage/editpw'")

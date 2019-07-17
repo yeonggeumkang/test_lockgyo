@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '',
+  password : '961107',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
+    password : '961107',
     database : 'test',
     dateStrings: 'date'
 });
@@ -107,7 +107,7 @@ app.get('/help/pw', function(req,res){
 });
 
 app.post('/help/pw', function(req,res){
-    var helpVar = [req.body.student_id, req.body.email];
+    var helpVar = [req.body.Uid, req.body.email];
 
     connection.query('SELECT password FROM users WHERE (Uid=? and email=?)', helpVar,
                     function(error,results,fields){
@@ -115,7 +115,8 @@ app.post('/help/pw', function(req,res){
             res.send('error');
         } else {
             if(results.length>0){
-                res.send(results); //수정해야함
+                console.log('enter');
+                module.exports = router;
             } else {
                 res.send('이메일을 확인하세요');
             }
@@ -158,7 +159,7 @@ app.post('/signUp', function(req,res){
                         if(error){
                           res.send('등록에서 오류');
                         } else {
-                          res.redirect('/main');
+                          res.redirect('/signin');
                         }
 
                     });
@@ -391,9 +392,32 @@ app.get('/mypage/edit', function(req, res){
                             phone_number:req.session.phone, studentID:user});
 });
 
+app.get('/mypage/editpw', function(req, res){
+  res.render('view_editpw');
+});
+
+app.post('/mypage/editpw', function(req, res){
+  if(req.body.password === req.body.password2){
+    var opts = {password:req.body.password};
+    hasher(opts, function(err, pass, salt, hash){
+      connection.query('UPDATE users SET password=?, salt=?', [hash, salt], function(error, result, fields){
+        if(error){
+          res.status(500);
+          console.log('query error');
+        } else {
+          res.redirect('/signin');
+        }
+    });
+    });
+  } else {
+    res.send('비밀번호가 일치하지 않습니다.');
+  }
+});
+
 app.post('/mypage/edit', function(req, res){
   res.send('hello');
-})
+});
+
 app.get('/mypage/quit', function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
@@ -442,11 +466,11 @@ app.get('/admin',function(req,res){ //관리자페이지
 app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,res){
     var id = req.query.id;
     var privilege = req.session.privilege;
-    var sql = 'UPDATE USERS SET privilege=2 where student_id=?;';
+    var sql = 'UPDATE USERS SET privilege=2 where Uid=?;';
     if(privilege!=1){
         res.send('허가되지 않은 접근입니다');
     }else{
-        connection.query(sql, [id], function(err, rows, fields){
+        connection.query(sql, id, function(err, rows, fields){
            if(err){
                console.log(err);
            } else{
