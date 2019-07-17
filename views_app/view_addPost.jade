@@ -4,31 +4,33 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='style.css')
     body
-        div.container
-            ul.navbar
-                      a(href='/main') HOME
-                      &nbsp;&nbsp;
-
-                      a(href='/notice') 공지사항
-                      &nbsp;&nbsp;
-
-                      a(href='/mypage') 마이페이지
-                      &nbsp; &nbsp;
-
-                      if privilege === 1
-                        a(href='/admin') 관리자페이지
+         div.navbar_container
+            div.navbar
+                ul
+                    li
+                        a(href='/main').btn_navbar HOME
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/notice').btn_navbar 공지사항
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/mypage').btn_navbar 마이페이지
                         &nbsp; &nbsp;
-
-                      a(href='/logout') 로그아웃
-            h1
-                | 글쓰기
-            form(action='/notice/add' method='post')
-                p
-                    input(type='text' name='title' placeholder='제목')
-                p
-                    textarea(name='description' placeholder='내용')
-                p
-                    input(type='text' name='author' placeholder='작성자')    
-                p
-                    input(type='submit')
-                
+                    li
+                        if privilege === 1
+                            a(href='/admin').btn_navbar 관리자페이지
+                            &nbsp; &nbsp;
+                    li
+                        a(href='/logout').btn_navbar 로그아웃
+            div.container
+                h1
+                    | 글쓰기
+                form(action='/notice/add' method='post')
+                    p
+                        input(type='text' name='title' placeholder='제목')
+                    p
+                        textarea(name='description' placeholder='내용')
+                    p
+                        input(type='text' name='author' placeholder='작성자')    
+                    p
+                        input(type='submit')

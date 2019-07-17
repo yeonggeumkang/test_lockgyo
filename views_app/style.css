@@ -14,24 +14,25 @@
 /*네비게이션바 관련 속성*/
 .navbar_container {
     background: #004483;
-    height: 41px;
+    height: 50px;
     overflow: hidden;
 }
 .navbar {
-    max-width: 1400px;
+    width: 90%;
     margin: 0 auto;
     overflow: hidden;
     height: 100%;
 
 }
 .navbar ul {
+    float:right;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
 .navbar li{
-    float:right;
+    float:left;
     list-style:none;
 }
 .btn_navbar{
@@ -54,14 +55,14 @@
     font-weight: 400;
     text-decoration: none;
 }
-/*.container {
-  width : 80%;
+.container {
+  width : 90%;
   height : 89vh;
   margin : auto;
   background-color : #FFFFFF;
   text-align: center;
 
-}*/
+}
 .left_info{
   float: left;
   padding-left: 4%;

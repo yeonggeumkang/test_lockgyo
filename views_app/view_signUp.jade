@@ -2,24 +2,25 @@ html
     head
         link(rel='stylesheet', href='style.css')
     body
+         div.navbar_container
+            div.navbar
+                ul
+                    li
+                        a(href='/main').btn_navbar HOME
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/notice').btn_navbar 공지사항
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/mypage').btn_navbar 마이페이지
+                        &nbsp; &nbsp;
+                    li
+                        if privilege === 1
+                            a(href='/admin').btn_navbar 관리자페이지
+                            &nbsp; &nbsp;
+                    li
+                        a(href='/logout').btn_navbar 로그아웃
         div.container
-            ul.navbar
-              a(href='/main') HOME
-              &nbsp;&nbsp;
-            
-              a(href='/notice') 공지사항
-              &nbsp;&nbsp;
-            
-              a(href='/mypage') 마이페이지
-              &nbsp; &nbsp;
-           
-              if privilege === 1
-                a(href='/admin') 관리자페이지
-                &nbsp; &nbsp;
-
-              a(href='/logout') 로그아웃
-              h1 회원가입
-
                 form(name="회원가입", method="post")
 
                   div.inner_login_box
