@@ -1,7 +1,7 @@
 html
     head
       link(rel='stylesheet', href='style.css')
-      link(rel='stylesheet', href='style.css')
+      link(rel='stylesheet', href='design_signIn.css')
     body
          div.navbar_container
             div.navbar
@@ -19,23 +19,24 @@ html
                         if privilege === 1
                             a(href='/admin').btn_navbar 관리자페이지
                             &nbsp; &nbsp;
-                    li
-                        a(href='/logout').btn_navbar 로그아웃
         div.container
-              h1 LOGIN
-                    form(name="sign in", method="post")
-
-                      div.inner_login_box
-                          input.A(type='text', name='email', placeholder="email")
-                          br
-                          input.A(type="password", name="password", placeholder="password")
-                          div.button
-                              input(type="submit", value="로그인", size='50')
-                          br
-
-                          div.button
-                              input(type='button', value='회원가입', onclick="location.href='/signUp'")
-
-                          div.button
-                              input(type='button', value='아이디 찾기', onclick="location.href='/help/id'")
-                              input(type='button', value='비밀번호 찾기', onclick="location.href='/help/pw'")
+            div.box_signIn
+                form(name="sign in", method="post")
+                    div.box_field
+                        input.field_email(type='text', name='email', placeholder="이메일")
+                    div.box_field
+                        input.field_password(type="password", name="password", placeholder="비밀번호")
+                    div.box_field
+                        input.btn_signIn(type="submit" value="로그인")
+                div.box_findInfo
+                    ul
+                        li 
+                            a(href='/help/id').btn_findInfo 아이디 찾기
+                        li 
+                            span |
+                        li 
+                            a(href='/help/pw').btn_findInfo 비밀번호 찾기
+                        li
+                            span |
+                        li
+                            a(href='/signUp').btn_findInfo 회원가입
