@@ -1,7 +1,7 @@
 html
     head
-        title 아이디찾기 | LOCKGYO
-        link(rel='stylesheet', href='style.css')
+    title 정보수정 | LOCKGYO
+    link(rel='stylesheet', href='style.css')
     body
          div.navbar_container
             div.navbar
@@ -20,13 +20,16 @@ html
                             a(href='/admin').btn_navbar 관리자페이지
                             &nbsp; &nbsp;
                     li
-                        a(href='/logout').btn_navbar 로그아웃
+                        a(href='/signIn').btn_navbar 로그인
+        h4 비밀번호변경
         div.container
-            form(name="helpuser", method="post")
+                form(name="비밀번호변경", method="post")
+                  br
+                  |비밀번호
+                  input.A(type="password", name="password",placeholder="비밀번호")
+                  br
+                  | 비밀번호 확인
+                  input.A(type="password", name="password2",placeholder="비밀번호 확인")
 
-                div.input 학번입력
-                    br
-                    input(type="text", name="student_id")
-
-                div.actions
-                    input(type="submit", value="email id 찾기")
+                  div.button
+                    input(type="submit", value="변경", name="변경", placeholder="변경")
