@@ -6,7 +6,11 @@ html
     body
          div.navbar_container
             div.navbar
-                ul
+                ul.navbar_logo
+                    li  
+                        a(href='/main')
+                            img.img_navbar_logo(src="img_logo.png")
+                ul.navbar_menu
                     li
                         a(href='/main').btn_navbar HOME
                         &nbsp;&nbsp;
@@ -22,22 +26,23 @@ html
                             &nbsp; &nbsp;
         div.container
             div.box_signIn
-                form(name="sign in", method="post")
-                    div.box_field
-                        input.field_email(type='text', name='email', placeholder="이메일")
-                    div.box_field
-                        input.field_password(type="password", name="password", placeholder="비밀번호")
-                    div.box_field
-                        input.btn_signIn(type="submit" value="로그인")
-                div.box_findInfo
-                    ul
-                        li 
-                            a(href='/help/id').btn_findInfo 아이디 찾기
-                        li 
-                            span |
-                        li 
-                            a(href='/help/pw').btn_findInfo 비밀번호 찾기
-                        li
-                            span |
-                        li
-                            a(href='/signUp').btn_findInfo 회원가입
+                div.box_field
+                    //p 
+                    //    img.img_logo(src="img_logo.png")
+                    p 로그인
+                    form(name="sign in", method="post")
+                            input.field_email(type='text', name='email', placeholder="이메일")
+                            input.field_password(type="password", name="password", placeholder="비밀번호")
+                            input.btn_signIn(type="submit" value="로그인")
+                    div.box_findInfo
+                        ul
+                            li 
+                                a(href='/help/id').btn_findInfo 아이디 찾기
+                            li 
+                                span |
+                            li 
+                                a(href='/help/pw').btn_findInfo 비밀번호 찾기
+                            li
+                                span |
+                            li
+                                a(href='/signUp').btn_findInfo 회원가입
