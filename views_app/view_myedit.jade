@@ -1,9 +1,9 @@
 html
     head
-    title 정보수정 | LOCKGYO
-    link(rel='stylesheet', href='style.css')
-    body
-         div.navbar_container
+        title 개인정보수정 | LOCKGYO
+        link(rel='stylesheet', href='design_signIn.css')
+    body        
+        div.navbar_container
             div.navbar
                 ul
                     li
@@ -43,7 +43,7 @@ html
 
                   div.actions
                       br
-                      br
                       input(type="submit", value="수정", name="수정", placeholder="수정")
-              a(id='edit_password' href='/mypage/editpw?id='+studentId) 비밀번호변경
+              br
+              //마이페이지에서 바로 변경할때는 이 버튼 이용.
               input(type='button', value='비밀번호변경', onclick="location.href='/mypage/editpw'")

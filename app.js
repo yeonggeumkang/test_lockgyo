@@ -115,8 +115,7 @@ app.post('/help/pw', function(req,res){
             res.send('error');
         } else {
             if(results.length>0){
-                console.log('enter');
-                module.exports = router;
+              res.redirect('/mypage/editpw');
             } else {
                 res.send('이메일을 확인하세요');
             }
@@ -264,6 +263,7 @@ app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
     var sql_all = 'SELECT * FROM NOTICE;'
     connection.query(sql_all, function(err, rows, fields){
         var id = req.query.id;
+        var privilege = req.session.privilege;
         if(id){
             var sql_detail = 'SELECT * FROM NOTICE WHERE Nid=?;';
             connection.query(sql_detail,[id],function(err, row, fields){
@@ -271,11 +271,11 @@ app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
                     console.log(err);
                     res.status(500).send('Internal Server Error');
                 }else {
-                    res.render('view_post',{post:row[0]});
+                    res.render('view_post',{post:row[0], privilege:req.session.privilege});
                 }
             });
         }else{
-            res.render('view_notice',{topics:rows});
+            res.render('view_notice',{topics:rows, privilege:req.session.privilege});
         };
     });
 });
@@ -374,13 +374,14 @@ app.post('/main/enroll?id=:id', function(req,res){
 
 });
 
-app.get('/mypage',function(req,res){ //마이페이지
+app.get('/mypage', function(req, res){ //마이페이지
     if(!req.session.user){
+      console.log('no user');
       res.redirect('/signIn');
-    } else {}
+    } else {
     var user = req.session.Uid;
     res.render('view_mypage',{name:req.session.name, email:req.session.email,
-                              phone_number:req.session.phone, studentID:user});
+                              phone_number:req.session.phone, studentID:user, privilege:req.session.privilege});}
 });
 
 app.get('/mypage/edit', function(req, res){
@@ -456,7 +457,7 @@ app.get('/admin',function(req,res){ //관리자페이지
                     console.log(err);
                 }
                 else {
-                     res.render('view_admin',{users:rows});
+                     res.render('view_admin',{users:rows, privilege:req.session.privilege});
                 }
             });
         };

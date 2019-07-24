@@ -1,9 +1,8 @@
 html
     head
-      
-        title LOCKGYO
+        title LOCKGYO | 성균관대학교 교육학과
         link(rel='stylesheet', href='style.css')
-    body
+    body        
         div.navbar_container
             div.navbar
                 ul
@@ -65,7 +64,7 @@ html
               div.right_content
                 h3 모든 사물함 보기
                 if locker
-                    p 새로운 사물함을 사용하고 싶은 경우 사용중인 사물함을 먼저 반납하시기 바랍니다
+                    p 새로운 사물함을 사용하고 싶은 경우 사용중인 사물함을 먼저 반납하시기 바랍니다.
                 if allLocker
                   each lock in allLocker
                     if locker
@@ -86,4 +85,4 @@ html
             | var btnEnroll = document.getElementById('btn_enroll');
             | btnEnroll.onclick = function(){var result = alert("신청완료");};
             | var btnReturn = documnet.getElementById('btn_return);
-            | btnReturn.onclick = function() {var a = confirm("반납완료");}
+            | btnReturn.onclick = function(){var a = confirm("반납완료");}
