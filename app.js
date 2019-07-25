@@ -40,6 +40,7 @@ app.get('/',function(req,res){ // 사용자 정보 있으면 메인페이지, �
     res.redirect('/signIn');
   }
 });
+
 //로그인페이지
 app.get('/signIn',function(req,res){
     res.render('view_signIn');
@@ -122,6 +123,8 @@ app.post('/help/pw', function(req,res){
         }
     });
 });
+
+//로그아웃 페이지
 app.get('/logout', function(req,res){
   delete req.session.email;
   delete req.session.Uid;
@@ -130,6 +133,7 @@ app.get('/logout', function(req,res){
   delete req.session.user;
   res.redirect('/');
 })
+
 //회원가입 페이지
 app.get('/signUp',function(req,res){
     res.render('view_signUp');
@@ -172,7 +176,8 @@ app.post('/signUp', function(req,res){
     }
 });
 
-app.get('/main', function(req,res) { //메인페이지
+// 메인 페이지
+app.get('/main', function(req,res) {
     if(!req.session.user){
       res.redirect('/signIn');
     } else {}
@@ -259,84 +264,7 @@ app.post('/main/return', function(req,res){
   });
 });
 
-app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
-    var sql_all = 'SELECT * FROM NOTICE;'
-    connection.query(sql_all, function(err, rows, fields){
-        var id = req.query.id;
-        var privilege = req.session.privilege;
-        var authorName = req.session.name;
-        if(id){
-            var sql_detail = 'SELECT * FROM NOTICE WHERE Nid=?;';
-            connection.query(sql_detail,[id],function(err, row, fields){
-                if(err){
-                    console.log(err);
-                    res.status(500).send('Internal Server Error');
-                }else {
-                    res.render('view_post',{post:row[0], privilege:req.session.privilege, authorName:authorName});
-                }
-            });
-        }else{
-            res.render('view_notice',{topics:rows, privilege:req.session.privilege, authorName:authorName});
-        };
-    });
-});
-app.get('/notice/add',function(req,res){
-   res.render('view_addPost');
-});//글쓰기
-app.post('/notice/add',function(req,res){//DB에 글 작성
-    var title = req.body.title;
-    var description = req.body.description;
-    var author = req.session.name;
-    var sql = 'INSERT INTO notice (title, description, author) VALUES(?, ?, ?);';
-    connection.query(sql, [title, description, author], function(err, rows, fields){
-       if(err){
-           console.log(err);
-           res.status(500).send('Internal Server Error');
-       } else{
-           res.redirect('/notice')
-       }
-    });
-});
-app.get(['/notice/edit','/notice/edit?id=:id'],function(req,res){
-    var id = req.query.id;
-    var sql = 'SELECT * FROM NOTICE WHERE Nid=?;';
-        connection.query(sql,[id],function(err, row, fields){
-            if(err){
-                console.log(err);
-                res.status(500).send('Internal Server Error');
-            }else {
-                res.render('view_editPost',{post:row[0]});
-            }
-        });
-});
-app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
-    var id = req.query.id;
-    var title = req.body.title;
-    var description = req.body.description;
-    var author = req.body.author;
-    var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE Nid=?';
-    connection.query(sql,[title, description, author, id], function(err,rows,fields){
-       if(err){
-           console.log(err);
-           res.status(500).send('Internal Server Error');
-       }else{
-           res.redirect('/notice/?id='+id);
-       }
-    });
-});
-app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
-    var id = req.query.id;
-    var sql = 'DELETE FROM notice WHERE Nid=?;';
-    connection.query(sql,[id],function(err, row, fields){
-       if(err){
-           console.log(err);
-           res.status(500).send('Internal Server Error');
-       }else{
-           res.redirect('/notice');
-       }
-    });
-});
-
+//사물함 신청
 app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
   console.log('enroll get access');
   var id = req.query.id;
@@ -372,10 +300,100 @@ app.post('/main/enroll?id=:id', function(req,res){
   var id = req.query.id;
   console.log(id);
   var lockNum = req.body.lockerNumber;
-
 });
 
-app.get('/mypage', function(req, res){ //마이페이지
+//공지사항, notice
+app.get(['/notice','/notice?id=:id'],function(req,res){
+  if(!req.session.user){
+    res.redirect('/signIn');
+  } else {
+      var sql_all = 'SELECT * FROM NOTICE;'
+      connection.query(sql_all, function(err, rows, fields){
+          var id = req.query.id;
+          var privilege = req.session.privilege;
+          var authorName = req.session.name;
+          if(id){
+              var sql_detail = 'SELECT * FROM NOTICE WHERE Nid=?;';
+              connection.query(sql_detail,[id],function(err, row, fields){
+                  if(err){
+                      console.log(err);
+                      res.status(500).send('Internal Server Error');
+                  }else {
+                      res.render('view_post',{post:row[0], privilege:req.session.privilege, authorName:authorName});
+                  }
+              });
+          }else{
+              res.render('view_notice',{topics:rows, privilege:req.session.privilege, authorName:authorName});
+          };
+      });
+    }
+});
+
+//공지사항 추가
+app.get('/notice/add',function(req,res){
+   res.render('view_addPost');
+});
+
+app.post('/notice/add',function(req,res){ //DB에 글 작성
+    var title = req.body.title;
+    var description = req.body.description;
+    var author = req.session.name;
+    var sql = 'INSERT INTO notice (title, description, author) VALUES(?, ?, ?);';
+    connection.query(sql, [title, description, author], function(err, rows, fields){
+       if(err){
+           console.log(err);
+           res.status(500).send('Internal Server Error');
+       } else{
+           res.redirect('/notice')
+       }
+    });
+});
+
+//공지사항 수정
+app.get(['/notice/edit','/notice/edit?id=:id'],function(req,res){
+    var id = req.query.id;
+    var sql = 'SELECT * FROM NOTICE WHERE Nid=?;';
+        connection.query(sql,[id],function(err, row, fields){
+            if(err){
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            }else {
+                res.render('view_editPost',{post:row[0]});
+            }
+        });
+});
+app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
+    var id = req.query.id;
+    var title = req.body.title;
+    var description = req.body.description;
+    var author = req.body.author;
+    var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE Nid=?';
+    connection.query(sql,[title, description, author, id], function(err,rows,fields){
+       if(err){
+           console.log(err);
+           res.status(500).send('Internal Server Error');
+       }else{
+           res.redirect('/notice/?id='+id);
+       }
+    });
+});
+
+//공지사항 삭제
+app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
+    var id = req.query.id;
+    var sql = 'DELETE FROM notice WHERE Nid=?;';
+    connection.query(sql,[id],function(err, row, fields){
+       if(err){
+           console.log(err);
+           res.status(500).send('Internal Server Error');
+       }else{
+           res.redirect('/notice');
+       }
+    });
+});
+
+// 마이페이지
+app.get('/mypage', function(req, res){
     if(!req.session.user){
       console.log('no user');
       res.redirect('/signIn');
@@ -384,7 +402,10 @@ app.get('/mypage', function(req, res){ //마이페이지
     res.render('view_mypage',{name:req.session.name, email:req.session.email,
                               phone_number:req.session.phone, studentID:user, privilege:req.session.privilege});}
 });
-
+app.post('/mypage/edit', function(req, res){
+  res.send('hello');
+});
+//개인정보 수정
 app.get('/mypage/edit', function(req, res){
   if(!req.session.user){
     res.redirect('/signIn');
@@ -393,7 +414,7 @@ app.get('/mypage/edit', function(req, res){
   res.render('view_myedit',{name:req.session.name, email:req.session.email,
                             phone_number:req.session.phone, studentID:user});
 });
-
+// 비밀번호 변경
 app.get('/mypage/editpw', function(req, res){
   res.render('view_editpw');
 });
@@ -416,10 +437,7 @@ app.post('/mypage/editpw', function(req, res){
   }
 });
 
-app.post('/mypage/edit', function(req, res){
-  res.send('hello');
-});
-
+// 회원탈퇴
 app.get('/mypage/quit', function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
@@ -440,9 +458,8 @@ app.get('/mypage/quit', function(req,res){
   });
 });
 
-app.get('/admin',function(req,res){ //관리자페이지
-    //res.render("view_admin");
-    //코드작성//
+//관리자 페이지
+app.get('/admin',function(req,res){
     var privilege = req.session.privilege;
     console.log(privilege);
     var sql= 'SELECT * FROM USERS WHERE privilege=3;';
@@ -481,7 +498,7 @@ app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,
         });
     };
 });
-
+//전체회원 승인
 app.get('/admin/changePrivilegeAll', function(req, res){
   var privilege = req.session.privilege;
   var sql = 'UPDATE USERS SET privilege=2 where privilege=3;'
@@ -512,6 +529,7 @@ app.post('/admin/setSchedule',function(req,res){
        }
     });
 });
+
 app.listen(3000,function(){ //포트접속
     console.log('Connected, 3000 port!');
 });
