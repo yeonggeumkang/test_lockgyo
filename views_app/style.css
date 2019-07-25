@@ -1,5 +1,6 @@
 @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
-body, table, div, p, form {font-family:'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';}
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@1.0/nanumbarungothicsubset.css");
+body, table, div, p, form, input {font-family:'NanumBarunGothic','Spoqa Han Sans JP', 'Sans-serif'; font-weight: 300;}
 /*네비게이션바 관련 속성*/
 .navbar_container {
     position: relative;

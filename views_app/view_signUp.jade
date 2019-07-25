@@ -47,12 +47,12 @@ html
                       br
                       학번
                       br
-                      input.A(type='text', name="student_id", placeholder='10자리 학번을 입력하세요.')
+                      input.A(type='text', name="student_id", pattern='[0-9]{10}', placeholder='10자리 학번을 입력하세요.')
 
                       br
                       연락처
                       br
-                      input.A(type='text', name="phone_number", placeholder="01012345678 형태로 입력하세요.")
+                      input.A(type='text', name="phone_number", pattern='[0-9]{11}', placeholder="01012345678 형태로 입력하세요.")
                       br
                       div.button
                           input(type="submit", value="회원가입", name="회원가입", placeholder="회원가입")

@@ -263,6 +263,7 @@ app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
     connection.query(sql_all, function(err, rows, fields){
         var id = req.query.id;
         var privilege = req.session.privilege;
+        var authorName = req.session.name;
         if(id){
             var sql_detail = 'SELECT * FROM NOTICE WHERE Nid=?;';
             connection.query(sql_detail,[id],function(err, row, fields){
@@ -270,21 +271,21 @@ app.get(['/notice','/notice?id=:id'],function(req,res){ //공지사항
                     console.log(err);
                     res.status(500).send('Internal Server Error');
                 }else {
-                    res.render('view_post',{post:row[0], privilege:req.session.privilege});
+                    res.render('view_post',{post:row[0], privilege:req.session.privilege, authorName:authorName});
                 }
             });
         }else{
-            res.render('view_notice',{topics:rows, privilege:req.session.privilege});
+            res.render('view_notice',{topics:rows, privilege:req.session.privilege, authorName:authorName});
         };
     });
 });
 app.get('/notice/add',function(req,res){
    res.render('view_addPost');
-});//글쓰기 화면
+});//글쓰기
 app.post('/notice/add',function(req,res){//DB에 글 작성
     var title = req.body.title;
     var description = req.body.description;
-    var author = req.body.author;
+    var author = req.session.name;
     var sql = 'INSERT INTO notice (title, description, author) VALUES(?, ?, ?);';
     connection.query(sql, [title, description, author], function(err, rows, fields){
        if(err){
@@ -479,6 +480,23 @@ app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,
         });
     };
 });
+
+app.get('/admin/changePrivilegeAll', function(req, res){
+  var privilege = req.session.privilege;
+  var sql = 'UPDATE USERS SET privilege=2 where privilege=3;'
+  if(privilege!=1){
+    res.send('허가되지 않은 접근입니다.');
+  } else {
+    connection.query(sql, function(err, rows, fields){
+      if(err){
+        console.log(error);
+      } else {
+        res.redirect('/admin');
+      }
+    });
+  }
+});
+
 app.post('/admin/setSchedule',function(req,res){
     var type = req.body.dateType;
     var str_date = req.body.str_date;

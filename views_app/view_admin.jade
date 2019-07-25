@@ -36,7 +36,6 @@ html
                     td 학번
                     td 이름
                     td 상태
-
                 each user in users
                     tr
                         td= user.Uid
@@ -44,7 +43,11 @@ html
                         td= user.privilege
                         td 
                             a(href='/admin/changePrivilege?id='+user.Uid) 가입승인
-
+            a(href='/admin/changePrivilegeAll') 전체 승인
+            br
+            br
+            
+            input(type)
             p 섹션2. 일정관리
             p 현재일정
             p
