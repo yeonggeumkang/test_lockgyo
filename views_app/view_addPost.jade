@@ -1,16 +1,14 @@
-doctype html
 html
     head
         title 공지사항게시 | LOCKGYO
-        meta(charset='utf-8')
-        link(rel='stylesheet', href='style.css')
+        link(rel='stylesheet', href='/assets/style/style.css')
     body
          div.navbar_container
             div.navbar
                 ul.navbar_logo
                     li  
                         a(href='/main')
-                            img.img_navbar_logo(src="img_logo.png")
+                            img.img_navbar_logo(src="/assets/image/img_logo.png")
                 ul.navbar_menu
                     li
                         a(href='/main').btn_navbar HOME
@@ -25,13 +23,15 @@ html
                         if privilege === 1
                             a(href='/admin').btn_navbar 관리자페이지
                             &nbsp; &nbsp;
-            div.container
-                h1
-                    | 글쓰기
-                form(action='/notice/add' method='post')
-                    p
-                        input(type='text' name='title' placeholder='제목')
-                    p
-                        textarea(name='description' placeholder='내용')
-                    p
-                        input(type='submit')
+                            
+        div.container
+            | 글쓰기
+            form(action='/notice/add' method='post')
+                p
+                    input(type='text' name='title' placeholder='제목')
+                p
+                    textarea(name='description' placeholder='내용')
+                p
+                    input(type='text' name='author' placeholder='작성자')    
+                p
+                    input(type='submit')

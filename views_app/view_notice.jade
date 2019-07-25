@@ -1,16 +1,15 @@
-doctype html
 html
     head
         title 공지사항 | LOCKGYO
         meta(charset='utf-8')
-        link(rel='stylesheet', href='style.css')
+        link(rel='stylesheet', href='/assets/style/style.css')
     body
         div.navbar_container
             div.navbar
                 ul.navbar_logo
                     li  
                         a(href='/main')
-                            img.img_navbar_logo(src="img_logo.png")
+                            img.img_navbar_logo(src="/assets/image/img_logo.png")
                 ul.navbar_menu
                     li
                         a(href='/main').btn_navbar HOME
@@ -28,7 +27,7 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
         div.container
-            h1 공지사항
+            | 공지사항
             ul
                 each topic in topics
                     li
