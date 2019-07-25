@@ -21,7 +21,7 @@ body, table, div, p, form {font-family:'Spoqa Han Sans', 'Spoqa Han Sans JP', 'S
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: hidden; 
+    overflow: hidden;
 }
 .navbar_logo li{
     float:left;

@@ -28,11 +28,12 @@ html
                 h3 나의 사물함 정보
                 if locker
 
-                  = locker.Lid
-                  번 사물함을 사용중입니다.
+                  p(title='hi')
+                    = locker.Lid
+                    번 사물함을 사용중입니다.
                 else
 
-                  사용중인 사물함이 없습니다.
+                  p(data-toggle="tooltip" title='hello')사용중인 사물함이 없습니다.
 
               //사물함 반납
               div.info
@@ -86,3 +87,7 @@ html
             | btnEnroll.onclick = function(){var result = alert("신청완료");};
             | var btnReturn = documnet.getElementById('btn_return);
             | btnReturn.onclick = function(){var a = confirm("반납완료");}
+        script
+            $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+            })

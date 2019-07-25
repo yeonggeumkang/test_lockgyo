@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '',
+  password : '961107',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
+    password : '961107',
     database : 'test',
     dateStrings: 'date'
 });
@@ -39,7 +39,6 @@ app.get('/',function(req,res){ // 사용자 정보 있으면 메인페이지, �
     res.redirect('/signIn');
   }
 });
-
 //로그인페이지
 app.get('/signIn',function(req,res){
     res.render('view_signIn');
