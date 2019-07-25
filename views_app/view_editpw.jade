@@ -5,7 +5,11 @@ html
     body
          div.navbar_container
             div.navbar
-                ul
+                ul.navbar_logo
+                    li  
+                        a(href='/main')
+                            img.img_navbar_logo(src="img_logo.png")
+                ul.navbar_menu
                     li
                         a(href='/main').btn_navbar HOME
                         &nbsp;&nbsp;
@@ -20,7 +24,7 @@ html
                             a(href='/admin').btn_navbar 관리자페이지
                             &nbsp; &nbsp;
                     li
-                        a(href='/signIn').btn_navbar 로그인
+                        a(href='/logout').btn_navbar 로그아웃
         h4 비밀번호변경
         div.container
                 form(name="비밀번호변경", method="post")

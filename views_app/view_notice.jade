@@ -5,9 +5,13 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='style.css')
     body
-         div.navbar_container
+        div.navbar_container
             div.navbar
-                ul
+                ul.navbar_logo
+                    li  
+                        a(href='/main')
+                            img.img_navbar_logo(src="img_logo.png")
+                ul.navbar_menu
                     li
                         a(href='/main').btn_navbar HOME
                         &nbsp;&nbsp;

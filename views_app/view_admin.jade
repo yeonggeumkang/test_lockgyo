@@ -5,24 +5,28 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='style.css')
     body
-         div.navbar_container
-                div.navbar
-                    ul
-                        li
-                            a(href='/main').btn_navbar HOME
-                            &nbsp;&nbsp;
-                        li
-                            a(href='/notice').btn_navbar 공지사항
-                            &nbsp;&nbsp;
-                        li
-                            a(href='/mypage').btn_navbar 마이페이지
+        div.navbar_container
+            div.navbar
+                ul.navbar_logo
+                    li  
+                        a(href='/main')
+                            img.img_navbar_logo(src="img_logo.png")
+                ul.navbar_menu
+                    li
+                        a(href='/main').btn_navbar HOME
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/notice').btn_navbar 공지사항
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/mypage').btn_navbar 마이페이지
+                        &nbsp; &nbsp;
+                    li
+                        if privilege === 1
+                            a(href='/admin').btn_navbar 관리자페이지
                             &nbsp; &nbsp;
-                        li
-                            if privilege === 1
-                                a(href='/admin').btn_navbar 관리자페이지
-                                &nbsp; &nbsp;
-                        li
-                            a(href='/logout').btn_navbar 로그아웃
+                    li
+                        a(href='/logout').btn_navbar 로그아웃
         div.container
             h1 admin page
             p 섹션1. 회원관리
