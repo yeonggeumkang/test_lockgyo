@@ -1,0 +1,40 @@
+html
+    head
+        title 공지사항 | LOCKGYO
+        meta(charset='utf-8')
+        link(rel='stylesheet', href='/assets/style/style.css')
+    body
+        div.navbar_container
+            div.navbar
+                ul.navbar_logo
+                    li  
+                        a(href='/main')
+                            img.img_navbar_logo(src="/assets/image/img_logo.png")
+                ul.navbar_menu
+                    li
+                        a(href='/main').btn_navbar HOME
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/notice').btn_navbar 공지사항
+                        &nbsp;&nbsp;
+                    li
+                        a(href='/mypage').btn_navbar 마이페이지
+                        &nbsp; &nbsp;
+
+                    li
+                        a(href='/signIn').btn_navbar 로그인
+        div.container
+              br
+              br
+              if msg
+                = msg
+              li 
+                  a(href='/help/id').btn_findInfo 아이디 찾기
+              li 
+                  span |
+              li 
+                  a(href='/help/pw').btn_findInfo 비밀번호 찾기
+              li
+                  span |
+              li
+                  a(href='/signUp').btn_findInfo 회원가입

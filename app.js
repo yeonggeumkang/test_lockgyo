@@ -66,7 +66,7 @@ app.post('/signIn', function(req,res){
                     req.session.user = results;
                     res.redirect('/');
                   } else {
-                    res.send('wrong password');
+                    res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다.", alertType:2});
                   }
                 });
                 /*if(results[0].password == password) { //비밀번호 일치, 로그인 성공
@@ -75,7 +75,7 @@ app.post('/signIn', function(req,res){
                     res.send('wrong password');
                 }*/
             } else { //데이터 없음
-                res.send('email do not exist');
+                res.render('view_alert2', {msg:"존재하지 않는 아이디입니다.", alertType:1});
             }
         }
     });
@@ -94,9 +94,9 @@ app.post('/help/id', function(req,res){
             res.send('error');
         } else {
             if(results.length>0){
-                res.send(results[0].email); //수정해야함
+                res.render('view_alert2', {msg:results[0].email, alertType:1});
             } else {
-                res.send('가입 안됨');
+                res.render('view_alert2', {msg:"존재하지 않는 학번입니다.", alertType:1});
             }
         }
     });
@@ -118,7 +118,7 @@ app.post('/help/pw', function(req,res){
             if(results.length>0){
               res.redirect('/mypage/editpw');
             } else {
-                res.send('이메일을 확인하세요');
+                res.render('view_alert2', {msg:"ID(이메일)을 확인하세요.", alertType:1});
             }
         }
     });
@@ -160,19 +160,19 @@ app.post('/signUp', function(req,res){
                       connection.query('INSERT INTO users(email, password, name, Uid, phone, salt) values(?,?,?,?,?,?)', hashUser,
                       function(error, result, fields){
                         if(error){
-                          res.send('등록에서 오류');
+                          res.render('view_alert2', {msg:"정보가 입력되지 않았습니다.", alertType:1});
                         } else {
                           res.redirect('/signin');
                         }
 
                     });
                   });
-                  } else { res.send('이미 존재하는 학번입니다.'); }
+                } else { res.render('view_alert2', {msg:"이미 존재하는 학번입니다.", alertType:1}); }
                 }});
-            } else { res.send('이미 존재하는 id(email)입니다.'); }
+            } else { res.render('view_alert2', {msg:"이미 존재하는 ID(이메일)입니다.", alertType:1}); }
           }});
     } else {
-      res.send('비밀번호가 일치하지 않음');
+      res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다.", alertType:1});
     }
 });
 
@@ -204,7 +204,8 @@ app.get('/main', function(req,res) {
                           res.send('fourth query error');
                           console.log(error);
                       }else{
-                      res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3, privilege:req.session.privilege, schedule:result4});
+                      res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3,
+                        privilege:req.session.privilege, schedule:result4});
                       }
                   })
                 }
@@ -226,8 +227,7 @@ app.post('/main', function(req,res){
     var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
     console.log(req.session.Uid);
 
-    var nowDate = new Date();
-    //date 유효성 코드 추가
+
 
     connection.query(sql1, lockNum, function(error, results, fields){
       if(error){
@@ -254,10 +254,12 @@ app.post('/main/return', function(req,res){
   } else {}
   var user = req.session.Uid;
   var sql = 'update locker set usable=1, owner=NULL where owner=?;';
+  console.log('step1');
   connection.query(sql, user, function(error, results, fields){
     if(error){
       res.send('query error');
     } else {
+      console.log('step2');
       //반납되었다는 알람, 팝업추가
       res.redirect('/main');
     }
@@ -274,25 +276,40 @@ app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
   console.log(req.session.Uid);
 
   var nowDate = new Date();
-  //date 유효성 코드 추가
+  console.log(nowDate);
+  var sql3 = 'SELECT strDate, endDate from schedule where Sid=2;'
 
-  connection.query(sql1, id, function(error, results, fields){
-    if(error){
-      res.send('first query error');
+  connection.query(sql3, function(error, results, fields){
+    if(error) {
+      console.log('sql3 query error');
     } else {
-      var objectResult = JSON.stringify(results[0]);
-      if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
-        res.send('사용중인 사물함');
-      } else {}
-   connection.query(sql2, [req.session.Uid, id], function(error, results, fields){
-      if(error){
-          res.send('second query error');
+        var strDate = new Date(results[0].strDate);
+        var endDate = new Date(results[0].endDate);
+        console.log(nowDate, strDate, endDate);
+        if(strDate < nowDate && nowDate < endDate) {
+          connection.query(sql1, id, function(error, results, fields){
+            if(error){
+              res.send('first query error');
+            } else {
+              var objectResult = JSON.stringify(results[0]);
+              if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
+                res.send('사용중인 사물함');
+              } else {}
+           connection.query(sql2, [req.session.Uid, id], function(error, results, fields){
+              if(error){
+                  res.send('second query error');
+                } else {
+                  res.redirect('/main');
+                }
+              });
+            }
+          });
         } else {
-          res.redirect('/main');
+          res.render('view_alert', {msg:"신청 기간이 아닙니다."});
         }
-      });
     }
   });
+
 });
 
 app.post('/main/enroll?id=:id', function(req,res){
@@ -433,7 +450,7 @@ app.post('/mypage/editpw', function(req, res){
     });
     });
   } else {
-    res.send('비밀번호가 일치하지 않습니다.');
+    res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다."});
   }
 });
 
@@ -453,7 +470,7 @@ app.get('/mypage/quit', function(req,res){
       delete req.session.name;
       delete req.session.phone;
       delete req.session.user;
-      res.send('탈퇴 완료');
+      res.render('view_alert2', {msg:"탈퇴가 완료되었습니다."});
     }
   });
 });
@@ -487,7 +504,7 @@ app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,
     var privilege = req.session.privilege;
     var sql = 'UPDATE USERS SET privilege=2 where Uid=?;';
     if(privilege!=1){
-        res.send('허가되지 않은 접근입니다');
+        res.render('view_alert', {msg:"허가되지 않은 접근입니다."});
     }else{
         connection.query(sql, id, function(err, rows, fields){
            if(err){
@@ -503,7 +520,7 @@ app.get('/admin/changePrivilegeAll', function(req, res){
   var privilege = req.session.privilege;
   var sql = 'UPDATE USERS SET privilege=2 where privilege=3;'
   if(privilege!=1){
-    res.send('허가되지 않은 접근입니다.');
+    res.render('view_alert', {msg:"허가되지 않은 접근입니다."});
   } else {
     connection.query(sql, function(err, rows, fields){
       if(err){
