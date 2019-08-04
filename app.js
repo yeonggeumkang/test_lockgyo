@@ -277,7 +277,7 @@ app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
 
   var nowDate = new Date();
   console.log(nowDate);
-  var sql3 = 'SELECT strDate, endDate from schedule where Sid=2;'
+  var sql3 = 'SELECT strDate, endDate from schedule where Sid=1;'
 
   connection.query(sql3, function(error, results, fields){
     if(error) {
@@ -336,7 +336,17 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
                       console.log(err);
                       res.status(500).send('Internal Server Error');
                   }else {
-                      res.render('view_post',{post:row[0], privilege:req.session.privilege, authorName:authorName});
+                      var sql_comment = 'SELECT * FROM comment WHERE notice=?;';
+                      connection.query(sql_comment, [id], function(err, row2, fields){
+                        if(err){
+                          console.log('2nd err');
+                        }else {
+                          console.log(row2);
+                          res.render('view_post', {post:row[0], privilege:req.session.privilege, authorName:authorName,
+                            allComment:row2});
+                        }
+                      });
+                      //res.render('view_post',{post:row[0], privilege:req.session.privilege, authorName:authorName});
                   }
               });
           }else{
@@ -346,6 +356,21 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
     }
 });
 
+app.post(['/notice/comment','/notice/comment?id=:id'], function(req, res){
+  console.log('comment post conneted');
+  var nid = req.query.id;
+  var c_content = req.body.c_content;
+  var c_author = req.session.name;
+  var sql = 'INSERT INTO comment values(?,?,?);';
+  connection.query(sql, [nid, c_content, c_author], function(err, row, fields){
+    if(err){
+      console.log('query error');
+    }else {
+      console.log('update completed');
+      res.redirect('/notice?id='+nid);
+    }
+  });
+});
 //공지사항 추가
 app.get('/notice/add',function(req,res){
    res.render('view_addPost');

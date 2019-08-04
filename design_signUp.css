@@ -1,0 +1,111 @@
+.inner_login_box {
+  border-style: 2px black;
+  background-color: #F5F5F5;
+  margin: auto;
+  text-align: center;
+  margin-left: inherit;
+  padding: 30px;
+  width: 30%;
+  display: inline-block;
+  font-size: 18px;
+}
+/*로그인 박스*/
+/*.box_signIn {
+    width: 30%;
+    display: inline-block;
+    background-color: #ffffff;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.08), 0 0 1px 0 rgba(0,0,0,.12);
+    position:absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    height: 30%;
+    margin: 10% auto;
+}*/
+
+.img_logo {
+    width: 50%;
+    margin: auto;
+}
+
+.box_field {
+    width: 25%;
+    display: inline-block;
+    background-color: #ffffff;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.08), 0 0 1px 0 rgba(0,0,0,.12);
+    top: 0; left: 0; bottom: 0; right: 0;
+    margin: 10% auto;
+    padding: 2% 0% 2% 0%;
+
+}
+.box_field p {
+    font-size: 25px;
+}
+
+.field_email {
+    width: 80%;
+    margin: 5px;
+    padding: 10px 5px;
+    font-size: 18px;
+    color: #999999
+}
+
+.field_password {
+    width: 80%;
+    margin: 5px;
+    padding: 10px 5px;
+    font-size: 18px;
+    color: #999999
+}
+
+.btn_signIn {
+    width: 80%;
+    margin: 5px;
+    padding: 10px 5px;
+    background-color: #4580F4;
+    color: #ffffff;
+    border: none;
+    font-size: 18px;
+}
+
+/*ID, PW 찾기*/
+.box_findInfo {
+    width: 80%;
+    margin: auto;
+    font-size: 5
+}
+
+.box_findInfo ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.box_findInfo li {
+    display: inline-block;
+    list-style: none;
+}
+
+span {
+    color: #4a4a4a
+}
+
+.btn_findInfo{
+    display:block;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #4a4a4a;
+    opacity: 0.7;
+    font-weight: 400;
+    text-decoration: none;
+}
+.btn_findInfo:hover{
+    display:block;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #4a4a4a;
+    opacity: 1;
+    font-weight: 400;
+    text-decoration: none;
+}

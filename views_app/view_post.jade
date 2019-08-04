@@ -40,6 +40,18 @@ html
                 a(href='/notice/edit?id='+post.Nid) 수정
             p
                 a(href='/notice/delete?id='+post.Nid id='btn_delete') 삭제
+                
+            div.container
+              if allComment
+                each com in allComment
+                  =com.c_author
+                  &nbsp;
+                  =com.c_content
+                  br
+              p 댓글작성
+                form(action='/notice/comment?id='+post.Nid, name="comment", method="post")
+                  input(type='text', name='c_content', placeholder="")
+                  input(type="submit" value="등록")
         script
             | var element = document.getElementById('btn_delete');
             | element.onclick = function() {var result = confirm("정말 삭제하시겠습니까?");};
