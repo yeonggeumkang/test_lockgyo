@@ -1,0 +1,23 @@
+.container {
+    width: 60%;
+    margin: auto;
+    background-color: #fff;
+}
+.board{
+    width: 95%;
+    margin: auto;
+    padding: 18px 0px;
+    vertical-align: middle;
+}
+
+.board tr {
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.td_id .td_title {
+    text-align: left;
+}
+
+.td_timestamp{
+    text-align: right;
+}
