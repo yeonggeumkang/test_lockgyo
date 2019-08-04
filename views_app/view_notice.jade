@@ -3,6 +3,7 @@ html
         title 공지사항 | LOCKGYO
         meta(charset='utf-8')
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_notice.css')
     body
         div.navbar_container
             div.navbar
@@ -27,20 +28,15 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
         div.container
-            | 공지사항
-            ul
+            table.board
                 each topic in topics
-                    li
-                        a(href='/notice?id='+topic.Nid)= topic.title
+                    tr
+                        td(width="5%").td_id= topic.Nid
+                        td(width="80%").td_title
+                            a(href='/notice?id='+topic.Nid)= topic.title
+                        td(width="15%").td_timestamp= topic.timestamp
+                        
+            div.wrap_btn
+                if privilege === 1
+                    a(href='/notice/add').btn_write 글쓰기
 
-            //article 
-                if detail
-                    h2= detail.title
-                    = detail.description
-                    div= 'by ' + detail.author
-                else
-                    h2 Welcome
-                    no content//
-            div
-            if privilege === 1
-                a(href='/notice/add') 글쓰기

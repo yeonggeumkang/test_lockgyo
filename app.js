@@ -379,9 +379,10 @@ app.get('/notice/add',function(req,res){
 app.post('/notice/add',function(req,res){ //DB에 글 작성
     var title = req.body.title;
     var description = req.body.description;
-    var author = req.session.name;
-    var sql = 'INSERT INTO notice (title, description, author) VALUES(?, ?, ?);';
-    connection.query(sql, [title, description, author], function(err, rows, fields){
+    var author = req.body.author;
+    var timestamp = req.body.timestamp;
+    var sql = 'INSERT INTO notice (title, description, author, timestamp) VALUES(?, ?, ?, ?);';
+    connection.query(sql, [title, description, author, timestamp], function(err, rows, fields){
        if(err){
            console.log(err);
            res.status(500).send('Internal Server Error');

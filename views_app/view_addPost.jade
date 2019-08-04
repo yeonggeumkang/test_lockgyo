@@ -32,4 +32,10 @@ html
                 p
                     textarea(name='description' placeholder='내용')
                 p
+                    input(type='text' name='author' placeholder='작성자')
+                p
+                    input(type='hidden' name='timestamp' id='timestamp')
+                p
                     input(type='submit')
+
+        script(type='text/javascript') document.getElementById('timestamp').value = new Date().toISOString().substring(0, 10);
