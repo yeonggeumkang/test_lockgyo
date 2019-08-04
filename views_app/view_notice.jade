@@ -35,7 +35,8 @@ html
                         td(width="80%").td_title
                             a(href='/notice?id='+topic.Nid)= topic.title
                         td(width="15%").td_timestamp= topic.timestamp
-            
-            div
-            if privilege === 1
-                a(href='/notice/add').btn_write 글쓰기
+                        
+            div.wrap_btn
+                if privilege === 1
+                    a(href='/notice/add').btn_write 글쓰기
+
