@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '961107',
+  password : '',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '961107',
+    password : '',
     database : 'test',
     dateStrings: 'date'
 });
@@ -336,10 +336,10 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
                       console.log(err);
                       res.status(500).send('Internal Server Error');
                   }else {
-                      var sql_comment = 'SELECT * FROM comment WHERE notice=?;';
+                      var sql_comment = 'SELECT * FROM COMMENT WHERE notice=?;';
                       connection.query(sql_comment, [id], function(err, row2, fields){
                         if(err){
-                          console.log('2nd err');
+                          console.log('Comment DB error');
                         }else {
                           console.log(row2);
                           res.render('view_post', {post:row[0], privilege:req.session.privilege, authorName:authorName,
