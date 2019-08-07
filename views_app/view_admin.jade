@@ -3,6 +3,7 @@ html
         title 관리자페이지 | LOCKGYO
         meta(charset='utf-8')
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_admin.css')
     body
         div.navbar_container
             div.navbar
@@ -27,42 +28,63 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
         div.container
-            h1 admin page
-            p 섹션1. 회원관리
-            | 현재 승인대기중인 가입자 수는 #{users.length}명 입니다
-            table
-                tr 
-                    td 학번
-                    td 이름
-                    td 상태
-                each user in users
-                    tr
-                        td= user.Uid
-                        td= user.name
-                        td= user.privilege
-                        td 
-                            a(href='/admin/changePrivilege?id='+user.Uid) 가입승인
-            a(href='/admin/changePrivilegeAll') 전체 승인
-            br
-            br
-            
-            input(type)
-            p 섹션2. 일정관리
-            p 현재일정
-            p
-                신규신청기간 : 
             form(action='/admin/setSchedule' method='post')
-                p
-                    일정유형<br>
-                    select(name='dateType')
-                        option(value=1) 신규신청
-                        option(value=2) 연장신청
-                p   
-                    시작일자 <br>
-                    input(type='date' id='str_date' name='str_date')
-                p   
-                    마감일자 <br>
-                    input(type='date' id='end_date' name='end_date')
-                p
-                    input(type='submit' value='적용하기')
+                table.board
+                    thead
+                        tr
+                            td(colspan="5") 일정관리
+                    tbody
+                        tr
+                            td(rowspan="3") 현재일정
+                            td 구분
+                            td 시작일
+                            td 마감일
+                        tr
+                            td 신규신청
+                            td= schedule[0].strDate
+                            td= schedule[0].endDate
+                            
+                        tr
+                            td 연장신청
+                            td= schedule[1].strDate
+                            td= schedule[1].endDate
+                        tr
+                            td(rowspan="2") 일정수정
+                            td(rowspan="2")
+                                select(name='dateType')
+                                    option(value=1) 신규신청
+                                    option(value=2) 연장신청
+                            td 시작일자
+                                input(type='date' id='str_date' name='str_date')
+                            td(rowspan="2")
+                                input(type='submit' value='적용하기')
+                        tr
+                            td 마감일자
+                                input(type='date' id='end_date' name='end_date')
+            
+            table.board
+                thead
+                    tr
+                        td(colspan="4") 회원관리
+                tbody
+                    tr
+                        td 학번
+                        td 이름
+                        td 상태
+                        td 승인
+                    each user in users
+                        tr
+                            td(width="30%")= user.Uid
+                            td(width="20%")= user.name
+                            td(width="20%")= user.privilege
+                            td(width="30%")
+                                if user.privilege = 3
+                                    a(href='/admin/changePrivilege?id='+user.Uid) 가입승인
+                                else
+                                    승인완료
+                    tr
+                        td(colspan="3") 현재 대기중인 가입자 수는 #{users.length}명 입니다
+                        td 
+                            a(href='/admin/changePrivilegeAll') 전체승인
+            
         script(type='text/javascript') document.getElementById('str_date').value = new Date().toISOString().substring(0, 10);
