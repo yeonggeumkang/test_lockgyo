@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '',
+  password : '961107',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
+    password : '961107',
     database : 'test',
     dateStrings: 'date'
 });
@@ -409,7 +409,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     var id = req.query.id;
     var title = req.body.title;
     var description = req.body.description;
-    var author = req.body.author;
+    var author = req.session.name;
     var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE Nid=?';
     connection.query(sql,[title, description, author, id], function(err,rows,fields){
        if(err){

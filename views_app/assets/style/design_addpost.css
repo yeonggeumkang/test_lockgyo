@@ -1,0 +1,56 @@
+.container {
+    width: 60%;
+    margin: auto;
+    background-color: #fff;
+}
+
+.board{
+    width: 60%;
+    padding-top: 5%;
+    margin: auto;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+
+.board p {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.field_title{
+  width:60%;
+  padding: 10px 10px;
+  font-size: 18px;
+  margin: 5px;
+}
+
+.field_desc{
+  width:60%;
+  padding: 100px 10px;
+  font-size: 14px;
+  margin: 5px;
+}
+
+.btn_submit{
+  width: 60%;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 10px;
+  background-color: #fff;
+  color: #4480f4;
+  border: 1px solid #4480f4;
+  text-decoration: none;
+  margin: 5px;
+}
+
+.btn_submit:hover {
+    width: 60%;
+    font-size: 15px;
+    font-weight: 400;
+    padding: 10px;
+    background-color: #4480f4;
+    color: #fff;
+    border: 1px solid #4480f4;
+    text-decoration: none;
+    margin: 5px;
+}

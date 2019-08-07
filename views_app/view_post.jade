@@ -34,6 +34,11 @@ html
                 p= post.title
               div.post_timestamp
                 p= post.timestamp
+                div.box_mng
+                  if privilege === 1
+                    a(href='/notice/edit?id='+post.Nid) 수정
+                    &nbsp;
+                    a(href='/notice/delete?id='+post.Nid id='btn_delete') 삭제
               div.post_content
                 p= post.description
             else
@@ -65,13 +70,7 @@ html
                   
           div.box_btn
                 p
-      
-                      a(href='/notice').btn_back 돌아가기
-                    p
-                    if privilege === 1
-                      a(href='/notice/edit?id='+post.Nid).btn_back 수정
-                      p
-                      a(href='/notice/delete?id='+post.Nid id='btn_delete').btn_back 삭제
+                  a(href='/notice').btn_back 돌아가기
                       
         script
             | var element = document.getElementById('btn_delete');

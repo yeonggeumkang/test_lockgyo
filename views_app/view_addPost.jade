@@ -2,6 +2,7 @@ html
     head
         title 공지사항게시 | LOCKGYO
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_addpost.css')
     body
          div.navbar_container
             div.navbar
@@ -25,15 +26,14 @@ html
                             &nbsp; &nbsp;
                             
         div.container
-            | 글쓰기
+          div.board
+              p 공지사항 작성
             form(action='/notice/add' method='post')
-                p
-                    input(type='text' name='title' placeholder='제목')
-                p
-                    textarea(name='description' placeholder='내용')
-                p
+                    input.field_title(type='text' name='title' placeholder='제목')
+
+                    textarea.field_desc(name='description' placeholder='내용')
+
                     input(type='hidden' name='timestamp' id='timestamp')
-                p
-                    input(type='submit')
+                    input.btn_submit(type='submit')
 
         script(type='text/javascript') document.getElementById('timestamp').value = new Date().toISOString().substring(0, 10);

@@ -3,6 +3,7 @@ html
         title 공지사항수정 | LOCKGYO
         meta(charset='utf-8')
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_addpost.css')
     body
          div.navbar_container
             div.navbar
@@ -27,16 +28,11 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
         div.container
-            h1
-                | 수정하기
+            div.board
+              p 공지사항 수정
             form(action='/notice/edit?id='+post.Nid method='post')
-                p
-                    input(type='text' name='title' value=post.title placeholder='제목')
-                p
-                    textarea(name='description' placeholder='내용' style='white-space:pre;')
-                        =post.description
-                p
-                    input(type='text' name='author' value=post.author placeholder='작성자')    
-                p
-                    input(type='submit')
+                    input.field_title(type='text' name='title' value=post.title placeholder='제목')
+                    textarea.field_desc(name='description' placeholder='내용' style='white-space:pre;')
+                        =post.description  
+                    input.btn_submit(type='submit')
                 
