@@ -2,6 +2,7 @@ html
     head
         title 개인정보수정 | LOCKGYO
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_myedit.css')
     body        
         div.navbar_container
             div.navbar
@@ -26,28 +27,23 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
         div.container
-              h1 개인정보 수정
+          div.box_field
               form(name="개인정보수정", method="post")
-                  div.input email
-                      br
-                      input(type="text", name="email", value=email)
-                      br
+                  div.edit_title
+                    p 정보 수정
+                  div.edit_text
+                    p email
+                    input.field_edit(type="text", name="email", value=email)
 
-                  div.input 이름
-                      br
-                      input(type="text", name="name", placeholder=name)
+                    p 이름
+                    input.field_edit(type="text", name="name", placeholder=name)
 
-                  div.input 학번
-                      br
-                      input(type='text', name="student_id", placeholder=studentID)
+                    p 학번
+                    input.field_edit(type='text', name="student_id", placeholder=studentID)
 
-                  div.input 연락처
-                      br
-                      input(type='text', name="phone_number", placeholder=phone_number)
+                    p 연락처
+                    input.field_edit(type='text', name="phone_number", placeholder=phone_number)
 
-                  div.actions
-                      br
-                      input(type="submit", value="수정", name="수정", placeholder="수정")
-              br
-              //마이페이지에서 바로 변경할때는 이 버튼 이용.
-              input(type='button', value='비밀번호변경', onclick="location.href='/mypage/editpw'")
+                    input.btn_edit(type="submit", value="수정", name="수정", placeholder="수정")
+
+              input.btn_editPw(type='button', value='비밀번호변경', onclick="location.href='/mypage/editpw'")

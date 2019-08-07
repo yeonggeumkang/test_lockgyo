@@ -30,32 +30,49 @@ html
         div.container
           div.post_board
             if post
-                div.post_title
-                  p= post.title
-                div.post_timestamp
-                  p= post.timestamp
-                div.post_content
-                  p= post.description
+              div.post_title
+                p= post.title
+              div.post_timestamp
+                p= post.timestamp
+              div.post_content
+                p= post.description
             else
                 | 잘못된 접근입니다
-            p
-                a(href='/notice') 돌아가기
-            p
-                a(href='/notice/edit?id='+post.Nid) 수정
-            p
-                a(href='/notice/delete?id='+post.Nid id='btn_delete') 삭제
-                
-            div.container
+
+                table.board
+                    thead
+                        tr
+                            td(colspan="4") 회원관리
+          div.box_comment
+            table.comment
+              thead
+                tr
+                  td(colspan="4") 댓글
               if allComment
+                tbody
                 each com in allComment
-                  =com.c_author
-                  &nbsp;
-                  =com.c_content
-                  br
-              p 댓글작성
-                form(action='/notice/comment?id='+post.Nid, name="comment", method="post")
-                  input(type='text', name='c_content', placeholder="")
-                  input(type="submit" value="등록")
+                  tr
+                    td(width="25%")= com.c_author
+                    &nbsp;
+                    td= com.c_content
+                    br
+          
+            form(action='/notice/comment?id='+post.Nid, name="comment", method="post")
+                  p 댓글작성
+                  input.field_comment(type='text', name='c_content', placeholder="")
+                  input.btn_comment(type="submit" value="등록")
+                  
+                  
+          div.box_btn
+                p
+      
+                      a(href='/notice').btn_back 돌아가기
+                    p
+                    if privilege === 1
+                      a(href='/notice/edit?id='+post.Nid).btn_back 수정
+                      p
+                      a(href='/notice/delete?id='+post.Nid id='btn_delete').btn_back 삭제
+                      
         script
             | var element = document.getElementById('btn_delete');
             | element.onclick = function() {var result = confirm("정말 삭제하시겠습니까?");};

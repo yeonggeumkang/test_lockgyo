@@ -73,10 +73,14 @@ html
                 if allLocker
                   each lock in allLocker
                     if locker
+                      if lock.usable === 1
                         span(style='color:blue')=lock.Lid
                         span(style='color:blue') &nbsp; 사용가능 &nbsp;
+                      else
+                        span(style='color:red')=lock.Lid
+                        span(style='color:red')&nbsp; 사용중
                     else
-                        if lock.usable
+                        if lock.usable === 1
                           span(style='color:blue')=lock.Lid
                           span(style='color:blue') &nbsp; 사용가능 &nbsp;
                           a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청하기

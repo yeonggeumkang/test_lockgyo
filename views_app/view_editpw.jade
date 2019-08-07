@@ -2,6 +2,7 @@ html
     head
       title 정보수정 | LOCKGYO
       link(rel='stylesheet', href='/assets/style/style.css')
+      link(rel='stylesheet', href='/assets/style/design_myedit.css')
     body
          div.navbar_container
             div.navbar
@@ -25,15 +26,17 @@ html
                             &nbsp; &nbsp;
                     li
                         a(href='/logout').btn_navbar 로그아웃
-        h4 비밀번호변경
-        div.container
-                form(name="비밀번호변경", method="post")
-                  br
-                  |비밀번호
-                  input.A(type="password", name="password",placeholder="비밀번호")
-                  br
-                  | 비밀번호 확인
-                  input.A(type="password", name="password2",placeholder="비밀번호 확인")
 
-                  div.button
-                    input(type="submit", value="변경", name="변경", placeholder="변경")
+        div.container
+          div.box_field
+                form(name="비밀번호변경", method="post")
+                div.edit_title
+                  p 비밀번호 변경
+                div.edit_text
+                  p 비밀번호
+                  input.field_edit(type="password", name="password",placeholder="비밀번호")
+                  
+                  p 비밀번호 확인
+                  input.field_edit(type="password", name="password2",placeholder="비밀번호 확인")
+
+                  input.btn_edit(type="submit", value="변경", name="변경", placeholder="변경")
