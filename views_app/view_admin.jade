@@ -4,6 +4,11 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='/assets/style/style.css')
         link(rel='stylesheet', href='/assets/style/design_admin.css')
+        script
+            |var count = 0;
+            |function countUser() {
+            |    count += 1;
+            |}
     body
         div.navbar_container
             div.navbar
@@ -76,15 +81,24 @@ html
                         tr
                             td(width="30%")= user.Uid
                             td(width="20%")= user.name
-                            td(width="20%")= user.privilege
-                            td(width="30%")
-                                if user.privilege = 3
+                            if user.privilege === 3
+                                script
+                                    | countUser();
+                                
+                                td(width="20%") 승인대기
+                                td(width="30%")
                                     a(href='/admin/changePrivilege?id='+user.Uid) 가입승인
-                                else
-                                    승인완료
+                            else
+                                td(width="20%") 승인완료
+                                td(width="30%")
+                                    a(href='/admin/deleteUser?id='+user.Uid) 회원삭제
                     tr
-                        td(colspan="3") 현재 대기중인 가입자 수는 #{users.length}명 입니다
+                        td(colspan="3") 현재 대기중인 가입자 수는 
+                            script 
+                                | document.write(count)
+                            명입니다
                         td 
                             a(href='/admin/changePrivilegeAll') 전체승인
             
-        script(type='text/javascript') document.getElementById('str_date').value = new Date().toISOString().substring(0, 10);
+        script(type='text/javascript')
+            |document.getElementById('str_date').value = new Date().toISOString().substring(0, 10);
