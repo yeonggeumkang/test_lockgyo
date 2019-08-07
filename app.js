@@ -185,7 +185,7 @@ app.get('/main', function(req,res) {
     var sql = 'SELECT Lid FROM LOCKER WHERE owner = ?';
     var sql2 = 'SELECT * FROM NOTICE WHERE Nid=1';
     var sql3 = 'SELECT * FROM LOCKER;';
-    var sql4 = 'SELECT * FROM SCHEDULE'
+    var sql4 = 'SELECT * FROM SCHEDULE';
 
     connection.query(sql, studentID, function(error, result1, fields){
       if(error) {
@@ -505,7 +505,8 @@ app.get('/mypage/quit', function(req,res){
 app.get('/admin',function(req,res){
     var privilege = req.session.privilege;
     console.log(privilege);
-    var sql= 'SELECT * FROM USERS WHERE privilege=3;';
+    var sql= 'SELECT * FROM USERS;';
+    var sql2 = 'SELECT * FROM SCHEDULE';
     if(!req.session.user){
       res.redirect('/signIn');
     }else {
@@ -514,11 +515,18 @@ app.get('/admin',function(req,res){
         }else {
             connection.query(sql, function(err, rows, fields){
                 if(err){
-                    res.send('error');
+                    res.send('Internal Server Error');
                     console.log(err);
-                }
-                else {
-                     res.render('view_admin',{users:rows, privilege:req.session.privilege});
+                } else {
+                    connection.query(sql2, function(err, rows2, fields){
+                        if(err){
+                            res.send("Internal Server Error")
+                            console.log(err);
+                        }
+                        else {
+                            res.render('view_admin',{users:rows, schedule:rows2, privilege:req.session.privilege});
+                        }
+                    });
                 }
             });
         };

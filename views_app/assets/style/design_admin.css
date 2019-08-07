@@ -1,0 +1,24 @@
+.container {
+    width: 60%;
+    margin: auto;
+    background-color: #fff;
+}
+.board{
+    width: 40%;
+    margin: auto;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+.board thead td {
+    font-size: 20px;
+    color: #4480f4;
+    font-weight: 400;
+    border-bottom: 1px solid #000;
+}
+
+.board tbody td {
+    padding: 10px 0px;
+    font-weight: 400;
+    border-bottom: 1px solid #f2f2f2;
+    text-align: left;
+}

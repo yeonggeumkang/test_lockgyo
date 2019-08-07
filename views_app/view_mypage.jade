@@ -2,6 +2,7 @@ html
   head
     title 마이페이지 | LOCKGYO
     link(rel='stylesheet', href='/assets/style/style.css')
+    link(rel='stylesheet', href='/assets/style/design_mypage.css')
   body
      div.navbar_container
             div.navbar
@@ -26,27 +27,26 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
     div.container
-
-
-      div.content_box
-        h3 내 정보
-        이름 :&nbsp;
-        =name
-        br
-        이메일(ID) :&nbsp;
-        =email
-        br
-        학번 :&nbsp;
-        =studentID
-        br
-        휴대폰 번호 :&nbsp;
-        =phone_number
-        br
-        br
+        table.board
+            tr
+                td(colspan="2").td_head 사용자 정보
+            tr
+                td(width="40%") 이름
+                td(width="60%")= name
+            tr
+                td(width="40%") 이메일(ID)
+                td(width="60%")= email
+            tr
+                td(width="40%") 학번
+                td(width="60%")= studentID
+            tr
+                td(width="40%") 휴대폰
+                td(width="60%")= "0" + phone_number
+                        
         p
-          a(href='/mypage/edit') 개인정보 수정
+            a(href='/mypage/edit').btn_mypage 개인정보 수정
         p
-            a(href='/mypage/quit' id='btn_delete') 회원탈퇴
+            a(href='/mypage/quit' id='btn_delete').btn_mypage 회원탈퇴
         script
             | var element = document.getElementById('btn_delete');
             | element.onclick = function() {var result = confirm("정말 탈퇴하시겠습니까?");};
