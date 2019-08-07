@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '961107',
+  password : '',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '961107',
+    password : '',
     database : 'test',
     dateStrings: 'date'
 });
@@ -549,6 +549,26 @@ app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,
         });
     };
 });
+
+//관리자페이지 내 회원삭제
+app.get(['/admin/deleteUser','/admin/deleteUser?id=:id'],function(req,res){
+    var id = req.query.id;
+    var privilege = req.session.privilege;
+    var sql = 'DELETE FROM USERS WHERE Uid=?;';
+    if(privilege!=1){
+        res.render('view_alert', {msg:"허가되지 않은 접근입니다."});
+    }else{
+        connection.query(sql, id, function(err, rows, fields){
+           if(err){
+               console.log(err);
+           } else{
+               res.redirect('/admin');
+           }
+        });
+    };
+});
+
+
 //전체회원 승인
 app.get('/admin/changePrivilegeAll', function(req, res){
   var privilege = req.session.privilege;
@@ -566,6 +586,7 @@ app.get('/admin/changePrivilegeAll', function(req, res){
   }
 });
 
+//일정관리
 app.post('/admin/setSchedule',function(req,res){
     var type = req.body.dateType;
     var str_date = req.body.str_date;

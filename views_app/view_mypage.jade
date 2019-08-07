@@ -28,20 +28,22 @@ html
                         a(href='/logout').btn_navbar 로그아웃
     div.container
         table.board
-            tr
-                td(colspan="2").td_head 사용자 정보
-            tr
-                td(width="40%") 이름
-                td(width="60%")= name
-            tr
-                td(width="40%") 이메일(ID)
-                td(width="60%")= email
-            tr
-                td(width="40%") 학번
-                td(width="60%")= studentID
-            tr
-                td(width="40%") 휴대폰
-                td(width="60%")= "0" + phone_number
+            thead
+                tr
+                    td(colspan="2") 사용자 정보
+            tbody
+                tr
+                    td(width="40%") 이름
+                    td(width="60%")= name
+                tr
+                    td(width="40%") 이메일(ID)
+                    td(width="60%")= email
+                tr
+                    td(width="40%") 학번
+                    td(width="60%")= studentID
+                tr
+                    td(width="40%") 휴대폰
+                    td(width="60%")= "0" + phone_number
                         
         p
             a(href='/mypage/edit').btn_mypage 개인정보 수정

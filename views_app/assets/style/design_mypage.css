@@ -4,13 +4,20 @@
     background-color: #fff;
 }
 .board{
-    width: 40%;
+    width: 60%;
     margin: auto;
     vertical-align: middle;
     border-collapse: collapse;
 }
 
-.board td {
+.board thead td {
+    font-size: 20px;
+    padding: 20px 0px;
+    color: #000;
+    font-weight: 400;
+    border-bottom: 1px solid #000;
+}
+.board tbody td {
     padding: 20px 0px;
     font-weight: 400;
     border-bottom: 1px solid #f2f2f2;

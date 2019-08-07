@@ -29,12 +29,16 @@ html
                         a(href='/logout').btn_navbar 로그아웃
         div.container
             table.board
-                each topic in topics
+                thead 
                     tr
-                        td(width="5%").td_id= topic.Nid
-                        td(width="80%").td_title
-                            a(href='/notice?id='+topic.Nid)= topic.title
-                        td(width="15%").td_timestamp= topic.timestamp
+                        td(colspan="3") 공지사항
+                tbody
+                    each topic in topics
+                        tr
+                            td(width="5%").td_id= topic.Nid
+                            td(width="80%").td_title
+                                a(href='/notice?id='+topic.Nid)= topic.title
+                            td(width="15%").td_timestamp= topic.timestamp
                         
             div.wrap_btn
                 if privilege === 1
