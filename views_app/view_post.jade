@@ -3,6 +3,7 @@ html
         title 공지사항 | LOCKGYO
         meta(charset='utf-8')
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_post.css')
     body
          div.navbar_container
             div.navbar
@@ -27,11 +28,14 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
         div.container
-            h1 게시글 상세보기
+          div.post_board
             if post
-                h2= post.title
-                = post.description
-                div= 'by '+ post.author
+                div.post_title
+                  p= post.title
+                div.post_timestamp
+                  p= post.timestamp
+                div.post_content
+                  p= post.description
             else
                 | 잘못된 접근입니다
             p

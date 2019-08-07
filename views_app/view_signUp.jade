@@ -2,6 +2,7 @@ html
     head
         title 회원가입 | LOCKGYO
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_signUp.css')
     body
          div.navbar_container
             div.navbar
@@ -26,34 +27,29 @@ html
                     li
                         a(href='/signIn').btn_navbar 로그인
         div.container
-          div.box_signUp
-                form(name="회원가입", method="post")
-
-                  div.box_field
-                      이메일 입력
-                      br
-                      input(type="email", name="email", placeholder="email")
-                      br
-                      비밀번호
-                      br
-                      input(type="password", name="password",placeholder="비밀번호")
-                      br
-                      비밀번호 확인
-                      br
-                      input(type="password", name="password2",placeholder="비밀번호 확인")
-                      br
-                      이름
-                      br
-                      input(type="text", name="name", placeholder="이름")
-                      br
-                      학번
-                      br
-                      input(type='text', name="student_id", pattern='[0-9]{10}', placeholder='10자리 학번을 입력하세요.')
-
-                      br
-                      연락처
-                      br
-                      input(type='text', name="phone_number", pattern='[0-9]{11}', placeholder="01012345678 형태로 입력하세요.")
-
-                      br
-                      input(type="submit", value="회원가입", name="회원가입", placeholder="회원가입")
+          div.box_field
+                form(name="회원가입", method="post") 
+                    div.signUp_title
+                      p 회원가입
+                      
+                    div.signUp_text  
+                      
+                      p 이메일 입력
+                      input.field_email(type="email", name="email", placeholder="email")
+                      
+                      p 비밀번호
+                      input.field_password(type="password", name="password",placeholder="비밀번호")
+                      
+                      p 비밀번호 확인
+                      input.field_password(type="password", name="password2",placeholder="비밀번호 확인")
+                      
+                      p 이름
+                      input.field_password(type="text", name="name", placeholder="이름")
+                      
+                      p 학번
+                      input.field_sid(type='text', name="student_id", pattern='[0-9]{10}', placeholder='10자리 학번을 입력하세요.')
+                      
+                      p 연락처
+                      input.field_phone(type='text', name="phone_number", pattern='[0-9]{11}', placeholder="01012345678 형태로 입력하세요.")
+                    
+                      input.btn_signUp(type="submit", value="회원가입", name="회원가입", placeholder="회원가입")

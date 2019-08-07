@@ -32,33 +32,66 @@
     background-color: #ffffff;
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.08), 0 0 1px 0 rgba(0,0,0,.12);
     top: 0; left: 0; bottom: 0; right: 0;
-    margin: 10% auto;
-    padding: 2% 0% 2% 0%;
+    margin: 2% auto;
+    padding: 0%;
 
 }
-.box_field p {
+
+.signUp_title p {
     font-size: 25px;
+    font-weight: 350;
+}
+
+.signUp_text p {
+  margin-left: 10%;
+  font-size: 15px;
+  text-align: left;
+  margin-bottom: 2px;
 }
 
 .field_email {
     width: 80%;
-    margin: 5px;
-    padding: 10px 5px;
+    margin: 0px;
+    padding: 7px 5px;
     font-size: 18px;
     color: #999999
 }
 
 .field_password {
     width: 80%;
-    margin: 5px;
-    padding: 10px 5px;
+    margin: 0px;
+    padding: 7px 5px;
     font-size: 18px;
     color: #999999
 }
 
-.btn_signIn {
+.field_name {
     width: 80%;
-    margin: 5px;
+    margin: 0px;
+    padding: 7px 5px;
+    font-size: 18px;
+    color: #999999
+}
+
+.field_phone {
+    width: 80%;
+    margin: 0px;
+    padding: 7px 5px;
+    font-size: 18px;
+    color: #999999
+}
+
+.field_sid {
+    width: 80%;
+    margin: 0px;
+    padding: 7px 5px;
+    font-size: 18px;
+    color: #999999
+}
+
+.btn_signUp {
+    width: 80%;
+    margin: 15px;
     padding: 10px 5px;
     background-color: #4580F4;
     color: #ffffff;

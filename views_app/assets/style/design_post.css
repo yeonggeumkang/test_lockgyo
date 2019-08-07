@@ -1,0 +1,30 @@
+.container {
+    width: 60%;
+    margin: auto;
+    background-color: #fff;
+}
+.post_board{
+  margin-top: 10% auto;
+  margin-bottom: 10% auto;
+}
+.post_title {
+  padding-top: 5%;
+}
+.post_title p {
+  font-size: 30px;
+  font-weight: 300;
+  text-align: left;
+  margin-left: 20%;
+}
+
+.post_timestamp p {
+  font-color: #999999;
+  text-align: left;
+  margin-left: 20%;
+}
+
+.post_content p {
+  text-align: left;
+  margin-left: 20%;
+
+}
