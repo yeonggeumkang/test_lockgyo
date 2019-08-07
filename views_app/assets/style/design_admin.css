@@ -23,3 +23,56 @@
     border-bottom: 1px solid #f2f2f2;
     text-align: left;
 }
+
+.btn_normalBlue {
+    background-color: #fff;
+    color: #4480f4;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #4480f4;
+    text-decoration: none;
+}
+.btn_normalBlue:hover {
+    background-color: #4480f4;
+    color: #fff;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #4480f4;
+    text-decoration: none;
+}
+
+.btn_normalYellow {
+    background-color: #fff;
+    color: #FFC647;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #FFC647;
+    text-decoration: none;
+}
+.btn_normalYellow:hover {
+    background-color: #FFC647;
+    color: #FFF;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #FFC647;
+    text-decoration: none;
+}
+
+.btn_setSchedule {
+    background-color: #fff;
+    font-size: 17px;
+    color: #4480f4;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #4480f4;
+    text-decoration: none;
+}
+.btn_setSchedule:hover {
+    background-color: #4480f4;
+    font-size: 17px;
+    color: #FFF;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #4480f4;
+    text-decoration: none;
+}
