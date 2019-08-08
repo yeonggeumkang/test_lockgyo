@@ -3,6 +3,7 @@ html
     title 마이페이지 | LOCKGYO
     link(rel='stylesheet', href='/assets/style/style.css')
     link(rel='stylesheet', href='/assets/style/design_mypage.css')
+    link(rel='icon', href='/assets/image/tab.png', type='image/x-icon')
   body
      div.navbar_container
             div.navbar
@@ -43,7 +44,7 @@ html
                     td(width="60%")= studentID
                 tr
                     td(width="40%") 휴대폰
-                    td(width="60%")= "0" + phone_number
+                    td(width="60%")= phone_number
                         
         p
             a(href='/mypage/edit').btn_mypage 개인정보 수정

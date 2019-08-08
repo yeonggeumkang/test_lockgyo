@@ -143,6 +143,7 @@ app.get('/signUp',function(req,res){
 app.post('/signUp', function(req,res){
     var tid = req.body.student_id;
     var temail = req.body.email;
+    console.log(req.body.phone_number);
 
     if(req.body.password === req.body.password2) { //비밀번호 불일치
       connection.query('SELECT * FROM users WHERE email = ?', temail, function(error, results, fields){
@@ -442,9 +443,7 @@ app.get('/mypage', function(req, res){
     res.render('view_mypage',{name:req.session.name, email:req.session.email,
                               phone_number:req.session.phone, studentID:user, privilege:req.session.privilege});}
 });
-app.post('/mypage/edit', function(req, res){
-  res.redirect('/mypage');
-});
+
 //개인정보 수정
 app.get('/mypage/edit', function(req, res){
   if(!req.session.user){
@@ -454,6 +453,33 @@ app.get('/mypage/edit', function(req, res){
   res.render('view_myedit',{name:req.session.name, email:req.session.email,
                             phone_number:req.session.phone, studentID:user});
 });
+
+app.post('/mypage/edit', function(req, res){
+  var email = req.body.email;
+  var name = req.body.name;
+  var sid = req.session.Uid;
+  var phone = req.body.phone_number;
+
+  if(phone === ''){
+    phone = req.session.phone;
+  }
+  if(email === ''){
+    email = req.session.email;
+  }
+  if(name === ''){
+    name = req.session.name;
+  }
+  var sql = 'UPDATE users SET email=?, name=?, phone=? WHERE Uid=?;'
+  console.log(email, name, phone,sid);
+  connection.query(sql, [email, name, phone, sid], function(error, result, fields){
+    if(error){
+      console.log(error);
+    } else {
+      res.redirect('/mypage');
+    }
+  });
+});
+
 // 비밀번호 변경
 app.get('/mypage/editpw', function(req, res){
   res.render('view_editpw');
@@ -501,9 +527,9 @@ app.get('/mypage/quit', function(req,res){
 //관리자 페이지
 app.get('/admin',function(req,res){
     var privilege = req.session.privilege;
-    console.log(privilege);
     var sql= 'SELECT * FROM USERS;';
     var sql2 = 'SELECT * FROM SCHEDULE';
+    var sql3 = 'SELECT lid, usable, name FROM locker, users WHERE locker.owner = users.uid ORDER BY lid';
     if(!req.session.user){
       res.redirect('/signIn');
     }else {
@@ -521,7 +547,14 @@ app.get('/admin',function(req,res){
                             console.log(err);
                         }
                         else {
-                            res.render('view_admin',{users:rows, schedule:rows2, privilege:req.session.privilege});
+                          connection.query(sql3, function(err, rows3, fields){
+                            if(err){
+                              console.log(err);
+                            } else {
+                              res.render('view_admin',{users:rows, schedule:rows2, privilege:req.session.privilege, locker:rows3});
+                            }
+                          })
+
                         }
                     });
                 }

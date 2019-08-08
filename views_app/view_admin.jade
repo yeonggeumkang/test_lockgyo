@@ -4,6 +4,7 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='/assets/style/style.css')
         link(rel='stylesheet', href='/assets/style/design_admin.css')
+        link(rel='icon', href='/assets/image/tab.png', type='image/x-icon')
         script
             |var count = 0;
             |function countUser() {
@@ -99,6 +100,23 @@ html
                             명입니다
                         td 
                             a(href='/admin/changePrivilegeAll').btn_normalBlue 전체승인
+            table.board
+              thead
+                tr
+                  td(colspan="5") 사물함관리
+              tbody
+                tr
+                  td 사물함번호
+                  td 사용자
+              each lock in locker
+                if lock.usable === 1
+                  tr 
+                    td= lock.lid
+                    td= lock.usable
+                else
+                  tr
+                    td= lock.lid
+                    td= lock.name
             
         script(type='text/javascript')
             |document.getElementById('str_date').value = new Date().toISOString().substring(0, 10);
