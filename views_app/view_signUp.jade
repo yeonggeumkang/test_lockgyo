@@ -35,21 +35,21 @@ html
                     div.signUp_text  
                       
                       p 이메일 입력
-                      input.field_email(type="email", name="email", placeholder="email")
+                      input.field_email(type="email", name="email", placeholder="email", required)
                       
                       p 비밀번호
-                      input.field_password(type="password", name="password",placeholder="비밀번호")
+                      input.field_password(type="password", name="password",placeholder="비밀번호", required)
                       
                       p 비밀번호 확인
-                      input.field_password(type="password", name="password2",placeholder="비밀번호 확인")
+                      input.field_password(type="password", name="password2",placeholder="비밀번호 확인", required)
                       
                       p 이름
-                      input.field_password(type="text", name="name", placeholder="이름")
+                      input.field_password(type="text", name="name", placeholder="이름", required)
                       
                       p 학번
-                      input.field_sid(type='text', name="student_id", pattern='[0-9]{10}', placeholder='10자리 학번을 입력하세요.')
+                      input.field_sid(type='text', name="student_id", pattern='[0-9]{10}', placeholder='10자리 학번을 입력하세요.', required)
                       
                       p 연락처
-                      input.field_phone(type='text', name="phone_number", pattern='[0-9]{11}', placeholder="01012345678 형태로 입력하세요.")
+                      input.field_phone(type='text', name="phone_number", pattern='[0-9]{11}', placeholder="01012345678 형태로 입력하세요.", required)
                     
                       input.btn_signUp(type="submit", value="회원가입", name="회원가입", placeholder="회원가입")

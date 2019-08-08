@@ -40,7 +40,7 @@ html
                     &nbsp;
                     a(href='/notice/delete?id='+post.Nid id='btn_delete') 삭제
               div.post_content
-                p= post.description
+                p(style='white-space : pre;')= desc
             else
                 | 잘못된 접근입니다
 

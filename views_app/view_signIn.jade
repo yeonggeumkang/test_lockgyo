@@ -31,8 +31,8 @@ html
                     //    img.img_logo(src="img_logo.png")
                     p 로그인
                     form(name="sign in", method="post")
-                            input.field_email(type='email', name='email', placeholder="이메일")
-                            input.field_password(type="password", name="password", placeholder="비밀번호")
+                            input.field_email(type='email', name='email', placeholder="이메일", minlength="5", required)
+                            input.field_password(type="password", name="password", placeholder="비밀번호",minlength="1", required)
                             input.btn_signIn(type="submit" value="로그인")
                     div.box_findInfo
                         ul

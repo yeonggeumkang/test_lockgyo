@@ -270,13 +270,10 @@ app.post('/main/return', function(req,res){
 app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
   console.log('enroll get access');
   var id = req.query.id;
-  console.log(id);
   var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
   var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
-  console.log(req.session.Uid);
 
   var nowDate = new Date();
-  console.log(nowDate);
   var sql3 = 'SELECT strDate, endDate from schedule where Sid=1;'
 
   connection.query(sql3, function(error, results, fields){
@@ -315,7 +312,6 @@ app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
 app.post('/main/enroll?id=:id', function(req,res){
   console.log('enroll post access');
   var id = req.query.id;
-  console.log(id);
   var lockNum = req.body.lockerNumber;
 });
 
@@ -341,8 +337,8 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
                         if(err){
                           console.log('Comment DB error');
                         }else {
-                          console.log(row2);
-                          res.render('view_post', {post:row[0], privilege:req.session.privilege, authorName:authorName,
+                          console.log(row[0].description);
+                          res.render('view_post', {post:row[0], desc:row[0].description, privilege:req.session.privilege, authorName:authorName,
                             allComment:row2});
                         }
                       });
@@ -381,6 +377,7 @@ app.post('/notice/add',function(req,res){ //DB에 글 작성
     var description = req.body.description;
     var author = req.session.name;
     var timestamp = req.body.timestamp;
+
     var sql = 'INSERT INTO notice (title, description, author, timestamp) VALUES(?, ?, ?, ?);';
     connection.query(sql, [title, description, author, timestamp], function(err, rows, fields){
        if(err){
@@ -446,7 +443,7 @@ app.get('/mypage', function(req, res){
                               phone_number:req.session.phone, studentID:user, privilege:req.session.privilege});}
 });
 app.post('/mypage/edit', function(req, res){
-  res.send('hello');
+  res.redirect('/mypage');
 });
 //개인정보 수정
 app.get('/mypage/edit', function(req, res){
@@ -597,7 +594,7 @@ app.post('/admin/setSchedule',function(req,res){
            console.log(err);
            res.status(500).send('Internal Server Error');
        } else{
-           res.redirect('/admin')
+           res.redirect('/admin');
        }
     });
 });
