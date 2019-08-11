@@ -184,12 +184,17 @@ app.get('/main', function(req,res) {
     var studentID = req.session.Uid;
     var sql = 'SELECT Lid FROM LOCKER WHERE owner = ?';
     var sql2 = 'SELECT * FROM NOTICE WHERE Nid=1';
-    var sql3 = 'SELECT * FROM LOCKER;';
-    var sql4 = 'SELECT * FROM SCHEDULE';
+    var sql3 = 'SELECT * FROM SCHEDULE';
+    var sql4 = 'SELECT * FROM LOCKER;';
+    var sql5 = 'SELECT * FROM LOCKER WHERE Lid < 41';
+    var sql6 = 'SELECT * FROM LOCKER WHERE Lid>40 AND Lid<81';
+    var sql7 = 'SELECT * FROM LOCKER WHERE Lid>80 AND Lid<121';
+    var sql8 = 'SELECT * FROM LOCKER WHERE Lid>120 AND Lid < 161';
 
     connection.query(sql, studentID, function(error, result1, fields){
       if(error) {
-        res.send('query error');
+          res.send('query error');
+          console.log(error);
       } else {
         connection.query(sql2, function(error, result2, fields){
           if(error){
@@ -204,8 +209,31 @@ app.get('/main', function(req,res) {
                           res.send('fourth query error');
                           console.log(error);
                       }else{
-                      res.render('view_main', {locker:result1[0], notice:result2[0], allLocker:result3,
-                        privilege:req.session.privilege, schedule:result4});
+                          connection.query(sql5, function(error, result5, fields){
+                              if(error){
+                                  console.log(error);
+                              } else {
+                                  connection.query(sql6, function(error, result6, fields){
+                                      if(error){
+                                          console.log(error);
+                                      } else{
+                                          connection.query(sql7, function(error, result7, fields){
+                                              if(error){
+                                                  console.log(error);
+                                              }else {
+                                                  connection.query(sql8, function(error, result8, fields){
+                                                      if(error) {
+                                                          console.log(error);
+                                                      }else {
+                                                          res.render('view_main', {locker:result1[0], notice:result2[0], privilege:req.session.privilege, schedule:result3, allLocker:result4, lockerSectionA:result5, lockerSectionB:result6, lockerSectionC:result7, lockerSectionD:result8});
+                                                      }
+                                                  });
+                                              }
+                                          });
+                                      }
+                                  });
+                              }
+                          });
                       }
                   })
                 }
