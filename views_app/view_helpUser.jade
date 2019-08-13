@@ -2,6 +2,7 @@ html
     head
         title 아이디찾기 | LOCKGYO
         link(rel='stylesheet', href='/assets/style/style.css')
+        link(rel='stylesheet', href='/assets/style/design_signUp.css')
         link(rel='icon', href='/assets/image/tab.png', type='image/x-icon')
     body
          div.navbar_container
@@ -27,11 +28,13 @@ html
                     li
                         a(href='/signIn').btn_navbar 로그인
         div.container
+          div.box_field
             form(name="helpuser", method="post")
+              div.signUp_title
+                p 아이디(email) 찾기
+                
+              div.signUp_text
+                p 학번입력
+                input.field_email(type="text", name="student_id")
 
-                div.input 학번입력
-                    br
-                    input(type="text", name="student_id")
-
-                div.actions
-                    input(type="submit", value="email id 찾기")
+                input.btn_signUp(type="submit", value="ID 찾기")
