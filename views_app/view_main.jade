@@ -2,7 +2,8 @@ html
     head
         title LOCKGYO | 성균관대학교 교육학과
         link(rel='stylesheet', href='/assets/style/style.css')
-        link(rel='icon', href='/assets/image/tab.png', type='image/x-icon')
+        link(rel='stylesheet', href='/assets/style/design_main.css')
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js")
     body
         div.navbar_container
             div.navbar
@@ -27,76 +28,156 @@ html
                     li
                         a(href='/logout').btn_navbar 로그아웃
         div.container
-            div.left_info
-              //사용중인 사물함 정보
-              div.info
-                h3 나의 사물함 정보
-                if locker
-
-                  p(title='hi')
-                    = locker.Lid
-                    번 사물함을 사용중입니다.
-                else
-
-                  p(data-toggle="tooltip" title='hello')사용중인 사물함이 없습니다.
-
-              //사물함 반납
-              div.info
+            div.info
+                table.Board
+                            thead
+                                tr
+                                    td(colspan="4") 신청일정
+                            tbody
+                                tr
+                                    td(width="25%" style="text-align:center;") 신규신청기간
+                                    td(width="25%" style="text-align:center;")= schedule[0].strDate
+                                    td(width="25%" style="text-align:center;") ~
+                                    td(width="25%" style="text-align:center;")= schedule[0].endDate
+                                tr
+                                    td(width="25%" style="text-align:center;") 연장신청기간
+                                    td(width="25%" style="text-align:center;")= schedule[1].strDate
+                                    td(width="25%" style="text-align:center;") ~
+                                    td(width="25%" style="text-align:center;")= schedule[1].endDate
+            div.info
                 form(class='신청', action='/main/return', method='post')
-                      h3 사물함 반납
-
-                      div.button
-                        input(id='btn_return' type='submit', value='반납')
-              //사물함 연장
-
-            div.right_info
-              //공지사항
-              div.right_content
-                h3 신청 일정
-                table(class=tbl_schedule)
-                    tr
-                        td 신규신청기간
-                        td= schedule[0].strDate
-                        td ~
-                        td= schedule[0].endDate
-                    tr
-                        td 연장신청기간
-                        td= schedule[1].strDate
-                        td ~
-                        td= schedule[1].endDate
-                br
-
-              //모든 사물함 정보
-              div.right_content
-                h3 모든 사물함 보기
-                if locker
-                    p 새로운 사물함을 사용하고 싶은 경우 사용중인 사물함을 먼저 반납하시기 바랍니다.
-                if allLocker
-                  each lock in allLocker
-                    if locker
-                      if lock.usable === 1
-                        span(style='color:blue')=lock.Lid
-                        span(style='color:blue') &nbsp; 사용가능 &nbsp;
-                      else
-                        span(style='color:red')=lock.Lid
-                        span(style='color:red')&nbsp; 사용중
-                    else
-                        if lock.usable === 1
-                          span(style='color:blue')=lock.Lid
-                          span(style='color:blue') &nbsp; 사용가능 &nbsp;
-                          a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청하기
-                        else
-                          span(style='color:red')=lock.Lid
-                          span(style='color:red')&nbsp; 사용중
-                    br
+                    table.Board
+                        thead
+                            tr
+                                td(colspan="4") 사물함 신청
+                        tbody
+                            tr
+                                if locker
+                                    td(colspan="2" style="text-align:center;") 현재 사용중인 사물함은
+                                    td(style="text-align:center;")= locker.Lid+"번 입니다"
+                                    td(style="text-align:center;") 
+                                        input(id='btn_return' type='submit', value='반납하기').btn_normalYellow
+                                else
+                                    td(colspan="4" style="text-align:center;") 현재 사용중인 사물함이 존재하지 않습니다
+                            if locker
+                                tr
+                                    td(colspan="4") 사용중인 사물함을 먼저 반납하시기 바랍니다.
+                            if allLocker
+                                tr
+                                    td(width="25%" style="text-align:center;")
+                                        a(id="sectionA").btn_normalGrey A구역
+                                    td(width="25%" style="text-align:center;")
+                                        a(id="sectionB").btn_normalGrey B구역
+                                    td(width="25%" style="text-align:center;")
+                                        a(id="sectionC").btn_normalGrey C구역
+                                    td(width="25%" style="text-align:center;")
+                                        a(id="sectionD").btn_normalGrey D구역
+                    table.tbl_enroll(id="tbl_sectionA")
+                        tbody
+                            tr
+                                each lock in lockerSectionA
+                                    td(width="12.5%")
+                                        if locker
+                                            if lock.usable === 1
+                                                span.span_used= lock.Lid
+                                                br
+                                                span.span_used 가능
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                        else
+                                            if lock.usable === 1
+                                                span.span_number= lock.Lid
+                                                br
+                                                a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                    if(lock.Lid%8===0)
+                                        tr
+                    table.tbl_enroll(id="tbl_sectionB")
+                        tbody
+                            tr
+                                each lock in lockerSectionB
+                                    td(width="12.5%")
+                                        if locker
+                                            if lock.usable === 1
+                                                span.span_used= lock.Lid
+                                                br
+                                                span.span_used 가능
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                        else
+                                            if lock.usable === 1
+                                                span.span_number= lock.Lid
+                                                br
+                                                a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                    if(lock.Lid%8===0)
+                                        tr
+                    table.tbl_enroll(id="tbl_sectionC")
+                        tbody
+                            tr
+                               each lock in lockerSectionC
+                                    td(width="12.5%")
+                                        if locker
+                                            if lock.usable === 1
+                                                span.span_used= lock.Lid
+                                                br
+                                                span.span_used 가능
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                        else
+                                            if lock.usable === 1
+                                                span.span_number= lock.Lid
+                                                br
+                                                a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                    if(lock.Lid%8===0)
+                                        tr
+                    table.tbl_enroll(id="tbl_sectionD")
+                        tbody
+                            tr
+                                each lock in lockerSectionD
+                                    td(width="12.5%")
+                                        if locker
+                                            if lock.usable === 1
+                                                span.span_used= lock.Lid
+                                                br
+                                                span.span_used 가능
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                        else
+                                            if lock.usable === 1
+                                                span.span_number= lock.Lid
+                                                br
+                                                a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                    if(lock.Lid%8===0)
+                                        tr
+                    
 
 
         script
-            | var btnEnroll = document.getElementById('btn_enroll');
-            | btnEnroll.onclick = function(){var result = alert("신청완료");};
-            | var btnReturn = documnet.getElementById('btn_return');
-            | btnReturn.onclick = function(){var a = confirm("반납완료");}
-        script
-            $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-            })
+            $("#sectionA").click(function(){$("#tbl_sectionA").slideToggle();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();});
+            $("#sectionB").click(function(){$("#tbl_sectionB").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();});
+            $("#sectionC").click(function(){$("#tbl_sectionC").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionD").hide();});
+            $("#sectionD").click(function(){$("#tbl_sectionD").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();});
+            
