@@ -30,12 +30,14 @@ html
 
         div.container
           div.box_field
-                form(name="비밀번호변경", method="post")
+              form(name="비밀번호변경", method="post")
                 div.edit_title
                   p 비밀번호 변경
                 div.edit_text
+                  p 현재 비밀번호
+                  input.field_edit(type="password", name="password0",placeholder="현재 비밀번호", minlength="1", required)
                   p 비밀번호
-                  input.field_edit(type="password", name="password",placeholder="비밀번호", minlength="1", required)
+                  input.field_edit(type="password", name="password1",placeholder="비밀번호", minlength="1", required)
                   
                   p 비밀번호 확인
                   input.field_edit(type="password", name="password2",placeholder="비밀번호 확인", minlength="1", required)

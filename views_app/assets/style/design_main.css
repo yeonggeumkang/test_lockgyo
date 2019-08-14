@@ -199,6 +199,9 @@
     font-weight: 400;
 }
 
+.locker{
+  margin : 15px;
+}
 #tbl_sectionA {
     display:none;
 }
@@ -209,5 +212,8 @@
     display:none;
 }
 #tbl_sectionD {
+    display:none;
+}
+#tbl_sectionE {
     display:none;
 }

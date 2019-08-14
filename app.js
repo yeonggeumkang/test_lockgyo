@@ -187,10 +187,23 @@ app.get('/main', function(req,res) {
     var sql2 = 'SELECT * FROM NOTICE WHERE Nid=1';
     var sql3 = 'SELECT * FROM SCHEDULE';
     var sql4 = 'SELECT * FROM LOCKER;';
-    var sql5 = 'SELECT * FROM LOCKER WHERE Lid < 41';
-    var sql6 = 'SELECT * FROM LOCKER WHERE Lid>40 AND Lid<81';
-    var sql7 = 'SELECT * FROM LOCKER WHERE Lid>80 AND Lid<121';
-    var sql8 = 'SELECT * FROM LOCKER WHERE Lid>120 AND Lid < 161';
+
+    //A구역 1-22
+    var sql5 = 'SELECT * FROM LOCKER WHERE Lid>2 AND Lid < 23 ORDER BY line';
+
+    //B구역 23-52
+    var sql6 = 'SELECT * FROM LOCKER WHERE Lid>22 AND Lid<53 ORDER BY line';
+
+    //C구역 53-72
+    var sql7 = 'SELECT * FROM LOCKER WHERE Lid>52 AND Lid<73 ORDER BY line, Lid DESC';
+
+    //D구역 73-92
+    var sql8 = 'SELECT * FROM LOCKER WHERE Lid>72 AND Lid <93 ORDER BY line';
+
+    //E구역 93-112
+    var sql9 = 'SELECT * FROM LOCKER WHERE Lid>92 AND Lid<113 ORDER BY line, Lid DESC';
+
+    var sql10 = 'SELECT * FROM LOCKER WHERE Lid<3 ORDER BY line';
 
     connection.query(sql, studentID, function(error, result1, fields){
       if(error) {
@@ -226,7 +239,22 @@ app.get('/main', function(req,res) {
                                                       if(error) {
                                                           console.log(error);
                                                       }else {
-                                                          res.render('view_main', {locker:result1[0], notice:result2[0], privilege:req.session.privilege, schedule:result3, allLocker:result4, lockerSectionA:result5, lockerSectionB:result6, lockerSectionC:result7, lockerSectionD:result8});
+                                                          connection.query(sql9, function(error, result9, fields){
+                                                            if(error) {
+                                                              console.log(error);
+                                                            } else {
+                                                              connection.query(sql10, function(error, result10, fields){
+                                                                if(error){
+                                                                  console.log(error);
+                                                                } else {
+                                                                  res.render('view_main', {locker:result1[0], notice:result2[0],
+                                                                    privilege:req.session.privilege, schedule:result3,
+                                                                    allLocker:result4, lockerSectionA:result5, lockerSectionB:result6,
+                                                                    lockerSectionC:result7, lockerSectionD:result8, lockerSectionE:result9, lockerSectionA2: result10});
+                                                                }
+                                                              });
+                                                            }
+                                                          });
                                                       }
                                                   });
                                               }
@@ -514,21 +542,34 @@ app.get('/mypage/editpw', function(req, res){
 });
 
 app.post('/mypage/editpw', function(req, res){
-  if(req.body.password === req.body.password2){
-    var opts = {password:req.body.password};
-    hasher(opts, function(err, pass, salt, hash){
-      connection.query('UPDATE users SET password=?, salt=?', [hash, salt], function(error, result, fields){
-        if(error){
-          res.status(500);
-          console.log('query error');
-        } else {
-          res.redirect('/signin');
-        }
-    });
-    });
-  } else {
-    res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다."});
+  var uid = req.session.Uid;
+  connection.query('SELECT password, salt FROM users WHERE Uid=?', uid, function(error, results, fields){
+    if(error){
+      console.log(error);
+    } else {
+      hasher({password:req.body.password0, salt:results[0].salt}, function(err, pass, salt, hash){
+        if(results[0].password === hash) {
+          if(req.body.password1 === req.body.password2){
+            var opts = {password:req.body.password1};
+            hasher(opts, function(err, pass, salt, hash){
+              connection.query('UPDATE users SET password=?, salt=?', [hash, salt], function(error, result, fields){
+                if(error){
+                  res.status(500);
+                  console.log('query error');
+                } else {
+                  res.redirect('/signin');
+                }
+            });
+            });
+          } else {
+            res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다."});
+          }
+    } else {
+      res.render('view_alert2', {msg:"현재 비밀번호를 확인하세요."});
+    }
+  });
   }
+  });
 });
 
 // 회원탈퇴

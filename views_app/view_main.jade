@@ -3,6 +3,7 @@ html
         title LOCKGYO | 성균관대학교 교육학과
         link(rel='stylesheet', href='/assets/style/style.css')
         link(rel='stylesheet', href='/assets/style/design_main.css')
+        link(rel='icon', href='/assets/image/tab.png', type='image/x-icon')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js")
     body
         div.navbar_container
@@ -49,32 +50,37 @@ html
                     table.Board
                         thead
                             tr
-                                td(colspan="4") 사물함 신청
+                                td(colspan="5") 사물함 신청
                         tbody
                             tr
                                 if locker
-                                    td(colspan="2" style="text-align:center;") 현재 사용중인 사물함은
+                                    td(colspan="3" style="text-align:center;") 현재 사용중인 사물함은
                                     td(style="text-align:center;")= locker.Lid+"번 입니다"
                                     td(style="text-align:center;") 
                                         input(id='btn_return' type='submit', value='반납하기').btn_normalYellow
                                 else
-                                    td(colspan="4" style="text-align:center;") 현재 사용중인 사물함이 존재하지 않습니다
+                                    td(colspan="5" style="text-align:center;") 현재 사용중인 사물함이 존재하지 않습니다.
                             if locker
                                 tr
-                                    td(colspan="4") 사용중인 사물함을 먼저 반납하시기 바랍니다.
+                                    td(colspan="5") 사용중인 사물함을 먼저 반납하시기 바랍니다.
                             if allLocker
                                 tr
-                                    td(width="25%" style="text-align:center;")
+                                    td(width="20%" style="text-align:center;")
                                         a(id="sectionA").btn_normalGrey A구역
-                                    td(width="25%" style="text-align:center;")
+                                    td(width="20%" style="text-align:center;")
                                         a(id="sectionB").btn_normalGrey B구역
-                                    td(width="25%" style="text-align:center;")
+                                    td(width="20%" style="text-align:center;")
                                         a(id="sectionC").btn_normalGrey C구역
-                                    td(width="25%" style="text-align:center;")
+                                    td(width="20%" style="text-align:center;")
                                         a(id="sectionD").btn_normalGrey D구역
+                                    td(width="20%" style="text-align:center;")
+                                        a(id="sectionE").btn_normalGrey E구역
+                                        
+                    //img.locker(src="/assets/image/locker.png")
                     table.tbl_enroll(id="tbl_sectionA")
                         tbody
                             tr
+
                                 each lock in lockerSectionA
                                     td(width="12.5%")
                                         if locker
@@ -95,7 +101,7 @@ html
                                                 span.span_number= lock.Lid
                                                 br
                                                 span.span_used 사용중
-                                    if(lock.Lid%8===0)
+                                    if(lock.Lid===18 ||lock.Lid===19 ||lock.Lid===20 ||lock.Lid===21||lock.Lid===22)
                                         tr
                     table.tbl_enroll(id="tbl_sectionB")
                         tbody
@@ -120,7 +126,7 @@ html
                                                 span.span_number= lock.Lid
                                                 br
                                                 span.span_used 사용중
-                                    if(lock.Lid%8===0)
+                                      if(lock.Lid===48 ||lock.Lid===49 ||lock.Lid===50 ||lock.Lid===51||lock.Lid===52)
                                         tr
                     table.tbl_enroll(id="tbl_sectionC")
                         tbody
@@ -145,7 +151,7 @@ html
                                                 span.span_number= lock.Lid
                                                 br
                                                 span.span_used 사용중
-                                    if(lock.Lid%8===0)
+                                    if(lock.Lid===53 ||lock.Lid===54 ||lock.Lid===55 ||lock.Lid===56||lock.Lid===57)
                                         tr
                     table.tbl_enroll(id="tbl_sectionD")
                         tbody
@@ -170,14 +176,39 @@ html
                                                 span.span_number= lock.Lid
                                                 br
                                                 span.span_used 사용중
-                                    if(lock.Lid%8===0)
+                                    if(lock.Lid===88 ||lock.Lid===89 ||lock.Lid===90 ||lock.Lid===91||lock.Lid===92)
                                         tr
-                    
-
-
+                    table.tbl_enroll(id="tbl_sectionE")
+                        tbody
+                            tr
+                                each lock in lockerSectionE
+                                    td(width="12.5%")
+                                        if locker
+                                            if lock.usable === 1
+                                                span.span_used= lock.Lid
+                                                br
+                                                span.span_used 가능
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                        else
+                                            if lock.usable === 1
+                                                span.span_number= lock.Lid
+                                                br
+                                                a(id='btn_enroll' href='/main/enroll?id='+lock.Lid) 신청
+                                            else
+                                                span.span_number= lock.Lid
+                                                br
+                                                span.span_used 사용중
+                                    if(lock.Lid===93 ||lock.Lid===94 ||lock.Lid===95 ||lock.Lid===96||lock.Lid===97)
+                                        tr
+                                
         script
-            $("#sectionA").click(function(){$("#tbl_sectionA").slideToggle();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();});
-            $("#sectionB").click(function(){$("#tbl_sectionB").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();});
-            $("#sectionC").click(function(){$("#tbl_sectionC").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionD").hide();});
-            $("#sectionD").click(function(){$("#tbl_sectionD").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();});
+            $("#sectionA").click(function(){$("#tbl_sectionA").slideToggle();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();$("#tbl_sectionE").hide();});
+            $("#sectionB").click(function(){$("#tbl_sectionB").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();$("#tbl_sectionE").hide();});
+            $("#sectionC").click(function(){$("#tbl_sectionC").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionD").hide();$("#tbl_sectionE").hide();});
+            $("#sectionD").click(function(){$("#tbl_sectionD").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();$("#tbl_sectionE").hide();});
+            $("#sectionE").click(function(){$("#tbl_sectionE").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();});
+
             
