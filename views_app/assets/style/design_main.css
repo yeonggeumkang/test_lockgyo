@@ -135,6 +135,28 @@
   text-align: center;
   margin: auto;
 }
+.btn_normalBlue {
+    background-color: #fff;
+    font-size: 15px;
+    color: #4480f4;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #4480f4;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 2px;
+}
+.btn_normalBlue:hover {
+    background-color: #4480f4;
+    font-size: 15px;
+    color: #fff;
+    font-weight: 400;
+    padding: 3px;
+    border: 1px solid #4480f4;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 2px;
+}
 
 .btn_normalYellow {
     background-color: #fff;

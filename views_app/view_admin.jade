@@ -103,17 +103,23 @@ html
             table.board
               thead
                 tr
-                  td(colspan="5") 사물함관리
+                  td(colspan="4") 사물함관리
               tbody
                 tr
-                  td 사물함번호
-                  td 사용자
-                  td 사물함 수거
+                  td(width="40%") 사물함번호
+                  td(width="20%") 사용자
+                  td(width="20%") 연장여부
+                  td(width="20%") 사물함 수거
               each lock in locker
                   tr
-                    td= lock.lid
-                    td= lock.name
-                    td
+                    td(width="40%")= lock.Lid
+                    td(width="20%")= lock.name
+                    td(width="20%")
+                        if lock.extension===1
+                            span Y
+                        else
+                            span N
+                    td(width="20%")
                       a(href='/admin/locker?id='+lock.lid).btn_normalYellow 수거
             
         script(type='text/javascript')
