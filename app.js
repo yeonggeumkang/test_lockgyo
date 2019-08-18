@@ -389,7 +389,7 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
                       console.log(err);
                       res.status(500).send('Internal Server Error');
                   }else {
-                      var sql_comment = 'SELECT * FROM COMMENT WHERE notice=?;';
+                      var sql_comment = 'SELECT * FROM COMMENT WHERE nid=?;';
                       connection.query(sql_comment, [id], function(err, row2, fields){
                         if(err){
                           console.log('Comment DB error');
@@ -685,6 +685,19 @@ app.get('/admin/changePrivilegeAll', function(req, res){
   }
 });
 
+// 사물함 수거
+
+app.get(['/admin/locker','/admin/locker?id=:id'], function(req, res){
+  var id = req.query.id;
+  var sql = 'UPDATE LOCKER SET usable=1, owner=NULL where lid=?';
+  connection.query(sql, id, function(error, result, fields){
+    if(error){
+      console.log(error);
+    } else {
+      res.redirect('/admin');
+    }
+  });
+});
 //일정관리
 app.post('/admin/setSchedule',function(req,res){
     var type = req.body.dateType;

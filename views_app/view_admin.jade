@@ -108,15 +108,13 @@ html
                 tr
                   td 사물함번호
                   td 사용자
+                  td 사물함 수거
               each lock in locker
-                if lock.usable === 1
-                  tr 
-                    td= lock.lid
-                    td= lock.usable
-                else
                   tr
                     td= lock.lid
                     td= lock.name
+                    td
+                      a(href='/admin/locker?id='+lock.lid).btn_normalYellow 수거
             
         script(type='text/javascript')
             |document.getElementById('str_date').value = new Date().toISOString().substring(0, 10);
