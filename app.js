@@ -181,7 +181,10 @@ app.post('/signUp', function(req,res){
 app.get('/main', function(req,res) {
     if(!req.session.user){
       res.redirect('/signIn');
-    } else {}
+    }
+    if(req.session.privilege==3){
+        res.render('view_alert', {msg:"관리자의 승인이 필요합니다"});
+    }
     var studentID = req.session.Uid;
     var sql = 'SELECT Lid FROM LOCKER WHERE owner = ?';
     var sql2 = 'SELECT * FROM NOTICE WHERE Nid=1';

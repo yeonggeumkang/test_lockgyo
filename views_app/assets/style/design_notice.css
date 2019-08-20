@@ -3,6 +3,10 @@
     width: 60%;
     margin: auto;
     background-color: #fff;
+    -ms-overflow-style: none;
+}
+.container::-webkit-scrollbar {
+    display:none;
 }
 .board{
     width: 60%;
@@ -44,7 +48,6 @@
 }
 
 .wrap_btn {
-    width: 7%;
     margin: 20px auto;
     display: block;
 }
@@ -58,20 +61,22 @@
 .btn_write {
     font-size: 15px;
     font-weight: 400;
-    padding: 10px;
+    padding: 5px;
     background-color: #fff;
     color: #4480f4;
     border: 1px solid #4480f4;
     text-decoration: none;
+    border-radius: 2px;
 }
 
 .btn_write:hover {
     font-size: 15px;
     font-weight: 400;
-    padding: 10px;
+    padding: 5px;
     background-color: #4480f4;
     color: #fff;
     border: 1px solid #4480f4;
     text-decoration: none;
+    border-radius: 2px;
 }
 

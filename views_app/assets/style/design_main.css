@@ -2,6 +2,12 @@
     width: 60%;
     margin: auto;
     background-color: #fff;
+    overflow: auto;
+    -ms-overflow-style: none;
+}
+
+.container::-webkit-scrollbar {
+    display:none;
 }
 
 .info {

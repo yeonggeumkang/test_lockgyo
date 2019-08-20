@@ -2,6 +2,10 @@
     width: 60%;
     margin: auto;
     background-color: #fff;
+    -ms-overflow-style: none;
+}
+.container::-webkit-scrollbar {
+    display:none;
 }
 .board{
     width: 60%;
