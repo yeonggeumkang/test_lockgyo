@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '961107',
+  password : '',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '961107',
+    password : '',
     database : 'test',
     dateStrings: 'date'
 });
@@ -181,7 +181,10 @@ app.post('/signUp', function(req,res){
 app.get('/main', function(req,res) {
     if(!req.session.user){
       res.redirect('/signIn');
-    } else {}
+    }
+    if(req.session.privilege==3){
+        res.render('view_alert', {msg:"관리자의 승인이 필요합니다"});
+    }
     var studentID = req.session.Uid;
     var sql = 'SELECT Lid FROM LOCKER WHERE owner = ?';
     var sql2 = 'SELECT * FROM NOTICE WHERE Nid=1';
@@ -310,7 +313,7 @@ app.post('/main/return', function(req,res){
     res.redirect('/signIn');
   } else {}
   var user = req.session.Uid;
-  var sql = 'update locker set usable=1, owner=NULL where owner=?;';
+  var sql = 'update locker set usable=1, extension=2, owner=NULL where owner=?;';
   console.log('step1');
   connection.query(sql, user, function(error, results, fields){
     if(error){
@@ -321,6 +324,35 @@ app.post('/main/return', function(req,res){
       res.redirect('/main');
     }
   });
+});
+
+app.get(['/main/extend','/main/extend?id:id'], function(req,res) {
+    if(!req.session.user){
+        res.redirect('/signIn');
+    };
+    var id = req.query.id;
+    var nowDate = new Date();
+    var sql1 = 'SELECT strDate, endDate FROM SCHEDULE WHERE Sid=2;'
+    var sql2 = 'UPDATE LOCKER SET extension=1 WHERE Lid=?;'; 
+    connection.query(sql1, function(err, results, fields) {
+       if(err){
+           console.log(err);
+       }else {
+           var strDate = new Date(results[0].strDate);
+           var endDate = new Date(results[0].endDate);
+           if(strDate <= nowDate && nowDate <= endDate){
+                connection.query(sql2, id, function(err,results,fields){
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.redirect('/main');
+                    }
+                });
+           }else{
+               res.render('view_alert', {msg:"신청 기간이 아닙니다."});
+           }
+       }
+    });
 });
 
 //사물함 신청
@@ -340,7 +372,7 @@ app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
         var strDate = new Date(results[0].strDate);
         var endDate = new Date(results[0].endDate);
         console.log(nowDate, strDate, endDate);
-        if(strDate < nowDate && nowDate < endDate) {
+        if(strDate <= nowDate && nowDate <= endDate) {
           connection.query(sql1, id, function(error, results, fields){
             if(error){
               res.send('first query error');
@@ -593,7 +625,7 @@ app.get('/admin',function(req,res){
     var privilege = req.session.privilege;
     var sql= 'SELECT * FROM USERS;';
     var sql2 = 'SELECT * FROM SCHEDULE';
-    var sql3 = 'SELECT lid, usable, name FROM locker, users WHERE locker.owner = users.uid ORDER BY lid';
+    var sql3 = 'SELECT Lid, usable, extension, name FROM locker, users WHERE LOCKER.owner = USERS.uid ORDER BY lid';
     if(!req.session.user){
       res.redirect('/signIn');
     }else {

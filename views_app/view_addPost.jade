@@ -35,6 +35,6 @@ html
                     textarea.field_desc(name='description' placeholder='내용')
 
                     input(type='hidden' name='timestamp' id='timestamp')
-                    input.btn_submit(type='submit')
+                    input.btn_submit(type='submit' value='작성하기')
 
         script(type='text/javascript') document.getElementById('timestamp').value = new Date().toISOString().substring(0, 10);

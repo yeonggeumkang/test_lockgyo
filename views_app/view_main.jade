@@ -54,15 +54,17 @@ html
                         tbody
                             tr
                                 if locker
-                                    td(colspan="3" style="text-align:center;") 현재 사용중인 사물함은
+                                    td(colspan="2" style="text-align:center;") 현재 사용중인 사물함은
                                     td(style="text-align:center;")= locker.Lid+"번 입니다"
+                                    td(style="text-align:center;")
+                                        a(href='main/extend?id='+locker.Lid).btn_normalBlue 연장하기
                                     td(style="text-align:center;") 
                                         input(id='btn_return' type='submit', value='반납하기').btn_normalYellow
                                 else
                                     td(colspan="5" style="text-align:center;") 현재 사용중인 사물함이 존재하지 않습니다.
                             if locker
                                 tr
-                                    td(colspan="5") 사용중인 사물함을 먼저 반납하시기 바랍니다.
+                                    td(colspan="5" style="text-align:center;") 신청을 원하는 경우 사용중인 사물함을 먼저 반납하시기 바랍니다
                             if allLocker
                                 tr
                                     td(width="20%" style="text-align:center;")
@@ -75,8 +77,9 @@ html
                                         a(id="sectionD").btn_normalGrey D구역
                                     td(width="20%" style="text-align:center;")
                                         a(id="sectionE").btn_normalGrey E구역
-                                        
-                    img.locker(src="/assets/image/locker.png")
+                                tr
+                                    td(colspan="5" style="text-align:center;")
+                                         img(style="width:90%;").locker(src="/assets/image/locker.png")
                     table.tbl_enroll(id="tbl_sectionA")
                         tbody
                             tr
