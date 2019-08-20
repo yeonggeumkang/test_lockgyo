@@ -80,7 +80,7 @@ html
                     table.tbl_enroll(id="tbl_sectionA")
                         tbody
                             tr
-
+                              td 　
                                 each lock in lockerSectionA
                                     td(width="12.5%")
                                         if locker
@@ -101,7 +101,10 @@ html
                                                 span.span_number= lock.Lid
                                                 br
                                                 span.span_used 사용중
-                                    if(lock.Lid===18 ||lock.Lid===19 ||lock.Lid===20 ||lock.Lid===21||lock.Lid===22)
+                                    if(lock.Lid===18 ||lock.Lid===19)
+                                        tr
+                                        td 　
+                                    if(lock.Lid===20 || lock.Lid===21||lock.Lid===22)
                                         tr
                     table.tbl_enroll(id="tbl_sectionB")
                         tbody

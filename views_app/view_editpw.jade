@@ -34,8 +34,8 @@ html
                 div.edit_title
                   p 비밀번호 변경
                 div.edit_text
-                  p 현재 비밀번호
-                  input.field_edit(type="password", name="password0",placeholder="현재 비밀번호", minlength="1", required)
+                  p 학번
+                  input.field_edit(type="text", name="uid", placeholder="학번", pattern="[0-9]{10}", required)
                   p 비밀번호
                   input.field_edit(type="password", name="password1",placeholder="비밀번호", minlength="1", required)
                   

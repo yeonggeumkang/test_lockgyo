@@ -47,10 +47,10 @@ app.get('/signIn',function(req,res){
 });
 
 app.post('/signIn', function(req,res){
-    var email = req.body.email;
+    var sid = req.body.sid;
     var password = req.body.password;
 
-    connection.query('SELECT * FROM users WHERE email = ?', email,
+    connection.query('SELECT * FROM users WHERE Uid = ?', sid,
                     function(error,results,fields){
         if(error) { //query  error
             res.send('error');
@@ -58,7 +58,7 @@ app.post('/signIn', function(req,res){
             if(results.length > 0){ //데이터 존재
                 hasher({password:req.body.password, salt:results[0].salt}, function(err, pass, salt, hash){
                   if(results[0].password === hash) { //비밀번호 일치?
-                    req.session.email = req.body.email;
+                    req.session.email = results[0].email;
                     req.session.Uid = results[0].Uid;
                     req.session.name = results[0].name;
                     req.session.phone = results[0].phone;
@@ -189,7 +189,7 @@ app.get('/main', function(req,res) {
     var sql4 = 'SELECT * FROM LOCKER;';
 
     //A구역 1-22
-    var sql5 = 'SELECT * FROM LOCKER WHERE Lid>2 AND Lid < 23 ORDER BY line';
+    var sql5 = 'SELECT * FROM LOCKER WHERE Lid < 23 ORDER BY line';
 
     //B구역 23-52
     var sql6 = 'SELECT * FROM LOCKER WHERE Lid>22 AND Lid<53 ORDER BY line';
@@ -542,13 +542,12 @@ app.get('/mypage/editpw', function(req, res){
 });
 
 app.post('/mypage/editpw', function(req, res){
-  var uid = req.session.Uid;
+  var uid = req.body.uid;
   connection.query('SELECT password, salt FROM users WHERE Uid=?', uid, function(error, results, fields){
     if(error){
       console.log(error);
     } else {
-      hasher({password:req.body.password0, salt:results[0].salt}, function(err, pass, salt, hash){
-        if(results[0].password === hash) {
+
           if(req.body.password1 === req.body.password2){
             var opts = {password:req.body.password1};
             hasher(opts, function(err, pass, salt, hash){
@@ -564,10 +563,6 @@ app.post('/mypage/editpw', function(req, res){
           } else {
             res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다."});
           }
-    } else {
-      res.render('view_alert2', {msg:"현재 비밀번호를 확인하세요."});
-    }
-  });
   }
   });
 });
