@@ -13,7 +13,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '',
+  password : '961107',
   database : 'test'
   })
 }));
@@ -22,7 +22,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
+    password : '961107',
     database : 'test',
     dateStrings: 'date'
 });
@@ -49,15 +49,20 @@ app.get('/signIn',function(req,res){
 app.post('/signIn', function(req,res){
     var sid = req.body.sid;
     var password = req.body.password;
+    console.log(sid, password);
 
-    connection.query('SELECT * FROM users WHERE Uid = ?', sid,
-                    function(error,results,fields){
+    connection.query('SELECT * FROM users WHERE Uid = ?', sid, function(error,results,fields){
         if(error) { //query  error
-            res.send('error');
+            console.log(error);
         } else {
             if(results.length > 0){ //데이터 존재
+                console.log(results[0]);
                 hasher({password:req.body.password, salt:results[0].salt}, function(err, pass, salt, hash){
+                  console.log(pass);
+                  console.log(salt);
+                  console.log(hash);
                   if(results[0].password === hash) { //비밀번호 일치?
+
                     req.session.email = results[0].email;
                     req.session.Uid = results[0].Uid;
                     req.session.name = results[0].name;
@@ -66,15 +71,11 @@ app.post('/signIn', function(req,res){
                     req.session.user = results;
                     res.redirect('/');
                   } else {
+                    console.log('외않되ㅡㅡ');
                     res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다.", alertType:2});
                   }
                 });
-                /*if(results[0].password == password) { //비밀번호 일치, 로그인 성공
-
-                } else { //비밀번호 불일치
-                    res.send('wrong password');
-                }*/
-            } else { //데이터 없음
+            } else {
                 res.render('view_alert2', {msg:"존재하지 않는 아이디입니다.", alertType:1});
             }
         }
@@ -333,7 +334,7 @@ app.get(['/main/extend','/main/extend?id:id'], function(req,res) {
     var id = req.query.id;
     var nowDate = new Date();
     var sql1 = 'SELECT strDate, endDate FROM SCHEDULE WHERE Sid=2;'
-    var sql2 = 'UPDATE LOCKER SET extension=1 WHERE Lid=?;'; 
+    var sql2 = 'UPDATE LOCKER SET extension=1 WHERE Lid=?;';
     connection.query(sql1, function(err, results, fields) {
        if(err){
            console.log(err);
@@ -575,28 +576,21 @@ app.get('/mypage/editpw', function(req, res){
 
 app.post('/mypage/editpw', function(req, res){
   var uid = req.body.uid;
-  connection.query('SELECT password, salt FROM users WHERE Uid=?', uid, function(error, results, fields){
-    if(error){
-      console.log(error);
-    } else {
-
-          if(req.body.password1 === req.body.password2){
-            var opts = {password:req.body.password1};
-            hasher(opts, function(err, pass, salt, hash){
-              connection.query('UPDATE users SET password=?, salt=?', [hash, salt], function(error, result, fields){
-                if(error){
-                  res.status(500);
-                  console.log('query error');
-                } else {
-                  res.redirect('/signin');
-                }
+  if(req.body.password1 === req.body.password2){
+    var opts = {password:req.body.password1};
+    hasher(opts, function(err, pass, salt, hash){
+      connection.query('UPDATE users SET password=?, salt=? where uid=?', [hash, salt, uid], function(error, result, fields){
+        if(error){
+          res.status(500);
+          console.log('query error');
+        } else {
+          res.redirect('/signin');
+        }
+          });
             });
-            });
-          } else {
-            res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다."});
-          }
+  } else {
+    res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다."});
   }
-  });
 });
 
 // 회원탈퇴
