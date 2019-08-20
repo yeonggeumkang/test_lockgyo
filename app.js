@@ -135,6 +135,10 @@ app.get('/logout', function(req,res){
   res.redirect('/');
 })
 
+//
+app.get('/preview', function(req,res){
+  res.render('view_preview');
+});
 //회원가입 페이지
 app.get('/signUp',function(req,res){
     res.render('view_signUp');
