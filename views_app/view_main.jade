@@ -54,8 +54,8 @@ html
                         tbody
                             tr
                                 if locker
-                                    td(colspan="2" style="text-align:center;") 현재 사용중인 사물함은
-                                    td(style="text-align:center;")= locker.Lid+"번 입니다"
+                                    td(colspan="2" style="text-align:center;") 사용중인 사물함
+                                    td(style="text-align:center;")= locker.Lid+"번"
                                     td(style="text-align:center;")
                                         a(href='main/extend?id='+locker.Lid).btn_normalBlue 연장하기
                                     td(style="text-align:center;") 
@@ -79,7 +79,8 @@ html
                                         a(id="sectionE").btn_normalGrey E구역
                                 tr
                                     td(colspan="5" style="text-align:center;")
-                                         img(style="width:90%;").locker(src="/assets/image/locker.png")
+                                         img(style="width:70%;").locker(src="/assets/image/locker.png")
+                                
                     table.tbl_enroll(id="tbl_sectionA")
                         tbody
                             tr
