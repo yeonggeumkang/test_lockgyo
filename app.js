@@ -5,6 +5,20 @@ require('date-utils');
 var MySQLStore = require('express-mysql-session');
 var bkfd2Password = require('pbkdf2-password');
 var hasher = bkfd2Password();
+
+//connect database
+var bodyParser = require('body-parser');
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+    host     : 'localhost',
+    user     : 'root',
+    password : '961107',
+    database : 'test',
+    dateStrings: 'date'
+});
+connection.connect();
+app.use(bodyParser.urlencoded({exteded:false}));
+app.locals.pretty = true;
 app.use(session({
     secret : '1107',
     resave : false,
@@ -17,23 +31,14 @@ app.use(session({
   database : 'test'
   })
 }));
-var bodyParser = require('body-parser');
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '961107',
-    database : 'test',
-    dateStrings: 'date'
-});
-connection.connect(); //mysql DB 연결
-app.use(bodyParser.urlencoded({exteded:false}));
-app.locals.pretty = true;
-app.set('views','./views_app'); //view파일 디렉토리 설정
-app.set('view engine','jade'); //Jade엔진
+
+//set view engine
+app.set('views','./views_app');
+app.set('view engine','jade');
 app.use(express.static('views_app'));
 app.use(express.static('views_app'));
-app.get('/',function(req,res){ // 사용자 정보 있으면 메인페이지, 없으면 로그인페이지로 리다이렉션 설정.
+
+app.get('/',function(req,res){
   if(req.session.user){
     res.redirect('/main');
   } else {
@@ -41,7 +46,7 @@ app.get('/',function(req,res){ // 사용자 정보 있으면 메인페이지, �
   }
 });
 
-//로그인페이지
+//signIn
 app.get('/signIn',function(req,res){
     res.render('view_signIn');
 });
@@ -52,17 +57,17 @@ app.post('/signIn', function(req,res){
     console.log(sid, password);
 
     connection.query('SELECT * FROM users WHERE Uid = ?', sid, function(error,results,fields){
-        if(error) { //query  error
+        if(error) {
             console.log(error);
         } else {
-            if(results.length > 0){ //데이터 존재
+            if(results.length > 0){
                 console.log(results[0]);
                 hasher({password:req.body.password, salt:results[0].salt}, function(err, pass, salt, hash){
                   console.log(pass);
                   console.log(salt);
                   console.log(hash);
-                  if(results[0].password === hash) { //비밀번호 일치?
-
+                  if(results[0].password === hash) {
+                    //login success
                     req.session.email = results[0].email;
                     req.session.Uid = results[0].Uid;
                     req.session.name = results[0].name;
@@ -71,7 +76,6 @@ app.post('/signIn', function(req,res){
                     req.session.user = results;
                     res.redirect('/');
                   } else {
-                    console.log('외않되ㅡㅡ');
                     res.render('view_alert2', {msg:"비밀번호가 일치하지 않습니다.", alertType:2});
                   }
                 });
@@ -82,7 +86,7 @@ app.post('/signIn', function(req,res){
     });
 });
 
-//아이디(이메일) 찾기
+//help id
 app.get('/help/id', function(req,res){
     res.render('view_helpUser');
 });
@@ -92,7 +96,7 @@ app.post('/help/id', function(req,res){
     connection.query('SELECT email FROM users WHERE Uid = ?', hid,
                     function(error,results,fields){
         if(error) {
-            res.send('error');
+            console.log(error);
         } else {
             if(results.length>0){
                 res.render('view_alert2', {msg:results[0].email, alertType:1});
@@ -103,7 +107,7 @@ app.post('/help/id', function(req,res){
     });
 });
 
-//비밀번호 찾기
+//help pw
 app.get('/help/pw', function(req,res){
     res.render('view_helpuserpw');
 });
@@ -111,10 +115,10 @@ app.get('/help/pw', function(req,res){
 app.post('/help/pw', function(req,res){
     var helpVar = [req.body.Uid, req.body.email];
 
-    connection.query('SELECT password FROM users WHERE (Uid=? and email=?)', helpVar,
+    connection.query('SELECT password FROM users WHERE (Uid=? AND email=?)', helpVar,
                     function(error,results,fields){
         if(error) {
-            res.send('error');
+            console.log(error);
         } else {
             if(results.length>0){
               res.redirect('/mypage/editpw');
@@ -125,7 +129,7 @@ app.post('/help/pw', function(req,res){
     });
 });
 
-//로그아웃 페이지
+//logout
 app.get('/logout', function(req,res){
   delete req.session.email;
   delete req.session.Uid;
@@ -135,11 +139,12 @@ app.get('/logout', function(req,res){
   res.redirect('/');
 })
 
-//
+//preview
 app.get('/preview', function(req,res){
   res.render('view_preview');
 });
-//회원가입 페이지
+
+//signUp
 app.get('/signUp',function(req,res){
     res.render('view_signUp');
 });
@@ -152,18 +157,18 @@ app.post('/signUp', function(req,res){
 
     if(req.body.password === req.body.password2) { //비밀번호 불일치
       connection.query('SELECT * FROM users WHERE email = ?', temail, function(error, results, fields){
-          if(error) { res.send('error'); }
+          if(error) { console.log(error); }
           else {
             if(results.length===0){ //데이터 없음 -->회원가입
               connection.query('SELECT * FROM users WHERE Uid=?', tid, function(error, results, fields){
-                if(error) {res.send('error2');}
+                if(error) {console.log(error);}
                 else {
                   if(results.length===0) {
                     var opts = {password:req.body.password};
                     hasher(opts, function(err, pass, salt, hash){
                       var hashUser = [req.body.email, hash, req.body.name, req.body.student_id, req.body.phone_number, salt];
                       console.log(hashUser);
-                      connection.query('INSERT INTO users(email, password, name, Uid, phone, salt) values(?,?,?,?,?,?)', hashUser,
+                      connection.query('INSERT INTO users(email, password, name, Uid, phone, salt) VALUES(?,?,?,?,?,?)', hashUser,
                       function(error, result, fields){
                         if(error){
                           res.render('view_alert2', {msg:"정보가 입력되지 않았습니다.", alertType:1});
@@ -182,7 +187,7 @@ app.post('/signUp', function(req,res){
     }
 });
 
-// 메인 페이지
+//main
 app.get('/main', function(req,res) {
     if(!req.session.user){
       res.redirect('/signIn');
@@ -196,39 +201,37 @@ app.get('/main', function(req,res) {
     var sql3 = 'SELECT * FROM SCHEDULE';
     var sql4 = 'SELECT * FROM LOCKER;';
 
-    //A구역 1-22
+    //A 1-22
     var sql5 = 'SELECT * FROM LOCKER WHERE Lid < 23 ORDER BY line';
 
-    //B구역 23-52
+    //B 23-52
     var sql6 = 'SELECT * FROM LOCKER WHERE Lid>22 AND Lid<53 ORDER BY line';
 
-    //C구역 53-72
+    //C 53-72
     var sql7 = 'SELECT * FROM LOCKER WHERE Lid>52 AND Lid<73 ORDER BY line, Lid DESC';
 
-    //D구역 73-92
+    //D 73-92
     var sql8 = 'SELECT * FROM LOCKER WHERE Lid>72 AND Lid <93 ORDER BY line';
 
-    //E구역 93-112
+    //E 93-112
     var sql9 = 'SELECT * FROM LOCKER WHERE Lid>92 AND Lid<113 ORDER BY line, Lid DESC';
 
     var sql10 = 'SELECT * FROM LOCKER WHERE Lid<3 ORDER BY line';
 
     connection.query(sql, studentID, function(error, result1, fields){
       if(error) {
-          res.send('query error');
           console.log(error);
       } else {
         connection.query(sql2, function(error, result2, fields){
           if(error){
-            res.send('second query error');
+            console.log(error);
           } else {
             connection.query(sql3, function(error,result3, fields){
               if(error){
-                res.send('third query error');
+                console.log(error);
               } else {
                   connection.query(sql4, function(error,result4, fields){
                       if(error){
-                          res.send('fourth query error');
                           console.log(error);
                       }else{
                           connection.query(sql5, function(error, result5, fields){
@@ -288,25 +291,22 @@ app.post('/main', function(req,res){
       res.redirect('/signIn');
     } else {}
     var lockNum = req.body.lockerNumber;
-    var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
-    var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
-    console.log(req.session.Uid);
-
-
+    var sql1 = 'SELECT usable FROM LOCKER WHERE Lid=?'
+    var sql2 = 'UPDATE locker SET owner=?, usable=0 WHERE Lid=?;'
 
     connection.query(sql1, lockNum, function(error, results, fields){
       if(error){
-        res.send('first query error');
+        console.log(error);
       } else {
         var objectResult = JSON.stringify(results[0]);
-        if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
-          res.send('사용중인 사물함');
+        if(objectResult[10]==='0'){
+          res.send('a');
         } else {}
      connection.query(sql2, [req.session.Uid, req.body.lockerNumber], function(error, results, fields){
         if(error){
-            res.send('second query error');
+            console.log(error);
           } else {
-            res.send('신청 완료');
+            res.send('a');
           }
         });
       }
@@ -318,14 +318,11 @@ app.post('/main/return', function(req,res){
     res.redirect('/signIn');
   } else {}
   var user = req.session.Uid;
-  var sql = 'update locker set usable=1, extension=2, owner=NULL where owner=?;';
-  console.log('step1');
+  var sql = 'UPDATE locker SET usable=1, extension=2, owner=NULL WHERE owner=?;';
   connection.query(sql, user, function(error, results, fields){
     if(error){
-      res.send('query error');
+      console.log(error);
     } else {
-      console.log('step2');
-      //반납되었다는 알람, 팝업추가
       res.redirect('/main');
     }
   });
@@ -360,19 +357,19 @@ app.get(['/main/extend','/main/extend?id:id'], function(req,res) {
     });
 });
 
-//사물함 신청
+//main-enroll locker
 app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
   console.log('enroll get access');
   var id = req.query.id;
   var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
-  var sql2 = 'update locker set owner=?, usable=0 where lid=?;'
+  var sql2 = 'UPDATE locker SET owner=?, usable=0 WHERE lid=?;'
 
   var nowDate = new Date();
-  var sql3 = 'SELECT strDate, endDate from schedule where Sid=1;'
+  var sql3 = 'SELECT strDate, endDate FROM schedule WHERE Sid=1;'
 
   connection.query(sql3, function(error, results, fields){
     if(error) {
-      console.log('sql3 query error');
+      console.log(error);
     } else {
         var strDate = new Date(results[0].strDate);
         var endDate = new Date(results[0].endDate);
@@ -380,7 +377,7 @@ app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
         if(strDate <= nowDate && nowDate <= endDate) {
           connection.query(sql1, id, function(error, results, fields){
             if(error){
-              res.send('first query error');
+              console.log(error);
             } else {
               var objectResult = JSON.stringify(results[0]);
               if(objectResult[10]==='0'){ //results의 값을 확인 해야혀~!
@@ -388,7 +385,7 @@ app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
               } else {}
            connection.query(sql2, [req.session.Uid, id], function(error, results, fields){
               if(error){
-                  res.send('second query error');
+                  console.log(error);
                 } else {
                   res.redirect('/main');
                 }
@@ -409,7 +406,7 @@ app.post('/main/enroll?id=:id', function(req,res){
   var lockNum = req.body.lockerNumber;
 });
 
-//공지사항, notice
+//notice
 app.get(['/notice','/notice?id=:id'],function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
@@ -426,7 +423,7 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
                       console.log(err);
                       res.status(500).send('Internal Server Error');
                   }else {
-                      var sql_comment = 'SELECT * FROM COMMENT WHERE nid=?;';
+                      var sql_comment = 'SELECT * FROM COMMENT WHERE Nid=?;';
                       connection.query(sql_comment, [id], function(err, row2, fields){
                         if(err){
                           console.log('Comment DB error');
@@ -447,26 +444,25 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
 });
 
 app.post(['/notice/comment','/notice/comment?id=:id'], function(req, res){
-  console.log('comment post conneted');
   var nid = req.query.id;
   var c_content = req.body.c_content;
   var c_author = req.session.name;
-  var sql = 'INSERT INTO comment values(?,?,?);';
+  var sql = 'INSERT INTO comment VALUES(?,?,?);';
   connection.query(sql, [nid, c_content, c_author], function(err, row, fields){
     if(err){
-      console.log('query error');
+      console.log(err);
     }else {
-      console.log('update completed');
       res.redirect('/notice?id='+nid);
     }
   });
 });
-//공지사항 추가
+
+//notice-add
 app.get('/notice/add',function(req,res){
    res.render('view_addPost');
 });
 
-app.post('/notice/add',function(req,res){ //DB에 글 작성
+app.post('/notice/add',function(req,res){
     var title = req.body.title;
     var description = req.body.description;
     var author = req.session.name;
@@ -483,7 +479,7 @@ app.post('/notice/add',function(req,res){ //DB에 글 작성
     });
 });
 
-//공지사항 수정
+//notice edit
 app.get(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     var id = req.query.id;
     var sql = 'SELECT * FROM NOTICE WHERE Nid=?;';
@@ -512,7 +508,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     });
 });
 
-//공지사항 삭제
+//notice delete
 app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     var id = req.query.id;
     var sql = 'DELETE FROM notice WHERE Nid=?;';
@@ -526,10 +522,9 @@ app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     });
 });
 
-// 마이페이지
+//mypage
 app.get('/mypage', function(req, res){
     if(!req.session.user){
-      console.log('no user');
       res.redirect('/signIn');
     } else {
     var user = req.session.Uid;
@@ -537,7 +532,7 @@ app.get('/mypage', function(req, res){
                               phone_number:req.session.phone, studentID:user, privilege:req.session.privilege});}
 });
 
-//개인정보 수정
+//mtpage edit
 app.get('/mypage/edit', function(req, res){
   if(!req.session.user){
     res.redirect('/signIn');
@@ -573,7 +568,7 @@ app.post('/mypage/edit', function(req, res){
   });
 });
 
-// 비밀번호 변경
+// mypage change password
 app.get('/mypage/editpw', function(req, res){
   res.render('view_editpw');
 });
@@ -583,10 +578,10 @@ app.post('/mypage/editpw', function(req, res){
   if(req.body.password1 === req.body.password2){
     var opts = {password:req.body.password1};
     hasher(opts, function(err, pass, salt, hash){
-      connection.query('UPDATE users SET password=?, salt=? where uid=?', [hash, salt, uid], function(error, result, fields){
+      connection.query('UPDATE users SET password=?, salt=? WHERE uid=?', [hash, salt, uid], function(error, result, fields){
         if(error){
           res.status(500);
-          console.log('query error');
+          console.log(error);
         } else {
           res.redirect('/signin');
         }
@@ -597,13 +592,13 @@ app.post('/mypage/editpw', function(req, res){
   }
 });
 
-// 회원탈퇴
+//mypage quit
 app.get('/mypage/quit', function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
   } else {}
   var id = req.session.Uid;
-  connection.query('delete from users where Uid=?', id, function(error, results, fields){
+  connection.query('DELETE FROM users WHERE Uid=?', id, function(error, results, fields){
     if(error){
       console.log('탈퇴 실패');
       res.status(500);
@@ -618,7 +613,7 @@ app.get('/mypage/quit', function(req,res){
   });
 });
 
-//관리자 페이지
+//admin
 app.get('/admin',function(req,res){
     var privilege = req.session.privilege;
     var sql= 'SELECT * FROM USERS;';
@@ -637,7 +632,7 @@ app.get('/admin',function(req,res){
                 } else {
                     connection.query(sql2, function(err, rows2, fields){
                         if(err){
-                            res.send("Internal Server Error")
+                            res.send("Internal Server Error");
                             console.log(err);
                         }
                         else {
@@ -656,11 +651,11 @@ app.get('/admin',function(req,res){
         };
     };
 });
-//관리자페이지 내 회원권한 변경
+
 app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,res){
     var id = req.query.id;
     var privilege = req.session.privilege;
-    var sql = 'UPDATE USERS SET privilege=2 where Uid=?;';
+    var sql = 'UPDATE USERS SET privilege=2 WHERE Uid=?;';
     if(privilege!=1){
         res.render('view_alert', {msg:"허가되지 않은 접근입니다."});
     }else{
@@ -678,7 +673,7 @@ app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,
 app.get(['/admin/deleteUser','/admin/deleteUser?id=:id'],function(req,res){
     var id = req.query.id;
     var privilege = req.session.privilege;
-    var sql = 'DELETE FROM USERS WHERE Uid=?;';
+    var sql = 'DELETE FROM users WHERE Uid=?;';
     if(privilege!=1){
         res.render('view_alert', {msg:"허가되지 않은 접근입니다."});
     }else{
@@ -692,11 +687,9 @@ app.get(['/admin/deleteUser','/admin/deleteUser?id=:id'],function(req,res){
     };
 });
 
-
-//전체회원 승인
 app.get('/admin/changePrivilegeAll', function(req, res){
   var privilege = req.session.privilege;
-  var sql = 'UPDATE USERS SET privilege=2 where privilege=3;'
+  var sql = 'UPDATE USERS SET privilege=2 WHERE privilege=3;'
   if(privilege!=1){
     res.render('view_alert', {msg:"허가되지 않은 접근입니다."});
   } else {
@@ -710,11 +703,10 @@ app.get('/admin/changePrivilegeAll', function(req, res){
   }
 });
 
-// 사물함 수거
-
+//admin return locker
 app.get(['/admin/locker','/admin/locker?id=:id'], function(req, res){
   var id = req.query.id;
-  var sql = 'UPDATE LOCKER SET usable=1, owner=NULL where lid=?';
+  var sql = 'UPDATE LOCKER SET usable=1, owner=NULL WHERE Lid=?';
   connection.query(sql, id, function(error, result, fields){
     if(error){
       console.log(error);
@@ -723,7 +715,8 @@ app.get(['/admin/locker','/admin/locker?id=:id'], function(req, res){
     }
   });
 });
-//일정관리
+
+//admin schedule
 app.post('/admin/setSchedule',function(req,res){
     var type = req.body.dateType;
     var str_date = req.body.str_date;
@@ -739,6 +732,7 @@ app.post('/admin/setSchedule',function(req,res){
     });
 });
 
-app.listen(3000,function(){ //포트접속
+//connect port
+app.listen(3000,function(){
     console.log('Connected, 3000 port!');
 });
