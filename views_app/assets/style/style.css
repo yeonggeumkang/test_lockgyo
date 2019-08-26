@@ -1,6 +1,7 @@
 @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
 @import url(https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css);
-body, table, div, p, form, input, a {font-family:'nanumbarungothic', 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+@import url(https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/HangeulNuri-Bold.woff);
+body, table, div, p, form, input, a {font-family:'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
 font-weight: 200;}
 
 body {

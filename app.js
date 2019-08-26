@@ -258,6 +258,7 @@ app.get('/main', function(req,res) {
                                                                 if(error){
                                                                   console.log(error);
                                                                 } else {
+                                                                  console.log(result5[0]);
                                                                   res.render('view_main', {locker:result1[0], notice:result2[0],
                                                                     privilege:req.session.privilege, schedule:result3,
                                                                     allLocker:result4, lockerSectionA:result5, lockerSectionB:result6,
@@ -411,7 +412,7 @@ app.get(['/notice','/notice?id=:id'],function(req,res){
   if(!req.session.user){
     res.redirect('/signIn');
   } else {
-      var sql_all = 'SELECT * FROM NOTICE;'
+      var sql_all = 'SELECT * FROM NOTICE ORDER BY Nid desc;'
       connection.query(sql_all, function(err, rows, fields){
           var id = req.query.id;
           var privilege = req.session.privilege;
