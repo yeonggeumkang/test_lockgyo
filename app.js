@@ -192,7 +192,7 @@ app.get('/main', function(req,res) {
     var sql4 = 'SELECT * FROM LOCKER;';
 
     //A구역 1-22
-    var sql5 = 'SELECT * FROM LOCKER WHERE Lid>2 AND Lid < 23 ORDER BY line';
+    var sql5 = 'SELECT * FROM LOCKER WHERE Lid < 23 ORDER BY line';
 
     //B구역 23-52
     var sql6 = 'SELECT * FROM LOCKER WHERE Lid>22 AND Lid<53 ORDER BY line';
