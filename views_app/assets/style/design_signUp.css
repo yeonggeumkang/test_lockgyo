@@ -97,6 +97,8 @@
     color: #ffffff;
     border: none;
     font-size: 18px;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
 }
 
 /*ID, PW 찾기*/

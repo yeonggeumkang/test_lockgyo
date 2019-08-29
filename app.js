@@ -5,7 +5,7 @@ require('date-utils');
 var MySQLStore = require('express-mysql-session');
 var bkfd2Password = require('pbkdf2-password');
 var hasher = bkfd2Password();
-
+var cookieParser = require('cookie-parser');
 //connect database
 var bodyParser = require('body-parser');
 var mysql      = require('mysql');
@@ -20,9 +20,13 @@ connection.connect();
 app.use(bodyParser.urlencoded({exteded:false}));
 app.locals.pretty = true;
 app.use(session({
+    key : 'session',
     secret : '1107',
-    resave : false,
+    resave : true,
     saveUninitialized : false,
+    cookie : {
+      maxAge : 1000*60*60
+    },
     store : new MySQLStore({
   host : 'localhost',
   port : 3306,
@@ -31,7 +35,7 @@ app.use(session({
   database : 'test'
   })
 }));
-
+app.use(cookieParser());
 //set view engine
 app.set('views','./views_app');
 app.set('view engine','jade');
@@ -56,7 +60,7 @@ app.post('/signIn', function(req,res){
     var password = req.body.password;
     console.log(sid, password);
 
-    connection.query('SELECT * FROM users WHERE Uid = ?', sid, function(error,results,fields){
+    connection.query('SELECT * FROM USERS WHERE Uid = ?', sid, function(error,results,fields){
         if(error) {
             console.log(error);
         } else {
@@ -93,7 +97,7 @@ app.get('/help/id', function(req,res){
 
 app.post('/help/id', function(req,res){
     var hid = req.body.student_id;
-    connection.query('SELECT email FROM users WHERE Uid = ?', hid,
+    connection.query('SELECT email FROM USERS WHERE Uid = ?', hid,
                     function(error,results,fields){
         if(error) {
             console.log(error);
@@ -115,7 +119,7 @@ app.get('/help/pw', function(req,res){
 app.post('/help/pw', function(req,res){
     var helpVar = [req.body.Uid, req.body.email];
 
-    connection.query('SELECT password FROM users WHERE (Uid=? AND email=?)', helpVar,
+    connection.query('SELECT password FROM USERS WHERE (Uid=? AND email=?)', helpVar,
                     function(error,results,fields){
         if(error) {
             console.log(error);
@@ -131,6 +135,8 @@ app.post('/help/pw', function(req,res){
 
 //logout
 app.get('/logout', function(req,res){
+  req.session.destroy();
+  res.clearCookie('session');
   delete req.session.email;
   delete req.session.Uid;
   delete req.session.name;
@@ -156,11 +162,11 @@ app.post('/signUp', function(req,res){
     console.log(req.body.phone_number);
 
     if(req.body.password === req.body.password2) { //비밀번호 불일치
-      connection.query('SELECT * FROM users WHERE email = ?', temail, function(error, results, fields){
+      connection.query('SELECT * FROM USERS WHERE email = ?', temail, function(error, results, fields){
           if(error) { console.log(error); }
           else {
             if(results.length===0){ //데이터 없음 -->회원가입
-              connection.query('SELECT * FROM users WHERE Uid=?', tid, function(error, results, fields){
+              connection.query('SELECT * FROM USERS WHERE Uid=?', tid, function(error, results, fields){
                 if(error) {console.log(error);}
                 else {
                   if(results.length===0) {
@@ -168,7 +174,7 @@ app.post('/signUp', function(req,res){
                     hasher(opts, function(err, pass, salt, hash){
                       var hashUser = [req.body.email, hash, req.body.name, req.body.student_id, req.body.phone_number, salt];
                       console.log(hashUser);
-                      connection.query('INSERT INTO users(email, password, name, Uid, phone, salt) VALUES(?,?,?,?,?,?)', hashUser,
+                      connection.query('INSERT INTO USERS(email, password, name, Uid, phone, salt) VALUES(?,?,?,?,?,?)', hashUser,
                       function(error, result, fields){
                         if(error){
                           res.render('view_alert2', {msg:"정보가 입력되지 않았습니다.", alertType:1});
@@ -293,7 +299,7 @@ app.post('/main', function(req,res){
     } else {}
     var lockNum = req.body.lockerNumber;
     var sql1 = 'SELECT usable FROM LOCKER WHERE Lid=?'
-    var sql2 = 'UPDATE locker SET owner=?, usable=0 WHERE Lid=?;'
+    var sql2 = 'UPDATE LOCKER SET owner=?, usable=0 WHERE Lid=?;'
 
     connection.query(sql1, lockNum, function(error, results, fields){
       if(error){
@@ -319,7 +325,7 @@ app.post('/main/return', function(req,res){
     res.redirect('/signIn');
   } else {}
   var user = req.session.Uid;
-  var sql = 'UPDATE locker SET usable=1, extension=2, owner=NULL WHERE owner=?;';
+  var sql = 'UPDATE LOCKER SET usable=1, extension=2, owner=NULL WHERE owner=?;';
   connection.query(sql, user, function(error, results, fields){
     if(error){
       console.log(error);
@@ -363,10 +369,10 @@ app.get(['/main/enroll','/main/enroll?id:id'], function(req, res){
   console.log('enroll get access');
   var id = req.query.id;
   var sql1 = 'SELECT usable FROM LOCKER WHERE LID=?'
-  var sql2 = 'UPDATE locker SET owner=?, usable=0 WHERE lid=?;'
+  var sql2 = 'UPDATE LOCKER SET owner=?, usable=0 WHERE lid=?;'
 
   var nowDate = new Date();
-  var sql3 = 'SELECT strDate, endDate FROM schedule WHERE Sid=1;'
+  var sql3 = 'SELECT strDate, endDate FROM SCHEDULE WHERE Sid=1;'
 
   connection.query(sql3, function(error, results, fields){
     if(error) {
@@ -448,7 +454,7 @@ app.post(['/notice/comment','/notice/comment?id=:id'], function(req, res){
   var nid = req.query.id;
   var c_content = req.body.c_content;
   var c_author = req.session.name;
-  var sql = 'INSERT INTO comment VALUES(?,?,?);';
+  var sql = 'INSERT INTO COMMENT VALUES(?,?,?);';
   connection.query(sql, [nid, c_content, c_author], function(err, row, fields){
     if(err){
       console.log(err);
@@ -469,7 +475,7 @@ app.post('/notice/add',function(req,res){
     var author = req.session.name;
     var timestamp = req.body.timestamp;
 
-    var sql = 'INSERT INTO notice (title, description, author, timestamp) VALUES(?, ?, ?, ?);';
+    var sql = 'INSERT INTO NOTICE (title, description, author, timestamp) VALUES(?, ?, ?, ?);';
     connection.query(sql, [title, description, author, timestamp], function(err, rows, fields){
        if(err){
            console.log(err);
@@ -498,7 +504,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
     var title = req.body.title;
     var description = req.body.description;
     var author = req.session.name;
-    var sql = 'UPDATE notice SET title=?, description=?, author=? WHERE Nid=?';
+    var sql = 'UPDATE NOTICE SET title=?, description=?, author=? WHERE Nid=?';
     connection.query(sql,[title, description, author, id], function(err,rows,fields){
        if(err){
            console.log(err);
@@ -512,7 +518,7 @@ app.post(['/notice/edit','/notice/edit?id=:id'],function(req,res){
 //notice delete
 app.get(['/notice/delete','/notice/delete?id=:id'],function(req,res){
     var id = req.query.id;
-    var sql = 'DELETE FROM notice WHERE Nid=?;';
+    var sql = 'DELETE FROM NOTICE WHERE Nid=?;';
     connection.query(sql,[id],function(err, row, fields){
        if(err){
            console.log(err);
@@ -558,7 +564,7 @@ app.post('/mypage/edit', function(req, res){
   if(name === ''){
     name = req.session.name;
   }
-  var sql = 'UPDATE users SET email=?, name=?, phone=? WHERE Uid=?;'
+  var sql = 'UPDATE USERS SET email=?, name=?, phone=? WHERE Uid=?;'
   console.log(email, name, phone,sid);
   connection.query(sql, [email, name, phone, sid], function(error, result, fields){
     if(error){
@@ -579,7 +585,7 @@ app.post('/mypage/editpw', function(req, res){
   if(req.body.password1 === req.body.password2){
     var opts = {password:req.body.password1};
     hasher(opts, function(err, pass, salt, hash){
-      connection.query('UPDATE users SET password=?, salt=? WHERE uid=?', [hash, salt, uid], function(error, result, fields){
+      connection.query('UPDATE USERS SET password=?, salt=? WHERE uid=?', [hash, salt, uid], function(error, result, fields){
         if(error){
           res.status(500);
           console.log(error);
@@ -599,7 +605,7 @@ app.get('/mypage/quit', function(req,res){
     res.redirect('/signIn');
   } else {}
   var id = req.session.Uid;
-  connection.query('DELETE FROM users WHERE Uid=?', id, function(error, results, fields){
+  connection.query('DELETE FROM USERS WHERE Uid=?', id, function(error, results, fields){
     if(error){
       console.log('탈퇴 실패');
       res.status(500);
@@ -619,7 +625,7 @@ app.get('/admin',function(req,res){
     var privilege = req.session.privilege;
     var sql= 'SELECT * FROM USERS;';
     var sql2 = 'SELECT * FROM SCHEDULE';
-    var sql3 = 'SELECT Lid, usable, extension, name FROM locker, users WHERE LOCKER.owner = USERS.uid ORDER BY lid';
+    var sql3 = 'SELECT Lid, usable, extension, name FROM LOCKER, USERS WHERE LOCKER.owner = USERS.uid ORDER BY lid';
     if(!req.session.user){
       res.redirect('/signIn');
     }else {
@@ -674,7 +680,7 @@ app.get(['/admin/changePrivilege','/admin/changePrivilege?id=:id'],function(req,
 app.get(['/admin/deleteUser','/admin/deleteUser?id=:id'],function(req,res){
     var id = req.query.id;
     var privilege = req.session.privilege;
-    var sql = 'DELETE FROM users WHERE Uid=?;';
+    var sql = 'DELETE FROM USERS WHERE Uid=?;';
     if(privilege!=1){
         res.render('view_alert', {msg:"허가되지 않은 접근입니다."});
     }else{

@@ -34,7 +34,7 @@
     top: 0; left: 0; bottom: 0; right: 0;
     margin: 10% auto;
     padding: 2% 0% 2% 0%;
-    
+
 }
 .box_field p {
     font-size: 25px;
@@ -64,6 +64,8 @@
     color: #ffffff;
     border: none;
     font-size: 18px;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
 }
 
 /*ID, PW 찾기*/
