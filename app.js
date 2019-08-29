@@ -12,7 +12,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '961107',
+    password : '',
     database : 'test',
     dateStrings: 'date'
 });
@@ -31,7 +31,7 @@ app.use(session({
   host : 'localhost',
   port : 3306,
   user : 'root',
-  password : '961107',
+  password : '',
   database : 'test'
   })
 }));
