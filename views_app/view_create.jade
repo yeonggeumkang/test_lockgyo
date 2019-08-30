@@ -1,0 +1,17 @@
+div.container
+  div.box_field
+        form(name="회원생성", method="post") 
+            div.signUp_title
+              p 회원생성
+              
+            div.signUp_text  
+              p 학번
+              input.field_sid(type='text', name="sid", pattern='[0-9]{10}', placeholder='10자리 학번을 입력하세요.', required)
+
+              p 이름
+              input.field_password(type="text", name="name", placeholder="이름", required)
+                                                          
+              p 사물함번호
+              input.field_sid(type='text', name="lid", required)
+            
+              input.btn_signUp(type="submit", value="회원생성", name="회원생성", placeholder="회원생성")

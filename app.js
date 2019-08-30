@@ -739,6 +739,40 @@ app.post('/admin/setSchedule',function(req,res){
     });
 });
 
+//create user data
+app.get('/create', function(req, res){
+  res.render('view_create');
+});
+
+app.post('/create', function(req, res){
+  var sid = req.body.sid;
+  var name = req.body.name;
+  var lid = req.body.lid;
+
+  //회원가입
+  var opts = {password:req.body.sid};
+  hasher(opts, function(err, pass, salt, hash){
+    var hashUser = [hash, name, sid, salt];
+    connection.query('INSERT INTO USERS(password, name, Uid, salt, privilege) VALUES(?,?,?,?,2)', hashUser, function(error, results, fields){
+      if(error){
+        console.log(error);
+      } else {
+        console.log('회원가입 완료');
+        //사물함 등록
+        connection.query('UPDATE LOCKER SET usable=0, owner=? WHERE Lid=?', [sid, lid], function(error, results, fields){
+          if(error){
+            console.log(error);
+          } else {
+            console.log('사물함 완료');
+            res.redirect('/create');
+          }
+        });
+
+      }
+    });
+  });
+});
+
 //connect port
 app.listen(3000,function(){
     console.log('Connected, 3000 port!');
