@@ -135,6 +135,7 @@ app.post('/help/pw', function(req,res){
 
 //logout
 app.get('/logout', function(req,res){
+  console.log('logout');
   req.session.destroy();
   res.clearCookie('session');
   delete req.session.email;
@@ -223,7 +224,7 @@ app.get('/main', function(req,res) {
     var sql9 = 'SELECT * FROM LOCKER WHERE Lid>92 AND Lid<113 ORDER BY line, Lid DESC';
 
     var sql10 = 'SELECT * FROM LOCKER WHERE Lid<3 ORDER BY line';
-
+    var sql11 = 'SELECT extension FROM LOCKER WHERE owner = ?';
     connection.query(sql, studentID, function(error, result1, fields){
       if(error) {
           console.log(error);
@@ -264,11 +265,16 @@ app.get('/main', function(req,res) {
                                                                 if(error){
                                                                   console.log(error);
                                                                 } else {
-                                                                  console.log(result5[0]);
-                                                                  res.render('view_main', {locker:result1[0], notice:result2[0],
-                                                                    privilege:req.session.privilege, schedule:result3,
-                                                                    allLocker:result4, lockerSectionA:result5, lockerSectionB:result6,
-                                                                    lockerSectionC:result7, lockerSectionD:result8, lockerSectionE:result9, lockerSectionA2: result10});
+                                                                  connection.query(sql11, studentID, function(error, result11, fields){
+                                                                    if(error){
+                                                                      console.log(error);
+                                                                    } else {
+                                                                      res.render('view_main', {locker:result1[0], extension:result11[0], notice:result2[0],
+                                                                        privilege:req.session.privilege, schedule:result3,
+                                                                        allLocker:result4, lockerSectionA:result5, lockerSectionB:result6,
+                                                                        lockerSectionC:result7, lockerSectionD:result8, lockerSectionE:result9, lockerSectionA2: result10});
+                                                                    }
+                                                                  })
                                                                 }
                                                               });
                                                             }
@@ -739,12 +745,12 @@ app.post('/admin/setSchedule',function(req,res){
     });
 });
 
-//create user data
-app.get('/create', function(req, res){
-  res.render('view_create');
+//register user
+app.get('/register', function(req, res){
+  res.render('view_register');
 });
 
-app.post('/create', function(req, res){
+app.post('/register', function(req, res){
   var sid = req.body.sid;
   var name = req.body.name;
   var lid = req.body.lid;
@@ -764,7 +770,7 @@ app.post('/create', function(req, res){
             console.log(error);
           } else {
             console.log('사물함 완료');
-            res.redirect('/create');
+            res.redirect('/register');
           }
         });
 

@@ -57,6 +57,9 @@ html
                                     td(colspan="2" style="text-align:center;") 사용중인 사물함
                                     td(style="text-align:center;")= locker.Lid+"번"
                                     td(style="text-align:center;")
+                                      if extension.extension === 1
+                                       a 연장완료
+                                      else 
                                         a(href='main/extend?id='+locker.Lid).btn_normalBlue 연장하기
                                     td(style="text-align:center;") 
                                         input(id='btn_return' type='submit', value='반납하기').btn_normalYellow
