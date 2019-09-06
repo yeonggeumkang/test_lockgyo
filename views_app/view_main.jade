@@ -57,7 +57,7 @@ html
                                     td(colspan="2" style="text-align:center;") 사용중인 사물함
                                     td(style="text-align:center;")= locker.Lid+"번"
                                     td(style="text-align:center;")
-                                        a(href='main/extend?id='+locker.Lid id="btn_extend").btn_normalBlue 연장하기
+                                        a(href='main/extend?id='+locker.Lid).btn_normalBlue 연장하기
                                     td(style="text-align:center;") 
                                         input(id='btn_return' type='submit', value='반납하기').btn_normalYellow
                                 else
@@ -217,8 +217,5 @@ html
             $("#sectionC").click(function(){$("#tbl_sectionC").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionD").hide();$("#tbl_sectionE").hide();});
             $("#sectionD").click(function(){$("#tbl_sectionD").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();$("#tbl_sectionE").hide();});
             $("#sectionE").click(function(){$("#tbl_sectionE").slideToggle();$("#tbl_sectionA").hide();$("#tbl_sectionB").hide();$("#tbl_sectionC").hide();$("#tbl_sectionD").hide();});
-        script
-            | var element = document.getElementById('btn_extend');
-            | element.onclick = function() {var result = alert("연장신청이 완료되었습니다");};
 
             
