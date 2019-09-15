@@ -70,7 +70,7 @@
 .tbl_enroll {
     width: 100%;
     margin: auto;
-    vertical-align: middle;
+    vertical-align: top;
     border-collapse: collapse;
 }
 
@@ -81,6 +81,7 @@
     font-weight: 400;
     border-bottom: 1px solid #4d4d4d;
     text-align: left;
+    vertical-align: top;
 }
 
 .tbl_enroll tbody td {
@@ -88,6 +89,7 @@
     font-weight: 200;
     text-align: center;
     padding:5px;
+    vertical-align: top;
     /*background-color: #fff;
     color: #4480f4;
     border: 1px solid #4480f4;*/

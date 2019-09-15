@@ -67,9 +67,6 @@ app.post('/signIn', function(req,res){
             if(results.length > 0){
                 console.log(results[0]);
                 hasher({password:req.body.password, salt:results[0].salt}, function(err, pass, salt, hash){
-                  console.log(pass);
-                  console.log(salt);
-                  console.log(hash);
                   if(results[0].password === hash) {
                     //login success
                     req.session.email = results[0].email;
@@ -135,7 +132,6 @@ app.post('/help/pw', function(req,res){
 
 //logout
 app.get('/logout', function(req,res){
-  console.log('logout');
   req.session.destroy();
   res.clearCookie('session');
   delete req.session.email;
@@ -721,6 +717,17 @@ app.get(['/admin/locker','/admin/locker?id=:id'], function(req, res){
   var id = req.query.id;
   var sql = 'UPDATE LOCKER SET usable=1, owner=NULL WHERE Lid=?';
   connection.query(sql, id, function(error, result, fields){
+    if(error){
+      console.log(error);
+    } else {
+      res.redirect('/admin');
+    }
+  });
+});
+
+app.get('/admin/changeExtensionAll', function(req,res){
+  var sql = 'UPDATE LOCKER SET extension=0';
+  connection.query(sql, function(error, result, fields){
     if(error){
       console.log(error);
     } else {
