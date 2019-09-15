@@ -110,7 +110,7 @@ html
                   td(width="20%") 사용자
                   td(width="20%") 연장여부
                   td(width="20%") 사물함 수거
-              each lock in locker
+                each lock in locker
                   tr
                     td(width="40%")= lock.Lid
                     td(width="20%")= lock.name
@@ -121,6 +121,10 @@ html
                             span N
                     td(width="20%")
                       a(href='/admin/locker?id='+lock.Lid).btn_normalYellow 수거
+                tr
+                  td(colspan="3") 전체 연장 초기화
+                  td
+                    a(href='/admin/changeExtensionAll').btn_normalYellow 초기화
             
         script(type='text/javascript')
             |document.getElementById('str_date').value = new Date().toISOString().substring(0, 10);
