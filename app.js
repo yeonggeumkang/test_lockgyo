@@ -355,7 +355,7 @@ app.get(['/main/extend','/main/extend?id:id'], function(req,res) {
        }else {
            var strDate = new Date(results[0].strDate);
            var endDate = new Date(results[0].endDate);
-           if(strDate <= nowDate && nowDate <= endDate){
+           if(strDate.getDate() <= nowDate.getDate() && nowDate.getDate() <= endDate.getDate()){
                 connection.query(sql2, id, function(err,results,fields){
                     if(err){
                         console.log(err);
