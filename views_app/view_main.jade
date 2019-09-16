@@ -37,14 +37,14 @@ html
                             tbody
                                 tr
                                     td(width="25%" style="text-align:center;") 신규신청기간
-                                    td(width="25%" style="text-align:center;")= schedule[0].strDate
-                                    td(width="25%" style="text-align:center;") ~
-                                    td(width="25%" style="text-align:center;")= schedule[0].endDate
+                                    td(width="30%" style="text-align:center;")= schedule[0].strDate
+                                    td(width="15%" style="text-align:center;") ~
+                                    td(width="30%" style="text-align:center;")= schedule[0].endDate
                                 tr
                                     td(width="25%" style="text-align:center;") 연장신청기간
-                                    td(width="25%" style="text-align:center;")= schedule[1].strDate
-                                    td(width="25%" style="text-align:center;") ~
-                                    td(width="25%" style="text-align:center;")= schedule[1].endDate
+                                    td(width="30%" style="text-align:center;")= schedule[1].strDate
+                                    td(width="15%" style="text-align:center;") ~
+                                    td(width="30%" style="text-align:center;")= schedule[1].endDate
             div.info
                 form(class='신청', action='/main/return', method='post')
                     table.Board
