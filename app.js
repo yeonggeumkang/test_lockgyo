@@ -742,7 +742,7 @@ app.post('/admin/setSchedule',function(req,res){
     var str_date = req.body.str_date;
     var end_date = req.body.end_date;
     var sql = 'UPDATE SCHEDULE SET strDate = ?, endDate = ? WHERE type = ?;';
-    connection.query(sql, [str_date, end_date, type], function(err, rows, fields){
+    connection.query(sql, [str_date+' 12:00:00', end_date+' 23:59:59', type], function(err, rows, fields){
        if(err){
            console.log(err);
            res.status(500).send('Internal Server Error');
