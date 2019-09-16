@@ -68,7 +68,7 @@ html
                             td 마감일자
                                 input(type='date' id='end_date' name='end_date')
             
-            table.board
+            table.board(id="userManager")
                 thead
                     tr
                         td(colspan="4") 회원관리
@@ -100,7 +100,7 @@ html
                             명입니다
                         td 
                             a(href='/admin/changePrivilegeAll').btn_normalBlue 전체승인
-            table.board
+            table.board(id="lockerManager")
               thead
                 tr
                   td(colspan="4") 사물함관리
