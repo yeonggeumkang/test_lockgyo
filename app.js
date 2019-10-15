@@ -625,6 +625,7 @@ app.get('/mypage/quit', function(req,res){
 //admin
 app.get('/admin',function(req,res){
     var privilege = req.session.privilege;
+    var nowDate = new Date();
     var sql= 'SELECT * FROM USERS;';
     var sql2 = 'SELECT * FROM SCHEDULE';
     var sql3 = 'SELECT Lid, usable, extension, name FROM LOCKER, USERS WHERE LOCKER.owner = USERS.uid ORDER BY lid';
@@ -649,7 +650,7 @@ app.get('/admin',function(req,res){
                             if(err){
                               console.log(err);
                             } else {
-                              res.render('view_admin',{users:rows, schedule:rows2, privilege:req.session.privilege, locker:rows3});
+                              res.render('view_admin',{users:rows, schedule:rows2, privilege:req.session.privilege, locker:rows3, date:nowDate});
                             }
                           })
 
